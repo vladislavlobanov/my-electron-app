@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   const [query, setQuery] = useState('');
@@ -31,16 +33,39 @@ function App() {
 
 
   return (
-    <div className="App">
-      <h1>MongoDB Query Executor</h1>
-      <textarea
-        placeholder="Enter MongoDB query (e.g., { age: { $gt: 25 } })"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <button onClick={handleQuerySubmit}>Run Query</button>
-      <div className="result">
-        <pre>{JSON.stringify(result, null, 2)}</pre>
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">MongoDB Query Executor</h1>
+      
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title">Enter MongoDB Query</h5>
+              <textarea
+                className="form-control mb-3"
+                rows="6"
+                placeholder="Enter MongoDB query (e.g., { age: { $gt: 25 } })"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button
+                className="btn btn-primary btn-block"
+                onClick={handleQuerySubmit}
+              >
+                Run Query
+              </button>
+            </div>
+          </div>
+          
+          {result && (
+            <div className="mt-4">
+              <h5>Query Result</h5>
+              <div className="card p-3">
+                <pre>{JSON.stringify(result, null, 2)}</pre>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
