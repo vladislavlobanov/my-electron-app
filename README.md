@@ -1,5 +1,7 @@
 # Proof-of-Concept Desktop Application using Electron
 
+![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/screenshot.png)
+
 ## Description
 A desktop application built with Electron that allows users to run a given MongoDB find queries and view the results in JSON format.
 
@@ -37,3 +39,4 @@ This project is hosted on GitHub, with source code managed and integrated with a
      ```bash
    npx webpack
    npx electron .
+
