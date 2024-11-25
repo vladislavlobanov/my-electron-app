@@ -1,6 +1,39 @@
-A proof-of-concept desktop application using Electron that enables users to execute predefined MongoDB `find` queries and view the results in JSON format. The application will be hosted in a GitHub repository, where the source code will be managed and integrated with a CI/CD pipeline configured through GitHub Actions to automate building and testing processes. The Electron app will establish a connection to a specific MongoDB instance without allowing configurable connection strings, ensuring simplicity and focus on the core functionality of running queries and displaying their outcomes. This project aims to provide hands-on experience with Electron for desktop development, MongoDB integration, and the implementation of automated deployment workflows using GitHub Actions.
+# Proof-of-Concept Desktop Application using Electron
 
-Steps to Run
-1. npm install
-2. On terminal 1, Run node backend/server.js   
-3. On terminal 2, Run npx webpack  and then Run npx electron .   
+## Description
+A desktop application built with Electron that allows users to run a given MongoDB find queries and view the results in JSON format.
+
+## Technologies
+- **Electron** for desktop application development
+- **MongoDB** for the database backend
+- **Webpack** for bundling JavaScript files
+- **GitHub Actions** for continuous integration and deployment automation
+
+## Features
+- Run MongoDB find queries
+- Display results in JSON format
+- Fixed MongoDB connection (no configurable connection strings)
+
+## Purpose
+To provide hands-on experience with:
+- Electron desktop app development
+- MongoDB integration
+- CI/CD automation with GitHub Actions
+
+## Repository
+This project is hosted on GitHub, with source code managed and integrated with a CI/CD pipeline for automated build and testing.
+
+---
+
+## Steps to Run the Application
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+2. **Run Node Server**:
+     ```bash
+   npm backend/server.js
+3. **Build and Deploy**:
+     ```bash
+   npx webpack
+   npx electron .
