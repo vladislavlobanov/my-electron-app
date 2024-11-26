@@ -1,44 +1,63 @@
-name: NodeJS with Webpack
-
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  build:
+  eslint:
+    name: Run ESLint
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'  # Use a single Node.js version for ESLint
+
+      - name: Install Dependencies
+        run: |
+          npm install
+          npm install @eslint/eslintrc
+
+      - name: Run ESLint
+        run: |
+          npx eslint . -f json -o eslint-report.json || true  # Always return success
+        continue-on-error: true
+
+      - name: Upload ESLint Report
+        if: always()  # Ensure this step runs regardless of previous success/failure
+        uses: actions/upload-artifact@v3
+        with:
+          name: eslint-report
+          path: eslint-report.json
+
+  build:
+    name: Build with Node.js ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    needs: eslint  # Ensures that ESLint runs before build
 
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set Up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies 
-      run: |
-        npm install
-        npm install @eslint/eslintrc
+      - name: Install Dependencies
+        run: |
+          npm install
+          npm install @eslint/eslintrc  # Ensure ESLint dependencies are installed if needed during build
 
-    - name: Run ESLint 
-      run: | 
-        npx eslint . || true  # Prevent ESLint errors from failing the step
-      continue-on-error: true  # Ensure the job continues even if ESLint finds errors
-
-    - name: Upload ESLint Report
-      if: always()  # Ensure this step runs even if previous steps fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: eslint-report
-        path: eslint-report.json  # Adjust if you output ESLint in JSON format
-
-    - name: Build
-      run: |
-        npx webpack
+      - name: Build Project
+        run: |
+          npx webpack
