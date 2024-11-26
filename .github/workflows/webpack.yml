@@ -23,16 +23,21 @@ jobs:
           npm install
           npm install @eslint/eslintrc @typescript-eslint/parser @typescript-eslint/eslint-plugin  # Ensure TypeScript ESLint plugins are installed if needed
 
-      - name: Run ESLint and Generate Report
+      - name: Run ESLint and Generate SARIF Report
         run: |
-          npx eslint . -f json -o eslint-report.json || true  # Always return success
+          npx eslint . -f sarif -o eslint-report.sarif || true  # Always return success
         continue-on-error: true
 
-      - name: Upload ESLint Report
+      - name: Upload ESLint SARIF Report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: eslint-report.sarif
+
+      - name: Upload ESLint Report as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: eslint-report
-          path: eslint-report.json
+          path: eslint-report.sarif
           if-no-files-found: ignore
           include-hidden-files: false
 
