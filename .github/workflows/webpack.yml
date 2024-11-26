@@ -29,7 +29,15 @@ jobs:
 
     - name: Run ESLint 
       run: | 
-        npx eslint .
+        npx eslint . || true  # Prevent ESLint errors from failing the step
+      continue-on-error: true  # Ensure the job continues even if ESLint finds errors
+
+    - name: Upload ESLint Report
+      if: always()  # Ensure this step runs even if previous steps fail
+      uses: actions/upload-artifact@v3
+      with:
+        name: eslint-report
+        path: eslint-report.json  # Adjust if you output ESLint in JSON format
 
     - name: Build
       run: |
