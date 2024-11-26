@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
