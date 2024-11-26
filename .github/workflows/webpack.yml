@@ -33,7 +33,7 @@ jobs:
         with:
           name: eslint-report
           path: eslint-report.json
-          if-no-files-found: warn
+          if-no-files-found: ignore
           include-hidden-files: false
 
   build:
