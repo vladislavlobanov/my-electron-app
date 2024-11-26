@@ -7,7 +7,7 @@ const app = express();
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 
-app.post1('/query', async (req, res) => {
+app.post('/query', async (req, res) => {
   const { query } = req.body;
   try {
     const result = await executeQuery(query);
