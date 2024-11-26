@@ -34,7 +34,7 @@ This project is hosted on GitHub, with source code managed and integrated with a
    npm install
 2. **Run Node Server**:
      ```bash
-   npm backend/server.js
+   npm start backend/server.js
 3. **Build and Deploy**:
      ```bash
    npx webpack
