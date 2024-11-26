@@ -16,24 +16,25 @@ jobs:
       - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'  # Use a single Node.js version for ESLint
+          node-version: '20.x'  # Use a single Node.js version for consistency
 
       - name: Install Dependencies
         run: |
           npm install
-          npm install @eslint/eslintrc
+          npm install @eslint/eslintrc @typescript-eslint/parser @typescript-eslint/eslint-plugin  # Ensure TypeScript ESLint plugins are installed if needed
 
-      - name: Run ESLint
+      - name: Run ESLint and Generate Report
         run: |
           npx eslint . -f json -o eslint-report.json || true  # Always return success
         continue-on-error: true
 
       - name: Upload ESLint Report
-        if: always()  # Ensure this step runs regardless of previous success/failure
         uses: actions/upload-artifact@v3
         with:
           name: eslint-report
           path: eslint-report.json
+          if-no-files-found: warn
+          include-hidden-files: false
 
   build:
     name: Build with Node.js ${{ matrix.node-version }}
@@ -56,7 +57,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-          npm install @eslint/eslintrc  # Ensure ESLint dependencies are installed if needed during build
+          npm install @eslint/eslintrc  # Include only if ESLint is needed during build
 
       - name: Build Project
         run: |
