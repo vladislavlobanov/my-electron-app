@@ -30,14 +30,6 @@ jobs:
           npx eslint . -f json -o eslint-report.json || true  # Always return success
         continue-on-error: true
 
-      - name: Upload ESLint Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: eslint-report
-          path: eslint-report.json
-          if-no-files-found: ignore
-          include-hidden-files: false
-          
       - name: Run ESLint 
         run: | 
           npx eslint . || true  # Prevent ESLint errors from failing the step
