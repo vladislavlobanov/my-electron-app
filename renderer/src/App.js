@@ -33,23 +33,26 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">MongoDB Query Executor</h1>
-
-      {/* Custom Switch to toggle between Simple and Advanced views */}
+      {/* Bootstrap Switch to toggle between Simple and Advanced views */}
       <div className="row justify-content-center mb-4">
         <div className="col-md-8">
-          <div className="custom-switch custom-switch-label-io">
+          <div className="form-check form-switch">
             <input
-              className="custom-switch-input"
-              id="viewSwitch"
+              className="form-check-input"
               type="checkbox"
+              role="switch"
+              id="flexSwitchCheckDefault"
               checked={isAdvanced}
               onChange={() => setIsAdvanced(!isAdvanced)}
             />
-            <label className="custom-switch-btn" htmlFor="viewSwitch"></label>
+            <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
+              Advanced view
+            </label>
           </div>
         </div>
       </div>
+
+      <h1 className="text-center mb-4">MongoDB Query Executor</h1>
 
       <div className="row justify-content-center">
         <div className="col-md-8">
@@ -79,13 +82,11 @@ function App() {
           {isAdvanced && (
             <div className="card shadow-sm">
               <div className="card-body">
-                <h5 className="card-title">Advanced MongoDB Query Builder</h5>
-
-                {/* Advanced options can be added here */}
+                <h5 className="card-title">Enter MongoDB Query</h5>
                 <textarea
                   className="form-control mb-3"
                   rows="6"
-                  placeholder='Enter advanced MongoDB query (e.g., { $and: [ { age: { $gt: 25 } }, { status: "active" } ] })'
+                  placeholder='Enter MongoDB query (e.g., { age: { $gt: 25 } })'
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
@@ -93,7 +94,7 @@ function App() {
                   className="btn btn-primary btn-block"
                   onClick={handleQuerySubmit}
                 >
-                  Run Advanced Query
+                  Run Query
                 </button>
               </div>
             </div>
