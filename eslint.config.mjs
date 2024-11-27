@@ -20,6 +20,11 @@ export default [
   // Use recommended rules from eslint-plugin-react
   pluginReact.configs.flat.recommended,
 
+  // Ignore
+  {
+    ignores: ["renderer/public/bundle.js"]
+  },
+
   // Override specific rules
   {
     rules: {
