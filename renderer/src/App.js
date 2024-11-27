@@ -34,8 +34,11 @@ function App() {
 
   return (
     <div className="container mt-5">
+      <div className="form-check form-switch">
+        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Advanced view</label>
+      </div>
       <h1 className="text-center mb-4">MongoDB Query Executor</h1>
-      
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card shadow-sm">
@@ -56,7 +59,7 @@ function App() {
               </button>
             </div>
           </div>
-          
+
           {result && (
             <div className="mt-4">
               <h5>Query Result</h5>
