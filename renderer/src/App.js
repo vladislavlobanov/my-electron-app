@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
+  const [isAdvanced, setIsAdvanced] = useState(false); // State to manage view mode
 
   const handleQuerySubmit = async () => {
     try {
       const parsedQuery = JSON.parse(query); // Parse the query from the text input
-      
+
       // Make a POST request to the backend
       const response = await fetch('http://localhost:5001/query', {
         method: 'POST',
@@ -31,34 +31,73 @@ function App() {
     }
   };
 
-
   return (
     <div className="container mt-5">
-      <div className="form-check form-switch">
-        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Advanced view</label>
-      </div>
       <h1 className="text-center mb-4">MongoDB Query Executor</h1>
+
+      {/* Custom Switch to toggle between Simple and Advanced views */}
+      <div className="row justify-content-center mb-4">
+        <div className="col-md-8">
+          <div className="custom-switch custom-switch-label-io">
+            <input
+              className="custom-switch-input"
+              id="viewSwitch"
+              type="checkbox"
+              checked={isAdvanced}
+              onChange={() => setIsAdvanced(!isAdvanced)}
+            />
+            <label className="custom-switch-btn" htmlFor="viewSwitch"></label>
+          </div>
+        </div>
+      </div>
+
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">Enter MongoDB Query</h5>
-              <textarea
-                className="form-control mb-3"
-                rows="6"
-                placeholder="Enter MongoDB query (e.g., { age: { $gt: 25 } })"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <button
-                className="btn btn-primary btn-block"
-                onClick={handleQuerySubmit}
-              >
-                Run Query
-              </button>
+          {/* Simple View */}
+          {!isAdvanced && (
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title">Enter MongoDB Query</h5>
+                <textarea
+                  className="form-control mb-3"
+                  rows="6"
+                  placeholder='Enter MongoDB query (e.g., { age: { $gt: 25 } })'
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <button
+                  className="btn btn-primary btn-block"
+                  onClick={handleQuerySubmit}
+                >
+                  Run Query
+                </button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Advanced View */}
+          {isAdvanced && (
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title">Advanced MongoDB Query Builder</h5>
+
+                {/* Advanced options can be added here */}
+                <textarea
+                  className="form-control mb-3"
+                  rows="6"
+                  placeholder='Enter advanced MongoDB query (e.g., { $and: [ { age: { $gt: 25 } }, { status: "active" } ] })'
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <button
+                  className="btn btn-primary btn-block"
+                  onClick={handleQuerySubmit}
+                >
+                  Run Advanced Query
+                </button>
+              </div>
+            </div>
+          )}
 
           {result && (
             <div className="mt-4">
