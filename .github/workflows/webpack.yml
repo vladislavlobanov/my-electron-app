@@ -25,11 +25,6 @@ jobs:
           npm install
           npm install @eslint/eslintrc @typescript-eslint/parser @typescript-eslint/eslint-plugin  # Ensure TypeScript ESLint plugins are installed if needed
 
-      - name: Run ESLint and Generate Report
-        run: |
-          npx eslint . -f json -o eslint-report.json || true  # Always return success
-        continue-on-error: true
-
       - name: Run ESLint 
         run: | 
           npx eslint . || true  # Prevent ESLint errors from failing the step
