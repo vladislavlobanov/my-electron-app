@@ -25,6 +25,9 @@ export default [
     rules: {
       // Disable the rule that forbids `require()` style imports
       '@typescript-eslint/no-require-imports': 'off',
+
+      // Disable the `no-undef` rule globally
+      "no-undef": "off",
     },
   },
 ];
