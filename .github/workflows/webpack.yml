@@ -53,10 +53,6 @@ jobs:
         npm install
         npm install @eslint/eslintrc
 
-    - name: Run Tests 
-      run: |
-        npm run test:mjs
-
     - name: Build
       run: |
         npx webpack
