@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test:mjs": "for file in ./tests/*.mjs; do node $file; done"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
@@ -22,6 +23,7 @@
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
+    "@playwright/test": "^1.49.0",
     "babel-loader": "^9.2.1"
   }
 }
