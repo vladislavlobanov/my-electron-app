@@ -2,9 +2,18 @@
   "name": "my-electron-app",
   "version": "1.0.0",
   "main": "main.js",
+  "description": "Sandbox project for TDD trainig",
+  "author": {
+    "name": "De-risk team",
+    "email": "derisk@3tsoftwarelabs.com"
+  },
+  "license": "MIT",
   "scripts": {
-    "start": "electron .",
-    "test:mjs": "for file in ./tests/*.mjs; do node $file; done"
+    "make": "electron-forge make",
+    "package": "electron-forge package",
+    "publish": "electron-forge publish",
+    "test:mjs": "for file in ./tests/*.mjs; do node $file; done",
+    "start": "electron-forge start"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -16,21 +25,32 @@
     "electron": "^33.2.0",
     "express": "^4.21.1",
     "mongodb": "^6.11.0",
-    "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react": "^18.3.1",
     "style-loader": "^4.0.0",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack": "^5.96.1"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
+    "@electron-forge/cli": "^7.6.0",
+    "@electron-forge/maker-deb": "^7.6.0",
+    "@electron-forge/maker-dmg": "^7.6.0",
+    "@electron-forge/maker-rpm": "^7.6.0",
+    "@electron-forge/maker-squirrel": "^7.6.0",
+    "@electron-forge/maker-zip": "^7.6.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.6.0",
+    "@electron-forge/plugin-fuses": "^7.6.0",
+    "@electron-forge/publisher-github": "^7.6.0",
+    "@electron/fuses": "^1.8.0",
+    "@eslint/js": "^9.15.0",
     "@playwright/test": "^1.49.0",
     "babel-loader": "^9.2.1",
-    "@eslint/js": "^9.15.0",
-    "eslint": "^9.15.0",
+    "electron-squirrel-startup": "^1.0.1",
     "eslint-plugin-react": "^7.37.2",
+    "eslint": "^9.15.0",
     "globals": "^15.12.0",
     "typescript-eslint": "^8.16.0"
   }
