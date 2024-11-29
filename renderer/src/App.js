@@ -10,7 +10,9 @@ function App() {
 
   const handleQuerySubmit = async () => {
     try {
-      const parsedQuery = JSON.parse(query);
+      const parsedQuery = JSON.parse(query); // Parse the query from the text input
+
+      // Make a POST request to the backend
       const response = await fetch('http://localhost:5001/query', {
         method: 'POST',
         headers: {
@@ -68,7 +70,7 @@ function App() {
               <textarea
                 className="form-control mb-3"
                 rows="6"
-                placeholder='Enter MongoDB query (e.g., { age: { $gt: 25 } })'
+                placeholder="Enter MongoDB query (e.g., { age: { $gt: 25 } })"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
