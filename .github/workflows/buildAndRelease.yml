@@ -1,4 +1,4 @@
-name: Release app
+name: Nightly Build 
 on:
   schedule:
   - cron: "0 0 * * 1-5"

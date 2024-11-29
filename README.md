@@ -1,3 +1,6 @@
+[![Nightly Build](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/buildAndRelease.yml/badge.svg)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/buildAndRelease.yml)
+
+
 # Proof-of-Concept Desktop Application using Electron
 
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/screenshot.png)
