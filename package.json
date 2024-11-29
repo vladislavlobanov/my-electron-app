@@ -7,7 +7,7 @@
     "name": "De-risk team",
     "email": "derisk@3tsoftwarelabs.com"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "make": "electron-forge make",
     "package": "electron-forge package",
