@@ -1,4 +1,4 @@
-[![Nightly Build](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/buildAndRelease.yml/badge.svg)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/buildAndRelease.yml)
+[![Nightly Build](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/badge.svg)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml)
 
 
 # Proof-of-Concept Desktop Application using Electron
