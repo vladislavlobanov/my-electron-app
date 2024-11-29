@@ -16,15 +16,15 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: parsedQuery }),
+        body: JSON.stringify({ query: parsedQuery }), // Send the parsed query
       });
 
       if (!response.ok) {
         throw new Error('Query execution failed');
       }
 
-      const data = await response.json();
-      setResult(data);
+      const data = await response.json(); // Parse the response data
+      setResult(data); // Set the result to the state for display
       setHistory([...history, { query, result: data }]); // Save to history
     } catch (error) {
       const errorResult = { error: 'Invalid query or server error.' };
