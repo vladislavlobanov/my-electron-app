@@ -13,7 +13,7 @@ app.post('/query', async (req, res) => {
     const result = await executeQuery(query);
     res.json(result);
   } catch (error) {
-    res.status(500).send({ error: 'Query execution failed.' });
+    res.status(500).send({ error: 'Query execution failed.'});
   }
 });
 
