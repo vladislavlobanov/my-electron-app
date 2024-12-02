@@ -24,6 +24,9 @@ Simple Electron MongoDB Query Tool
 
 6. **Comparison of Query Results**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies, enhancing data management and analysis capabilities.
 
+# External System(s)
+**MongoDB**: The primary database system used for managing and querying data. MongoDB facilitates the storage of JSON-like documents with dynamic schemas, which is integral to the query tool's operation. [MongoDB Documentation](https://mongodb.com/docs/)
+   
 # Proof-of-Concept Desktop Application using Electron
 
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/screenshot.png)
