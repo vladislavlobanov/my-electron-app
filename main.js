@@ -15,17 +15,16 @@ app.on("ready", () => {
         {
           label: 'Settings',
           click: () => {
-            // Placeholder for opening a simple message window on click
-            console.log("Settings clicked");
-            // Create a simple message box when "Settings" is clicked
-            mainWindow.webContents.executeJavaScript(`alert('Settings clicked')`);
+            // Send IPC message to renderer to open Settings modal
+            if (mainWindow) {
+              mainWindow.webContents.send('open-settings');
+            }
           }
         },
         { type: 'separator' },
         { role: 'quit' }
       ]
     },
-    // Other roles can be included here as necessary
     // { role: 'fileMenu' }
     {
       label: 'File',
@@ -33,7 +32,7 @@ app.on("ready", () => {
         { role: 'close' } // or { role: 'quit' } based on needs
       ]
     },
-    // Other submenu items can go here
+    // You can add other menu items here if necessary
   ];
 
   const menu = Menu.buildFromTemplate(template);
@@ -44,12 +43,15 @@ app.on("ready", () => {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: true, // Enable Node.js integration
+      contextIsolation: false, // Disable context isolation
     }
   });
 
   mainWindow.loadFile("./renderer/public/index.html");
+
+  // Optional: Open DevTools for debugging
+  // mainWindow.webContents.openDevTools();
 });
 
 // Graceful exit

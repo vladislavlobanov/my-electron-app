@@ -1,12 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+const { ipcRenderer } = window.require('electron');
 
 function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
   const [isAdvanced, setIsAdvanced] = useState(false);
   const [history, setHistory] = useState([]); // To store query history
+  const [showSettings, setShowSettings] = useState(false);
+  const [theme, setTheme] = useState('system'); // Default theme
+
+  useEffect(() => {
+    // Listen for 'open-settings' IPC message
+    ipcRenderer.on('open-settings', () => {
+      setShowSettings(true);
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      ipcRenderer.removeAllListeners('open-settings');
+    };
+  }, []);
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
+  useEffect(() => {
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => {
+        applyTheme('system');
+      };
+      mediaQuery.addEventListener('change', handleChange);
+
+      // Cleanup listener on unmount
+      return () => {
+        mediaQuery.removeEventListener('change', handleChange);
+      };
+    }
+  }, [theme]);
+
+  const applyTheme = (selectedTheme) => {
+    const root = document.documentElement;
+    if (selectedTheme === 'light') {
+      root.classList.remove('dark-theme');
+      root.classList.add('light-theme');
+    } else if (selectedTheme === 'dark') {
+      root.classList.remove('light-theme');
+      root.classList.add('dark-theme');
+    } else if (selectedTheme === 'system') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        root.classList.remove('light-theme');
+        root.classList.add('dark-theme');
+      } else {
+        root.classList.remove('dark-theme');
+        root.classList.add('light-theme');
+      }
+    }
+  };
+
+  const handleThemeChange = (e) => {
+    setTheme(e.target.value);
+  };
+
+  const handleSettingsClose = () => {
+    setShowSettings(false);
+  };
 
   const handleQuerySubmit = async () => {
     try {
@@ -30,7 +92,7 @@ function App() {
       setHistory([...history, { query, result: data }]); // Save to history
     } catch (error) {
       const errorResult = { error: 'Invalid query or server error.' };
-      console.log({error})
+      console.log({ error });
       setResult(errorResult);
       setHistory([...history, { query, result: errorResult }]); // Save to history
     }
@@ -43,6 +105,75 @@ function App() {
 
   return (
     <div className="container mt-5">
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="modal-overlay">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Settings</h5>
+                <button type="button" className="close" onClick={handleSettingsClose}>
+                  <span>&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <h5>Select Theme</h5>
+                <div className="form-group">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="themeOptions"
+                      id="lightTheme"
+                      value="light"
+                      checked={theme === 'light'}
+                      onChange={handleThemeChange}
+                    />
+                    <label className="form-check-label" htmlFor="lightTheme">
+                      Light
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="themeOptions"
+                      id="darkTheme"
+                      value="dark"
+                      checked={theme === 'dark'}
+                      onChange={handleThemeChange}
+                    />
+                    <label className="form-check-label" htmlFor="darkTheme">
+                      Dark
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="themeOptions"
+                      id="systemTheme"
+                      value="system"
+                      checked={theme === 'system'}
+                      onChange={handleThemeChange}
+                    />
+                    <label className="form-check-label" htmlFor="systemTheme">
+                      As in System
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={handleSettingsClose}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rest of your App.js content */}
       <div className="row justify-content-center mb-4">
         <div className="col-md-8">
           <div className="form-check form-switch">
@@ -100,7 +231,7 @@ function App() {
                 {history.map((item, index) => (
                   <button
                     key={index}
-                    className="list-group-item list-group-item-action text-truncate" // Truncates long text
+                    className="list-group-item list-group-item-action text-truncate"
                     onClick={() => handleHistoryItemClick(item)}
                   >
                     {`Query: ${item.query} | Result: ${JSON.stringify(item.result)}`}
