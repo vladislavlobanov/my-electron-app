@@ -31,8 +31,7 @@ Simple Electron MongoDB Query Tool
 
 The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style**, combining both frontend and backend functionalities within a single application. This approach simplifies development and deployment, enabling users to execute MongoDB queries directly from the Electron interface without requiring a separate server. 
 
-# Diagram
-
+# Architecture Diagram
 
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/Diagram.png)
 
@@ -48,6 +47,7 @@ A desktop application built with Electron that allows users to run a given Mongo
 - **MongoDB** for the database backend
 - **Webpack** for bundling JavaScript files
 - **GitHub Actions** for continuous integration and deployment automation
+- **Local Storage** Sqlite database 
 
 ## Features
 - Run MongoDB find queries
