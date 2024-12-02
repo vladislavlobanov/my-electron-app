@@ -4,11 +4,11 @@
 Simple Electron MongoDB Query Tool
 
 # Contributors
-Vaisakh Sasikumar
-Andrei Kim
-Vlad Lobanov
-Hazel Ozmel
-Ivan Martynov
+- Vaisakh Sasikumar
+- Andrei Kim
+- Vlad Lobanov
+- Hazel Ozmel
+- Ivan Martynov
 
 # Proof-of-Concept Desktop Application using Electron
 
