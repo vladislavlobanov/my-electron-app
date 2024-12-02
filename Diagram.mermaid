@@ -1,0 +1,9 @@
+graph LR
+  A[Electron Frontend] -->|User Queries & Config| B{Monolithic Backend}
+  B -->|Executes Queries| C{MongoDB Database}
+  C -->|Returns Data| B
+  B -->|JSON Results| A
+  A-.-> C
+  A -->|Settings| B
+  A -->|Query History| B
+  B -->|Persistent Storage for Settings & History| D[Local Storage]
