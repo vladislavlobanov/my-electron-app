@@ -21,9 +21,8 @@ jobs:
           node-version: 20
       - name: Update package.json version
         run: |
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          jq '.version |= "1.0.0+" + "'$TIMESTAMP'"' package.json > package.tmp.json
-          mv package.tmp.json package.json
+          node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version = '1.0.0+' + new Date().toISOString().replace(/[-:.TZ]/g, ''); fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');"
+          
       - run: npm ci
       - name: Publish app
         env:
