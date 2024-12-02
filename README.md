@@ -10,6 +10,20 @@ Simple Electron MongoDB Query Tool
 - Hazel Ozmel
 - Ivan Martynov
 
+# Use cases for the Simple Electron MongoDB Query Tool:
+
+1. **Running MongoDB Queries**: Users can input and execute MongoDB `find` queries, enabling them to retrieve specific data from the MongoDB database.
+
+2. **Viewing Results in JSON Format**: After executing a query, users can view the results in a structured JSON format, making it easy to read and understand the data returned.
+
+3. **Fixed MongoDB Connection**: The application allows access to a predefined or stored in settings MongoDB connection, simplifying the setup process for the user since they don't need to input connection strings.
+
+4. **Persisting Query History**: Users can have their previous queries saved in local storage, allowing them to easily access and rerun past queries without retyping.
+
+5. **Settings and Theme Management**: The application includes a settings menu that allows users to switch themes and MongoDB URI/Database/Collection.
+
+6. **Comparison of Query Results**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies, enhancing data management and analysis capabilities.
+
 # Proof-of-Concept Desktop Application using Electron
 
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/screenshot.png)
