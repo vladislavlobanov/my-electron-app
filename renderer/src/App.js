@@ -30,6 +30,7 @@ function App() {
       setHistory([...history, { query, result: data }]); // Save to history
     } catch (error) {
       const errorResult = { error: 'Invalid query or server error.' };
+      console.log({error})
       setResult(errorResult);
       setHistory([...history, { query, result: errorResult }]); // Save to history
     }

@@ -1,38 +1,30 @@
 import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+import js from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
+import tseslint from "typescript-eslint";
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  // Specify the files to lint
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-
-  // Define global variables for the browser environment
-  { languageOptions: { globals: globals.browser } },
-
-  // Use recommended rules from @eslint/js
-  pluginJs.configs.recommended,
-
-  // Spread in recommended rules from @typescript-eslint
-  ...tseslint.configs.recommended,
-
-  // Use recommended rules from eslint-plugin-react
-  pluginReact.configs.flat.recommended,
-
-  // Ignore
+export default tseslint.config(
+  js.configs.recommended,
+  tseslint.configs.recommended,
   {
-    ignores: ["renderer/public/bundle.js"]
+    ignores: ["renderer/public/*"]
   },
-
-  // Override specific rules
   {
+    plugins: {
+      pluginReact,
+    },
+    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     rules: {
-      // Disable the rule that forbids `require()` style imports
-      '@typescript-eslint/no-require-imports': 'off',
-
-      // Disable the `no-undef` rule globally
+      "@typescript-eslint/no-require-imports": "off",
       "no-undef": "off",
     },
-  },
-];
+  }
+);
