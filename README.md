@@ -26,6 +26,7 @@ Simple Electron MongoDB Query Tool
 
 # External System(s)
 **MongoDB**: The primary database system used for managing and querying data. MongoDB facilitates the storage of JSON-like documents with dynamic schemas, which is integral to the query tool's operation. [MongoDB Documentation](https://mongodb.com/docs/)
+**SQLite**: Local database for local storage
 
 # System Architecture Style
 
