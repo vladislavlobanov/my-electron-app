@@ -1,5 +1,14 @@
 [![Nightly Build](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/badge.svg)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml)
 
+# System Name
+Simple Electron MongoDB Query Tool
+
+# Contributors
+Vaisakh Sasikumar
+Andrei Kim
+Vlad Lobanov
+Hazel Ozmel
+Ivan Martynov
 
 # Proof-of-Concept Desktop Application using Electron
 
