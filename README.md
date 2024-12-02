@@ -22,11 +22,15 @@ Simple Electron MongoDB Query Tool
 
 5. **Settings and Theme Management**: The application includes a settings menu that allows users to switch themes and MongoDB URI/Database/Collection.
 
-6. **Comparison of Query Results**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies, enhancing data management and analysis capabilities.
+6. **Comparison of Query Results**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies.
 
 # External System(s)
 **MongoDB**: The primary database system used for managing and querying data. MongoDB facilitates the storage of JSON-like documents with dynamic schemas, which is integral to the query tool's operation. [MongoDB Documentation](https://mongodb.com/docs/)
-   
+
+# System Architecture Style
+
+The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style**, combining both frontend and backend functionalities within a single application. This approach simplifies development and deployment, enabling users to execute MongoDB queries directly from the Electron interface without requiring a separate server. 
+
 # Proof-of-Concept Desktop Application using Electron
 
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/screenshot.png)
