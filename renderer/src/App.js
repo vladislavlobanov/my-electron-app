@@ -7,17 +7,14 @@ function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
   const [isAdvanced, setIsAdvanced] = useState(false);
-  const [history, setHistory] = useState([]); // To store query history
+  const [history, setHistory] = useState([]);
   const [showSettings, setShowSettings] = useState(false);
-  const [theme, setTheme] = useState('system'); // Default theme
+  const [theme, setTheme] = useState('system');
 
   useEffect(() => {
-    // Listen for 'open-settings' IPC message
     ipcRenderer.on('open-settings', () => {
       setShowSettings(true);
     });
-
-    // Cleanup listener on unmount
     return () => {
       ipcRenderer.removeAllListeners('open-settings');
     };
@@ -34,8 +31,6 @@ function App() {
         applyTheme('system');
       };
       mediaQuery.addEventListener('change', handleChange);
-
-      // Cleanup listener on unmount
       return () => {
         mediaQuery.removeEventListener('change', handleChange);
       };
@@ -72,29 +67,27 @@ function App() {
 
   const handleQuerySubmit = async () => {
     try {
-      const parsedQuery = JSON.parse(query); // Parse the query from the text input
-
-      // Make a POST request to the backend
+      const parsedQuery = JSON.parse(query);
       const response = await fetch('http://localhost:5001/query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: parsedQuery }), // Send the parsed query
+        body: JSON.stringify({ query: parsedQuery }),
       });
 
       if (!response.ok) {
         throw new Error('Query execution failed');
       }
 
-      const data = await response.json(); // Parse the response data
-      setResult(data); // Set the result to the state for display
-      setHistory([...history, { query, result: data }]); // Save to history
+      const data = await response.json();
+      setResult(data);
+      setHistory([...history, { query, result: data }]);
     } catch (error) {
       const errorResult = { error: 'Invalid query or server error.' };
       console.log({ error });
       setResult(errorResult);
-      setHistory([...history, { query, result: errorResult }]); // Save to history
+      setHistory([...history, { query, result: errorResult }]);
     }
   };
 
@@ -196,8 +189,10 @@ function App() {
 
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className="card shadow-sm">
-            <div className={`card-body ${isAdvanced ? 'sticky-top' : ''}`}>
+          <div className={`card shadow-sm ${
+            isAdvanced ? 'sticky-top' : ''
+          }`}>
+            <div className="card-body">
               <h5 className="card-title">Enter MongoDB Query</h5>
               <textarea
                 className={`form-control mb-3 ${theme === 'dark' ? 'dark-textarea' : ''}`}

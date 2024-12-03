@@ -6,10 +6,10 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background-color: white; /* Ensure background color when sticky */
+    /* Remove hardcoded white background */
+    background-color: var(--card-background);
     border-bottom: 1px solid #ddd;
 }
-
 .text-truncate {
     width: 100%;
     white-space: nowrap;
