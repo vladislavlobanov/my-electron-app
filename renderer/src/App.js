@@ -200,7 +200,7 @@ function App() {
             <div className={`card-body ${isAdvanced ? 'sticky-top' : ''}`}>
               <h5 className="card-title">Enter MongoDB Query</h5>
               <textarea
-                className="form-control mb-3"
+                className={`form-control mb-3 ${theme === 'dark' ? 'dark-textarea' : ''}`}
                 rows="6"
                 placeholder="Enter MongoDB query (e.g., { age: { $gt: 25 } })"
                 value={query}

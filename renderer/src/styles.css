@@ -105,6 +105,42 @@ body {
     outline: none;
 }
 
+.dark-textarea {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #444; /* Darker border for better visibility */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dark-textarea:focus {
+    background-color: #1a1a1a; /* Slightly darker background for active state */
+    color: #ffffff; /* Ensure text remains white */
+    border: 1px solid #66bb6a; /* Highlighted border color when active */
+    outline: none; /* Remove default outline */
+    transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for focus effects */
+}
+
+.dark-textarea:focus {
+    border-color: #3d84f7; /* Change border color to a bright blue when focused */
+    outline: none; /* Remove default focus outline */
+}
+
+/* Styles for the toggle switch in dark mode */
+.form-check-input:checked {
+    background-color: #4e5b77; /* Set an appropriate color for the checked state */
+    border-color: #4e5b77; /* Matching border color */
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5); /* Adjust focus shadow for dark mode */
+}
+
+/* Checkbox specific styles for dark theme */
+.dark-theme .form-check-input:checked {
+    background-color: #66bb6a; /* A pleasant green color for checked status */
+    border-color: #66bb6a; /* Matching border */
+}
+
 .text-truncate {
     width: 100%;
     white-space: nowrap;
