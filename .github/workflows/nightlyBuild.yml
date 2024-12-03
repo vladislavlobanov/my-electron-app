@@ -1,7 +1,13 @@
 name: Nightly Build 
-on:
-  schedule:
-  - cron: "0 0 * * 1-5"
+on: push
+# on:
+#   schedule:
+#   - cron: "0 0 * * 1-5"
+
+permissions:
+  id-token: write
+  deployments: write
+  contents: write
 
 jobs:
   build:
