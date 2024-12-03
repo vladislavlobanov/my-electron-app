@@ -226,7 +226,7 @@ function App() {
                 {history.map((item, index) => (
                   <button
                     key={index}
-                    className="list-group-item list-group-item-action text-truncate"
+                    className={`list-group-item list-group-item-action text-truncate ${theme === 'dark' ? 'dark-list-group-item' : ''}`}
                     onClick={() => handleHistoryItemClick(item)}
                   >
                     {`Query: ${item.query} | Result: ${JSON.stringify(item.result)}`}

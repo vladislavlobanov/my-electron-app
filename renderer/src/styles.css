@@ -148,6 +148,18 @@ body {
     outline: none; /* Remove default outline */
 }
 
+/* New styles for dark mode list items */
+.dark-list-group-item {
+    background-color: #1e1e1e; /* Background for dark mode list items */
+    color: #ffffff; /* Text color for dark mode list items */
+    border: 1px solid #444; /* Border color for dark mode */
+}
+
+.dark-list-group-item:hover {
+    background-color: #444; /* Lighter background on hover */
+}
+
+/* Repeated text-truncate class */
 .text-truncate {
     width: 100%;
     white-space: nowrap;
