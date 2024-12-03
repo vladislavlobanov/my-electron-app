@@ -10,6 +10,7 @@
     background-color: var(--card-background);
     border-bottom: 1px solid #ddd;
 }
+
 .text-truncate {
     width: 100%;
     white-space: nowrap;
@@ -136,9 +137,15 @@ body {
 }
 
 /* Checkbox specific styles for dark theme */
+.dark-theme .form-check-input {
+    background-color: #444; /* Background color for unchecked state */
+    border-color: #666; /* Border color for unchecked state */
+}
+
 .dark-theme .form-check-input:checked {
     background-color: #66bb6a; /* A pleasant green color for checked status */
-    border-color: #66bb6a; /* Matching border */
+    border-color: #66bb6a; /* Matching border for checked state */
+    outline: none; /* Remove default outline */
 }
 
 .text-truncate {
