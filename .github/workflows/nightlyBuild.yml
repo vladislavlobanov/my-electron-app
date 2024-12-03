@@ -4,10 +4,7 @@ on: push
 #   schedule:
 #   - cron: "0 0 * * 1-5"
 
-permissions:
-  id-token: write
-  deployments: write
-  contents: write
+permissions: write-all
 
 jobs:
   build:
