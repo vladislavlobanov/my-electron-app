@@ -1,8 +1,8 @@
 name: Nightly Build 
-on: push
-# on:
-#   schedule:
-#   - cron: "0 0 * * 1-5"
+
+on:
+  schedule:
+  - cron: "0 0 * * 1-5"
 
 permissions: write-all
 
