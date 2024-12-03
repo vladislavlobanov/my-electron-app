@@ -120,11 +120,6 @@ body {
     transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for focus effects */
 }
 
-.dark-textarea:focus {
-    border-color: #3d84f7; /* Change border color to a bright blue when focused */
-    outline: none; /* Remove default focus outline */
-}
-
 /* Styles for the toggle switch in dark mode */
 .form-check-input:checked {
     background-color: #4e5b77; /* Set an appropriate color for the checked state */
