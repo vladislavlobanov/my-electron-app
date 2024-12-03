@@ -48,7 +48,7 @@ module.exports = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'andrei-kim-3tsoftwarelabs',
+          owner: 'vaisakhsasikumar',
           name: 'my-electron-app'
         },
         draft: true,
