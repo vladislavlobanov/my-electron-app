@@ -143,7 +143,7 @@ body {
 }
 
 .dark-theme .form-check-input:checked {
-    background-color: #66bb6a; /* A pleasant green color for checked status */
+    background-color: #444; /* Background color for checked state */
     border-color: #66bb6a; /* Matching border for checked state */
     outline: none; /* Remove default outline */
 }
