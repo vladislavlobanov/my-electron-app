@@ -87,3 +87,5 @@ This project is hosted on GitHub, with source code managed and integrated with a
    npx webpack
    npx electron .
 
+## Test Cases
+[Click here to view the Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/TestCases.md)
