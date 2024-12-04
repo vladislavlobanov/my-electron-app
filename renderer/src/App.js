@@ -11,6 +11,11 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [theme, setTheme] = useState('system');
 
+  // New state variables for DB settings
+  const [uri, setUri] = useState('mongodb://localhost:27017');
+  const [dbName, setDbName] = useState('test');
+  const [collectionName, setCollectionName] = useState('test');
+
   useEffect(() => {
     ipcRenderer.on('open-settings', () => {
       setShowSettings(true);
@@ -68,7 +73,7 @@ function App() {
   const handleQuerySubmit = async () => {
     try {
       const parsedQuery = JSON.parse(query);
-      const response = await fetch('http://localhost:5001/query', {
+      const response = await fetch(`${uri}/${dbName}/${collectionName}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -155,6 +160,33 @@ function App() {
                     </label>
                   </div>
                 </div>
+                <h5>Database Settings</h5>
+                <div className="form-group">
+                  <label htmlFor="uriInput">URI</label>
+                  <input
+                    type="text"
+                    id="uriInput"
+                    className="form-control mb-2"
+                    value={uri}
+                    onChange={(e) => setUri(e.target.value)}
+                  />
+                  <label htmlFor="dbNameInput">Database Name</label>
+                  <input
+                    type="text"
+                    id="dbNameInput"
+                    className="form-control mb-2"
+                    value={dbName}
+                    onChange={(e) => setDbName(e.target.value)}
+                  />
+                  <label htmlFor="collectionNameInput">Collection Name</label>
+                  <input
+                    type="text"
+                    id="collectionNameInput"
+                    className="form-control mb-2"
+                    value={collectionName}
+                    onChange={(e) => setCollectionName(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={handleSettingsClose}>
@@ -189,9 +221,7 @@ function App() {
 
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className={`card shadow-sm ${
-            isAdvanced ? 'sticky-top' : ''
-          }`}>
+          <div className={`card shadow-sm ${isAdvanced ? 'sticky-top' : ''}`}>
             <div className="card-body">
               <h5 className="card-title">Enter MongoDB Query</h5>
               <textarea
