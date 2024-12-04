@@ -16,6 +16,14 @@ function App() {
   const [dbName, setDbName] = useState('test');
   const [collectionName, setCollectionName] = useState('test');
 
+  // Store previous settings for reset
+  const [prevSettings, setPrevSettings] = useState({
+    theme: 'system',
+    uri: 'mongodb://localhost:27017',
+    dbName: 'test',
+    collectionName: 'test',
+  });
+
   useEffect(() => {
     ipcRenderer.on('open-settings', () => {
       setShowSettings(true);
@@ -67,6 +75,19 @@ function App() {
   };
 
   const handleSettingsClose = () => {
+    setShowSettings(false);
+  };
+
+  const handleApplySettings = () => {
+    setPrevSettings({ theme, uri, dbName, collectionName });
+    setShowSettings(false);
+  };
+
+  const handleCancelSettings = () => {
+    setTheme(prevSettings.theme);
+    setUri(prevSettings.uri);
+    setDbName(prevSettings.dbName);
+    setCollectionName(prevSettings.collectionName);
     setShowSettings(false);
   };
 
@@ -189,8 +210,12 @@ function App() {
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleSettingsClose}>
-                  Close
+                <button type="button" className="btn btn-secondary" onClick={handleCancelSettings}>
+                  Cancel
+                </button>
+                <div className="ml-2 mr-2" style={{ width: '20px' }}></div>
+                <button type="button" className="btn btn-primary" onClick={handleApplySettings}>
+                  Apply
                 </button>
               </div>
             </div>
