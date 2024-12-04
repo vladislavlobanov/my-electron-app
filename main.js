@@ -1,5 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require("electron");
-const path = require("path");
+const { app, BrowserWindow, Menu } = require("electron");
 
 let mainWindow;
 
@@ -42,6 +41,8 @@ app.on("ready", () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    titleBarStyle: 'hidden',
+    ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {}),
     webPreferences: {
       nodeIntegration: true, // Enable Node.js integration
       contextIsolation: false, // Disable context isolation
