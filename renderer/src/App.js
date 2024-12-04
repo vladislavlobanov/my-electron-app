@@ -78,8 +78,18 @@ function App() {
     setShowSettings(false);
   };
 
-  const handleApplySettings = () => {
+  const handleApplySettings = async () => {
     setPrevSettings({ theme, uri, dbName, collectionName });
+
+    // Send database configuration to the server
+    await fetch('http://localhost:5001/setDatabaseConfig', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uri, dbName, collectionName }),
+    });
+
     setShowSettings(false);
   };
 

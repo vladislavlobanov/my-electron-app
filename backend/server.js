@@ -20,11 +20,13 @@ app.post("/setDatabaseConfig", (req, res) => {
   const { uri, dbName, collectionName } = req.body;
   setDatabaseConfig(uri, dbName, collectionName);
   res.send({ message: "Database configuration updated." });
+  console.log("setDatabaseConfig:", uri, dbName, collectionName);
 });
 
 app.get("/getDatabaseConfig", (req, res) => {
   const config = getDatabaseConfig();
   res.json(config);
+  console.log("getDatabaseConfig:", config);
 });
 
 app.listen(5001, () => console.log("Server running on port 5001"));
