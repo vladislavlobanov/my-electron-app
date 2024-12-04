@@ -14,8 +14,7 @@ app.post("/query", async (req, res) => {
     const result = await executeQuery(query);
     console.log("Query executed successfully:", result); // Log the result on success
     res.json(result);
-  } catch (error) {
-    console.error("Query execution failed:", error); // Log the error on failure
+  } catch {
     res.status(500).send({ error: "Query execution failed." });
   }
 });
