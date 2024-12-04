@@ -4,9 +4,9 @@ let uri = 'mongodb://localhost:27017'; // Replace with your MongoDB URI
 let dbName = 'test'; // Replace with your database name
 let collectionName = 'test'; // Replace with your collection name
 
-const client = new MongoClient(uri);
 
 async function executeQuery(query) {
+  const client = new MongoClient(uri);
   try {
     await client.connect();
     console.log("Connected")
