@@ -1,14 +1,16 @@
 const { MongoClient } = require('mongodb');
 
-const uri = 'mongodb://localhost:27017'; // Replace with your MongoDB URI
-const client = new MongoClient(uri);
+let uri = 'mongodb://localhost:27017'; // Replace with your MongoDB URI
+let dbName = 'test'; // Replace with your database name
+let collectionName = 'test'; // Replace with your collection name
 
 async function executeQuery(query) {
+  const client = new MongoClient(uri);
   try {
     await client.connect();
     console.log("Connected")
-    const db = client.db('test'); // Replace with your database name
-    return await db.collection('test').find(query).toArray(); // Replace with your collection name
+    const db = client.db(dbName);
+    return await db.collection(collectionName).find(query).toArray();
   } catch (error) {
     console.error('Error executing query:', error);
     throw error;
@@ -17,4 +19,18 @@ async function executeQuery(query) {
   }
 }
 
-module.exports = { executeQuery };
+function setDatabaseConfig(newUri, newDbName, newCollectionName) {
+  uri = newUri;
+  dbName = newDbName;
+  collectionName = newCollectionName;
+}
+
+function getDatabaseConfig() {
+  return {
+    uri,
+    dbName,
+    collectionName
+  };
+}
+
+module.exports = { executeQuery, setDatabaseConfig, getDatabaseConfig };

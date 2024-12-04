@@ -11,6 +11,34 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [theme, setTheme] = useState('system');
 
+  // New state variables for DB settings
+  const [uri, setUri] = useState('');
+  const [dbName, setDbName] = useState('');
+  const [collectionName, setCollectionName] = useState('');
+
+  // Store previous settings for reset
+  const [prevSettings, setPrevSettings] = useState({
+    theme: 'system',
+    uri: '',
+    dbName: '',
+    collectionName: '',
+  });
+
+  useEffect(() => {
+    const fetchDatabaseConfig = async () => {
+      const response = await fetch('http://localhost:5001/getDatabaseConfig');
+      if (response.ok) {
+        const config = await response.json();
+        setUri(config.uri);
+        setDbName(config.dbName);
+        setCollectionName(config.collectionName);
+        setPrevSettings(config);
+      }
+    };
+
+    fetchDatabaseConfig();
+  }, []);
+
   useEffect(() => {
     ipcRenderer.on('open-settings', () => {
       setShowSettings(true);
@@ -62,6 +90,29 @@ function App() {
   };
 
   const handleSettingsClose = () => {
+    setShowSettings(false);
+  };
+
+  const handleApplySettings = async () => {
+    setPrevSettings({ theme, uri, dbName, collectionName });
+
+    // Send database configuration to the server
+    await fetch('http://localhost:5001/setDatabaseConfig', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uri, dbName, collectionName }),
+    });
+
+    setShowSettings(false);
+  };
+
+  const handleCancelSettings = () => {
+    setTheme(prevSettings.theme);
+    setUri(prevSettings.uri);
+    setDbName(prevSettings.dbName);
+    setCollectionName(prevSettings.collectionName);
     setShowSettings(false);
   };
 
@@ -155,10 +206,41 @@ function App() {
                     </label>
                   </div>
                 </div>
+                <h5>Database Settings</h5>
+                <div className="form-group">
+                  <label htmlFor="uriInput">URI</label>
+                  <input
+                    type="text"
+                    id="uriInput"
+                    className="form-control mb-2"
+                    value={uri}
+                    onChange={(e) => setUri(e.target.value)}
+                  />
+                  <label htmlFor="dbNameInput">Database Name</label>
+                  <input
+                    type="text"
+                    id="dbNameInput"
+                    className="form-control mb-2"
+                    value={dbName}
+                    onChange={(e) => setDbName(e.target.value)}
+                  />
+                  <label htmlFor="collectionNameInput">Collection Name</label>
+                  <input
+                    type="text"
+                    id="collectionNameInput"
+                    className="form-control mb-2"
+                    value={collectionName}
+                    onChange={(e) => setCollectionName(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleSettingsClose}>
-                  Close
+                <button type="button" className="btn btn-secondary" onClick={handleCancelSettings}>
+                  Cancel
+                </button>
+                <div className="ml-2 mr-2" style={{ width: '20px' }}></div>
+                <button type="button" className="btn btn-primary" onClick={handleApplySettings}>
+                  Apply
                 </button>
               </div>
             </div>
@@ -189,9 +271,7 @@ function App() {
 
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className={`card shadow-sm ${
-            isAdvanced ? 'sticky-top' : ''
-          }`}>
+          <div className={`card shadow-sm ${isAdvanced ? 'sticky-top' : ''}`}>
             <div className="card-body">
               <h5 className="card-title">Enter MongoDB Query</h5>
               <textarea

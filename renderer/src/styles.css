@@ -1,4 +1,3 @@
-/* Import Bootstrap CSS */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 .sticky-top {
@@ -157,6 +156,30 @@ body {
 
 .dark-list-group-item:hover {
     background-color: #444; /* Lighter background on hover */
+}
+
+/* Input styles for dark theme */
+.dark-theme .form-control {
+    background-color: #1e1e1e; /* Dark background for dark mode */
+    color: #ffffff; /* White text for contrast */
+    border: 1px solid #444; /* Darker border for better visibility */
+}
+
+.dark-theme .form-control:focus {
+    background-color: #2a2a2a; /* Slightly lighter dark background for editing */
+    border: 1px solid #66bb6a; /* Highlight border color */
+    color: #ffffff; /* Ensure text remains white */
+}
+
+.light-theme .form-control {
+    background-color: #ffffff; /* White background for light mode */
+    color: #000000; /* Black text for contrast */
+}
+
+.light-theme .form-control:focus {
+    background-color: #f0f0f0; /* Slightly gray background for editing */
+    border: 1px solid #007bff; /* Bootstrap primary border color */
+    color: #000000; /* Ensure text remains black */
 }
 
 /* Repeated text-truncate class */
