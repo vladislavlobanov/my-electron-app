@@ -12,17 +12,32 @@ function App() {
   const [theme, setTheme] = useState('system');
 
   // New state variables for DB settings
-  const [uri, setUri] = useState('mongodb://localhost:27017');
-  const [dbName, setDbName] = useState('test');
-  const [collectionName, setCollectionName] = useState('test');
+  const [uri, setUri] = useState('');
+  const [dbName, setDbName] = useState('');
+  const [collectionName, setCollectionName] = useState('');
 
   // Store previous settings for reset
   const [prevSettings, setPrevSettings] = useState({
     theme: 'system',
-    uri: 'mongodb://localhost:27017',
-    dbName: 'test',
-    collectionName: 'test',
+    uri: '',
+    dbName: '',
+    collectionName: '',
   });
+
+  useEffect(() => {
+    const fetchDatabaseConfig = async () => {
+      const response = await fetch('http://localhost:5001/getDatabaseConfig');
+      if (response.ok) {
+        const config = await response.json();
+        setUri(config.uri);
+        setDbName(config.dbName);
+        setCollectionName(config.collectionName);
+        setPrevSettings(config);
+      }
+    };
+
+    fetchDatabaseConfig();
+  }, []);
 
   useEffect(() => {
     ipcRenderer.on('open-settings', () => {
