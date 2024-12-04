@@ -8,10 +8,14 @@ app.use(express.json());
 
 app.post("/query", async (req, res) => {
   const { query } = req.body;
+  console.log("Received query:", query); // Log the received query
+
   try {
     const result = await executeQuery(query);
+    console.log("Query executed successfully:", result); // Log the result on success
     res.json(result);
-  } catch {
+  } catch (error) {
+    console.error("Query execution failed:", error); // Log the error on failure
     res.status(500).send({ error: "Query execution failed." });
   }
 });
