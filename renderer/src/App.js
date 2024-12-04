@@ -119,12 +119,12 @@ function App() {
   const handleQuerySubmit = async () => {
     try {
       const parsedQuery = JSON.parse(query);
-      const response = await fetch(`${uri}/${dbName}/${collectionName}`, {
+      const response = await fetch('http://localhost:5001/query', { // Use the correct endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: parsedQuery }),
+        body: JSON.stringify({ query: parsedQuery }), // Match the request structure
       });
 
       if (!response.ok) {
