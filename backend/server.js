@@ -1,5 +1,5 @@
 const express = require("express");
-const { executeQuery } = require("./db");
+const { executeQuery, setDatabaseConfig, getDatabaseConfig } = require("./db");
 const cors = require("cors");
 
 const app = express();
@@ -14,6 +14,17 @@ app.post("/query", async (req, res) => {
   } catch {
     res.status(500).send({ error: "Query execution failed." });
   }
+});
+
+app.post("/setDatabaseConfig", (req, res) => {
+  const { uri, dbName, collectionName } = req.body;
+  setDatabaseConfig(uri, dbName, collectionName);
+  res.send({ message: "Database configuration updated." });
+});
+
+app.get("/getDatabaseConfig", (req, res) => {
+  const config = getDatabaseConfig();
+  res.json(config);
 });
 
 app.listen(5001, () => console.log("Server running on port 5001"));
