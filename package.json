@@ -9,6 +9,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
+    "dev": "concurrently \"npx webpack --watch\" \"electron .\"",
     "make": "electron-forge make",
     "package": "electron-forge package",
     "publish": "electron-forge publish",
@@ -19,9 +20,11 @@
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
+    "better-sqlite3": "^11.6.0",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "css-loader": "^7.1.2",
+    "electron-reload": "^2.0.0-alpha.1",
     "express": "^4.21.1",
     "mongodb": "^6.11.0",
     "react": "^18.3.1",
@@ -47,6 +50,7 @@
     "@eslint/js": "^9.16.0",
     "@playwright/test": "^1.49.0",
     "babel-loader": "^9.2.1",
+    "concurrently": "^9.1.0",
     "electron": "^33.2.0",
     "electron-squirrel-startup": "^1.0.1",
     "eslint": "^9.16.0",

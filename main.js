@@ -1,6 +1,8 @@
 const { app, BrowserWindow, Menu, utilityProcess } = require("electron");
 const { join } = require("node:path");
+const electronReload = require("electron-reload");
 
+electronReload(__dirname, {});
 let mainWindow;
 
 app.on("ready", () => {
