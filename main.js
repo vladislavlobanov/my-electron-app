@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, utilityProcess } = require("electron");
+const { join } = require("node:path");
 
 let mainWindow;
 
@@ -6,7 +7,7 @@ app.on("ready", () => {
   /**
    * Create another process that will run backend code
    */
-  utilityProcess.fork(path.join(__dirname, "/backend/server.js"), [])
+  utilityProcess.fork(join(__dirname, "backend/server.js"), [])
   // Create the main menu
   const template = [
     // { role: 'appMenu' }
