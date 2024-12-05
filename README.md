@@ -16,13 +16,13 @@ Simple Electron MongoDB Query Tool
 
 2. **Viewing Results in JSON Format**: After executing a query, users can view the results in a structured JSON format, making it easy to read and understand the data returned.
 
-3. **Fixed MongoDB Connection**: The application allows access to a predefined or stored in settings MongoDB connection, simplifying the setup process for the user since they don't need to input connection strings.
+3. **Configurable MongoDB Connection**: The application utilizes the MongoDB URI, Database, and Collection specified in the settings while running queries. This approach allows users to easily configure their connection details without needing to input connection strings each time they execute a query.
 
 4. **Persisting Query History**: Users can have their previous queries saved in local storage, allowing them to easily access and rerun past queries without retyping.
 
-5. **Settings and Theme Management**: The application includes a settings menu that allows users to switch themes and MongoDB URI/Database/Collection.
+5. **Settings and Theme Management**: The application includes a settings menu that allows users to switch themes and MongoDB URI/Database/Collection. Settings are persisted in local storage in order to facilitate users not to enter them each time after app has been restarted. Settings have defauld values, which are used when app starts for the first time, and lately can be replaced anytime.
 
-6. **Comparison of Query Results**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies.
+6. **Execution History Overview**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies.
 
 # External System(s)
 **MongoDB**: The primary database system used for managing and querying data. MongoDB facilitates the storage of JSON-like documents with dynamic schemas, which is integral to the query tool's operation. [MongoDB Documentation](https://mongodb.com/docs/)
@@ -38,11 +38,11 @@ The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style
 
 # Branching Strategy
 
-TBD
+We have mono repo for the whole project. We create PRs and merge them to master branch from our repos or our branches.
 
 # Deployment Model
 
-TBD
+The Simple Electron MongoDB Query Tool can be deployed as a native desktop application across various operating systems, including Windows, macOS, and Linux. Leveraging ElectronJS capabilities, the app can package web technologies into standalone executables, allowing users to easily install and run the application on their local machines without needing an additional server setup. This ensures a seamless experience for users while maintaining consistent functionality across platforms.
 
 # Proof-of-Concept Desktop Application using Electron
 
@@ -57,11 +57,6 @@ A desktop application built with Electron that allows users to run a given Mongo
 - **Webpack** for bundling JavaScript files
 - **GitHub Actions** for continuous integration and deployment automation
 - **Local Storage** Sqlite database 
-
-## Features
-- Run MongoDB find queries
-- Display results in JSON format
-- Fixed MongoDB connection (no configurable connection strings)
 
 ## Purpose
 To provide hands-on experience with:
@@ -79,10 +74,8 @@ This project is hosted on GitHub, with source code managed and integrated with a
 1. **Install dependencies**:
    ```bash
    npm install
-2. **Run Node Server**:
-     ```bash
-   node backend/server.js
-3. **Build and Deploy**:
+
+2. **Build, Run and Deploy**:
      ```bash
    npx webpack
    npx electron .
