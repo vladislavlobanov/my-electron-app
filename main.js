@@ -1,10 +1,15 @@
-const { app, BrowserWindow, Menu } = require("electron");
+const { app, BrowserWindow, Menu, utilityProcess } = require("electron");
+const { join } = require("node:path");
 const electronReload = require("electron-reload");
 
 electronReload(__dirname, {});
 let mainWindow;
 
 app.on("ready", () => {
+  /**
+   * Create another process that will run backend code
+   */
+  utilityProcess.fork(join(__dirname, "backend/server.js"), [])
   // Create the main menu
   const template = [
     // { role: 'appMenu' }
@@ -59,5 +64,10 @@ app.on("ready", () => {
 
 // Graceful exit
 app.on("window-all-closed", () => {
-  app.quit();
+  if (process.platform !== "darwin") {
+    processes.forEach(function(proc) {
+      proc.kill();
+    });
+    app.quit();
+  }
 });
