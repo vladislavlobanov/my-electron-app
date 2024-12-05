@@ -37,7 +37,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS queries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     query TEXT NOT NULL,
-    result TEXT NOT NULL
+    output TEXT NOT NULL
   );
 `);
 
