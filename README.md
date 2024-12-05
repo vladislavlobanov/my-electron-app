@@ -79,7 +79,6 @@ This project is hosted on GitHub, with source code managed and integrated with a
 2. **Build, Run and Deploy**:
      ```bash
    npx webpack
-   npx electron .
    npm start
 
 ## Test Cases
