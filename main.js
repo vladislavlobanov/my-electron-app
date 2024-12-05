@@ -1,5 +1,7 @@
 const { app, BrowserWindow, Menu } = require("electron");
+const electronReload = require("electron-reload");
 
+electronReload(__dirname, {});
 let mainWindow;
 
 app.on("ready", () => {
