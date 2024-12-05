@@ -38,13 +38,16 @@ The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style
 
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/Diagram.png)
 
-# Branching Strategy
+# Repository and Branching Strategy
 
-We have mono repo for the whole project. We create PRs and merge them to master branch from our repos or our branches.
+We have mono github repo for the whole project. We create PRs and merge them to master branch from our personal repos or our branches from current repo.
 
 # Deployment Model
 
 The Simple Electron MongoDB Query Tool can be deployed as a native desktop application across various operating systems, including Windows, macOS, and Linux. Leveraging ElectronJS capabilities, the app can package web technologies into standalone executables, allowing users to easily install and run the application on their local machines without needing an additional server setup. This ensures a seamless experience for users while maintaining consistent functionality across platforms.
+
+# Project Board
+[![Board](https://github.com/users/vaisakhsasikumar/projects/1/views/1)
 
 # Proof-of-Concept Desktop Application using Electron
 
