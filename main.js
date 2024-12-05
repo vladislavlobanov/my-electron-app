@@ -1,8 +1,12 @@
-const { app, BrowserWindow, Menu } = require("electron");
+const { app, BrowserWindow, Menu, utilityProcess } = require("electron");
 
 let mainWindow;
 
 app.on("ready", () => {
+  /**
+   * Create another process that will run backend code
+   */
+  utilityProcess.fork(path.join(__dirname, "/backend/server.js"), [])
   // Create the main menu
   const template = [
     // { role: 'appMenu' }
@@ -57,5 +61,10 @@ app.on("ready", () => {
 
 // Graceful exit
 app.on("window-all-closed", () => {
-  app.quit();
+  if (process.platform !== "darwin") {
+    processes.forEach(function(proc) {
+      proc.kill();
+    });
+    app.quit();
+  }
 });
