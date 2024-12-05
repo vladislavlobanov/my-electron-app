@@ -3,6 +3,9 @@
 # System Name
 Simple Electron MongoDB Query Tool
 
+## Description
+A desktop application built with Electron that allows users to run a given MongoDB find queries and view the results in JSON format.
+
 # Contributors
 - Vaisakh Sasikumar
 - Andrei Kim
@@ -40,6 +43,7 @@ The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style
 
 # Repository and Branching Strategy
 
+This project is hosted on GitHub, with source code managed and integrated with a CI/CD pipeline for automated build and testing.
 We have mono github repo for the whole project. We create PRs and merge them to master branch from our personal repos or our branches from current repo.
 
 # Deployment Model
@@ -52,9 +56,6 @@ The Simple Electron MongoDB Query Tool can be deployed as a native desktop appli
 # Proof-of-Concept Desktop Application using Electron
 
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/screenshot.png)
-
-## Description
-A desktop application built with Electron that allows users to run a given MongoDB find queries and view the results in JSON format.
 
 ## Technologies
 - **Electron** for desktop application development
@@ -69,8 +70,6 @@ To provide hands-on experience with:
 - MongoDB integration
 - CI/CD automation with GitHub Actions
 
-## Repository
-This project is hosted on GitHub, with source code managed and integrated with a CI/CD pipeline for automated build and testing.
 
 ---
 
