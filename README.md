@@ -16,13 +16,14 @@ Simple Electron MongoDB Query Tool
 
 2. **Viewing Results in JSON Format**: After executing a query, users can view the results in a structured JSON format, making it easy to read and understand the data returned.
 
-3. **Configurable MongoDB Connection**: The application utilizes the MongoDB URI, Database, and Collection specified in the settings while running queries. This approach allows users to easily configure their connection details without needing to input connection strings each time they execute a query.
+3. **Configuring MongoDB Connection**: The application utilizes the MongoDB URI, Database, and Collection specified in the settings while running queries. This approach allows users to easily configure their connection details without needing to input connection strings each time they execute a query.
 
-4. **Persisting Query History**: Users can have their previous queries saved in local storage, allowing them to easily access and rerun past queries without retyping.
+4. **Overviewing Execution History**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies.
+   
+5. **Persisting Query History**: Users can have their previous queries saved in local storage, allowing them to easily access and rerun past queries without retyping.
 
-5. **Settings and Theme Management**: The application includes a settings menu that allows users to switch themes and MongoDB URI/Database/Collection. Settings are persisted in local storage in order to facilitate users not to enter them each time after app has been restarted. Settings have defauld values, which are used when app starts for the first time, and lately can be replaced anytime.
+6. **Managing Settings and Theme**: The application includes a settings menu that allows users to switch themes and MongoDB URI/Database/Collection. Settings are persisted in local storage in order to facilitate users not to enter them each time after the app has been restarted. Settings have default values, which are used when the app starts for the first time, and lately can be replaced anytime.
 
-6. **Execution History Overview**: Users can invoke an "Advanced View" feature to see a simplified history of their queries and replies.
 
 # External System(s)
 **MongoDB**: The primary database system used for managing and querying data. MongoDB facilitates the storage of JSON-like documents with dynamic schemas, which is integral to the query tool's operation. [MongoDB Documentation](https://mongodb.com/docs/)
