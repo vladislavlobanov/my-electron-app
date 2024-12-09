@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 let uri = 'mongodb://localhost:27017'; // Replace with your MongoDB URI
 let dbName = 'test'; // Replace with your database name
 let collectionName = 'test'; // Replace with your collection name
-let theme = 'default'; // Default theme
+let theme = 'system'; // Default theme
 
 async function executeQuery(query) {
   const client = new MongoClient(uri);
