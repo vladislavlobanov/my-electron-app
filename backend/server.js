@@ -1,5 +1,5 @@
 const express = require("express");
-const { executeQuery, setDatabaseConfig, getDatabaseConfig } = require("./db");
+const { executeQuery, storeSettings, getSettings } = require("./db");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
@@ -69,17 +69,17 @@ app.post("/api/queries", (req, res) => {
   }
 });
 
-app.post("/setDatabaseConfig", (req, res) => {
-  const { uri, dbName, collectionName } = req.body;
-  setDatabaseConfig(uri, dbName, collectionName);
-  res.send({ message: "Database configuration updated." });
-  console.log("setDatabaseConfig:", uri, dbName, collectionName);
+app.post("/storeSettings", (req, res) => {
+  const { uri, dbName, collectionName, theme } = req.body;
+  storeSettings(uri, dbName, collectionName, theme);
+  res.send({ message: "Settings updated." });
+  console.log("storeSettings:", uri, dbName, collectionName, theme);
 });
 
-app.get("/getDatabaseConfig", (req, res) => {
-  const config = getDatabaseConfig();
+app.get("/getSettings", (req, res) => {
+  const config = getSettings();
   res.json(config);
-  console.log("getDatabaseConfig:", config);
+  console.log("getSettings:", config);
 });
 
 app.listen(5001, () => console.log("Server running on port 5001"));
