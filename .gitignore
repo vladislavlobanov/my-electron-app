@@ -137,4 +137,8 @@ dist
 /.idea/vcs.xml
 /.idea/workspace.xml
 
-/localStorage
+src/localStorage/
+dist/
+dist-electron/
+release/
+dist-ssr

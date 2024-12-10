@@ -2,9 +2,9 @@ name: NodeJS with Webpack
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   eslint:
@@ -18,14 +18,14 @@ jobs:
       - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'  # Use a single Node.js version for consistency
+          node-version: "20.x" # Use a single Node.js version for consistency
 
       - name: Install Dependencies
         run: npm ci
 
       - name: Run ESLint
         run: npm run lint
-        continue-on-error: true  # Ensure the job continues even if ESLint finds errors
+        continue-on-error: true # Ensure the job continues even if ESLint finds errors
 
   build-linux-windows:
     name: Build on ${{ matrix.os.name }} with Node.js ${{ matrix.node-version }}
@@ -33,8 +33,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - { name: 'linux', image: 'ubuntu-latest' }
-          - { name: 'windows', image: 'windows-latest' }
+          - { name: "linux", image: "ubuntu-latest" }
+          - { name: "windows", image: "windows-latest" }
         node-version: [18.x, 20.x, 22.x]
     needs: eslint
 
@@ -50,7 +50,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run make
+        run: npm run build
 
   build-macos:
     name: Build on macOS with Node.js ${{ matrix.node-version }}
@@ -72,7 +72,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run make
+        run: npm run build
 
   test:
     name: Run Tests on macOS with Node.js ${{ matrix.node-version }}
@@ -80,7 +80,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-    needs: build-macos  # Ensure tests run after the macOS build
+    needs: build-macos # Ensure tests run after the macOS build
 
     steps:
       - uses: actions/checkout@v4
