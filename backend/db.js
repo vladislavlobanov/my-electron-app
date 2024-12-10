@@ -1,11 +1,10 @@
-const { MongoClient } = require('mongodb');
+import { MongoClient } from "mongodb";
 
-let uri = 'mongodb://localhost:27017'; // Replace with your MongoDB URI
-let dbName = 'test'; // Replace with your database name
-let collectionName = 'test'; // Replace with your collection name
-let theme = 'system'; // Default theme
+let uri = "mongodb://localhost:27017"; // Replace with your MongoDB URI
+let dbName = "test"; // Replace with your database name
+let collectionName = "test"; // Replace with your collection name
 
-async function executeQuery(query) {
+export async function executeQuery(query) {
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -13,27 +12,23 @@ async function executeQuery(query) {
     const db = client.db(dbName);
     return await db.collection(collectionName).find(query).toArray();
   } catch (error) {
-    console.error('Error executing query:', error);
+    console.error("Error executing query:", error);
     throw error;
   } finally {
     await client.close();
   }
 }
 
-function storeSettings(newUri, newDbName, newCollectionName, newTheme) {
+export function setDatabaseConfig(newUri, newDbName, newCollectionName) {
   uri = newUri;
   dbName = newDbName;
   collectionName = newCollectionName;
-  theme = newTheme;
 }
 
-function getSettings() {
+export function getDatabaseConfig() {
   return {
     uri,
     dbName,
     collectionName,
-    theme
   };
 }
-
-module.exports = { executeQuery, storeSettings, getSettings };
