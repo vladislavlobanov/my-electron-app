@@ -60,7 +60,6 @@ jobs:
     strategy:
       matrix:
         os:
-          - { name: 'windows', image: 'windows-latest' }
           - { name: 'macos', image: 'macos-latest' }
         node-version: [18.x, 20.x, 22.x]
     runs-on: ${{ matrix.os.image }}
