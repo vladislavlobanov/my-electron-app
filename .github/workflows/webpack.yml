@@ -54,33 +54,31 @@ jobs:
       - name: Build
         run: npm run make
 
-      - name: Set up Xvfb for Linux
+      # Install necessary GUI dependencies on Linux
+      - name: Install GUI Dependencies on Linux
         if: matrix.os.name == 'linux'
         run: |
           sudo apt-get update
-          # Install XFCE desktop environment
-          sudo apt-get install -y xfce4 xfce4-goodies
-          
-          # Install TigerVNC server
-          sudo apt-get install -y tigervnc-standalone-server tigervnc-common
-          
-          # Set up VNC password (empty password for simplicity; modify as needed)
-          mkdir -p ~/.vnc
-          echo "" | vncpasswd -f > ~/.vnc/passwd
-          chmod 600 ~/.vnc/passwd
-          
-          # Create a startup script for VNC
-          echo -e "#!/bin/bash\nstartxfce4 &\n" > ~/.vnc/xstartup
-          chmod +x ~/.vnc/xstartup
-          
-          # Start the VNC server on display :1
-          vncserver :1 -geometry 1280x1024 -depth 24
-          
-          # Export the DISPLAY variable
-          echo "DISPLAY=:1" >> $GITHUB_ENV
-
-          # Install additional dependencies if required by your Electron app
-          sudo apt-get install -y libgtk-3-0 libnotify-dev libnss3 libxss1 libasound2
+          sudo apt-get install -y \
+            libgtk-3-0 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            libasound2 \
+            libgbm-dev \
+            libnss3 \
+            libatk-bridge2.0-0 \
+            libgtk-3-0 \
+            libxext6 \
+            libxfixes3 \
+            libxi6 \
+            libxrender1 \
+            libxcb1 \
+            libxcb-render0 \
+            libxcb-shape0 \
+            libxcb-xfixes0 \
+            libxcb1-dev
 
       - name: Run Tests
         run: npm test
