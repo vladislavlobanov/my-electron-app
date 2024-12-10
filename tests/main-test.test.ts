@@ -8,10 +8,8 @@ describe("Electron Application Tests", () => {
   let window: Page;
 
   beforeAll(async () => {
-    // Launch Electron using ts-node to run main.ts
     electronApp = await electron.launch({
       args: [
-        // Use ts-node to run the TypeScript file directly
         path.join(__dirname, "../dist-electron//main.js"), // Path to your Electron entry file
       ],
     });
