@@ -25,18 +25,19 @@ function App() {
   });
 
   useEffect(() => {
-    const fetchDatabaseConfig = async () => {
-      const response = await fetch('http://localhost:5001/getDatabaseConfig');
+    const fetchSettings = async () => {
+      const response = await fetch('http://localhost:5001/getSettings');
       if (response.ok) {
         const config = await response.json();
         setUri(config.uri);
         setDbName(config.dbName);
         setCollectionName(config.collectionName);
+        setTheme(config.theme);
         setPrevSettings(config);
       }
     };
 
-    fetchDatabaseConfig();
+    fetchSettings();
   }, []);
 
   useEffect(() => {
@@ -96,13 +97,13 @@ function App() {
   const handleApplySettings = async () => {
     setPrevSettings({ theme, uri, dbName, collectionName });
 
-    // Send database configuration to the server
-    await fetch('http://localhost:5001/setDatabaseConfig', {
+    // Send settings to the server
+    await fetch('http://localhost:5001/storeSettings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uri, dbName, collectionName }),
+      body: JSON.stringify({ uri, dbName, collectionName, theme }),
     });
 
     setShowSettings(false);
