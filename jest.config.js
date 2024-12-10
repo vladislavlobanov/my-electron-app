@@ -1,16 +1,9 @@
-module.exports = {
-  // Specify the test environment
+export default {
   testEnvironment: "node",
-
-  // Define the test file patterns
-  testMatch: ["**/tests/**/*.test.js"],
-
-  // Enable ESM support if using ES Modules
-  transform: {},
-
-  // Specify modules that should not be transformed
-  transformIgnorePatterns: [],
-
-  // Enable verbose test results
-  verbose: true
+  testMatch: ["**/tests/**/*.test.ts"],
+  transform: {
+    "^.+\\.ts$": ["ts-jest", { useESM: true }],
+  },
+  extensionsToTreatAsEsm: [".ts"],
+  verbose: true,
 };
