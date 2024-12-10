@@ -23,30 +23,75 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run ESLint 
+      - name: Run ESLint
         run: npm run lint
         continue-on-error: true  # Ensure the job continues even if ESLint finds errors
-          
 
-  build:
-    name: Build with Node.js ${{ matrix.node-version }}
-    runs-on: ubuntu-latest
-    needs: eslint  # Ensures that ESLint runs before build
+  build-linux-windows:
+    name: Build on ${{ matrix.os.name }} with Node.js ${{ matrix.node-version }}
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      matrix:
+        os:
+          - { name: 'linux', image: 'ubuntu-latest' }
+          - { name: 'windows', image: 'windows-latest' }
+        node-version: [18.x, 20.x, 22.x]
+    needs: eslint
 
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run make
+
+  build-macos:
+    name: Build on macOS with Node.js ${{ matrix.node-version }}
+    runs-on: macos-latest
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
+    needs: eslint
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies 
-      run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-    - name: Build
-      run: npm run make
+      - name: Build
+        run: npm run make
+
+  test:
+    name: Run Tests on macOS with Node.js ${{ matrix.node-version }}
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+    needs: build-macos  # Ensure tests run after the macOS build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test --timeout=15000
