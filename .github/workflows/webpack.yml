@@ -54,31 +54,5 @@ jobs:
       - name: Build
         run: npm run make
 
-      # Install necessary GUI dependencies on Linux
-      - name: Install GUI Dependencies on Linux
-        if: matrix.os.name == 'linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgtk-3-0 \
-            libx11-xcb1 \
-            libxcomposite1 \
-            libxdamage1 \
-            libxrandr2 \
-            libasound2 \
-            libgbm-dev \
-            libnss3 \
-            libatk-bridge2.0-0 \
-            libgtk-3-0 \
-            libxext6 \
-            libxfixes3 \
-            libxi6 \
-            libxrender1 \
-            libxcb1 \
-            libxcb-render0 \
-            libxcb-shape0 \
-            libxcb-xfixes0 \
-            libxcb1-dev
-
       - name: Run Tests
-        run: npm test
+        run: xvbf-maybe npm test
