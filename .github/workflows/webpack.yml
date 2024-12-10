@@ -58,9 +58,29 @@ jobs:
         if: matrix.os.name == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 1280x1024x24 &
-          echo "DISPLAY=:99" >> $GITHUB_ENV
+          # Install XFCE desktop environment
+          sudo apt-get install -y xfce4 xfce4-goodies
+          
+          # Install TigerVNC server
+          sudo apt-get install -y tigervnc-standalone-server tigervnc-common
+          
+          # Set up VNC password (empty password for simplicity; modify as needed)
+          mkdir -p ~/.vnc
+          echo "" | vncpasswd -f > ~/.vnc/passwd
+          chmod 600 ~/.vnc/passwd
+          
+          # Create a startup script for VNC
+          echo -e "#!/bin/bash\nstartxfce4 &\n" > ~/.vnc/xstartup
+          chmod +x ~/.vnc/xstartup
+          
+          # Start the VNC server on display :1
+          vncserver :1 -geometry 1280x1024 -depth 24
+          
+          # Export the DISPLAY variable
+          echo "DISPLAY=:1" >> $GITHUB_ENV
+
+          # Install additional dependencies if required by your Electron app
+          sudo apt-get install -y libgtk-3-0 libnotify-dev libnss3 libxss1 libasound2
 
       - name: Run Tests
         run: npm test
