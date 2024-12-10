@@ -1,16 +1,15 @@
-const { _electron: electron } = require("playwright");
-const assert = require("assert").strict;
-const path = require("path");
-const test = require("node:test");
+const { _electron: electron } = require('playwright');
+const assert = require('assert').strict;
+const path = require('path');
 
-describe("Electron Application Tests", () => {
+describe('Electron Application Tests', () => {
   let electronApp;
   let window;
 
   beforeAll(async () => {
-    const appPath = path.join(__dirname, "..", "main.js"); // Adjust the path if necessary
+    const appPath = path.join(__dirname, '..', 'main.js'); // Adjust the path if necessary
     electronApp = await electron.launch({
-      args: [appPath]
+      args: [appPath],
     });
 
     window = await electronApp.firstWindow();
@@ -20,9 +19,9 @@ describe("Electron Application Tests", () => {
     await electronApp.close();
   });
 
-  test("Window title should be \"MongoDB Query Executor\"", async () => {
+  test('Window title should be "MongoDB Query Executor"', async () => {
     const title = await window.title();
     console.log(`Window title: ${title}`);
-    assert.strictEqual(title, "MongoDB Query Executor");
+    assert.strictEqual(title, 'MongoDB Query Executor');
   });
 });
