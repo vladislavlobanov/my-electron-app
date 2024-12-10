@@ -55,4 +55,4 @@ jobs:
         run: npm run make
 
       - name: Test
-        run: npm test  # Updated to run Jest tests
+        run: npm test
