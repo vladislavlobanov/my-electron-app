@@ -14,7 +14,8 @@
     "build": "tsc && vite build && npm run copy-backend && electron-builder",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "copy-backend": "copyfiles -f backend/**/* dist-electron/",
-    "rebuildDB": "electron-rebuild -f -w sqlite3"
+    "rebuildDB": "electron-rebuild -f -w sqlite3",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
