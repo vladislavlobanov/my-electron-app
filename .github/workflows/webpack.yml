@@ -50,6 +50,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build
 
   build-macos:
@@ -72,6 +74,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build
 
   test:
