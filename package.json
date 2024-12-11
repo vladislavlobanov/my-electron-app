@@ -17,7 +17,7 @@
     "rebuildDB": "electron-rebuild -f -w sqlite3",
     "test": "run-script-os",
     "test:default": "if [ -d dist ] && [ -d dist-electron ]; then jest; else tsc && vite build && npm run copy-backend && jest; fi",
-    "test:windows": "if exist dist if exist dist-electron (jest) else (tsc && vite build && npm run copy-backend && jest)",
+    "test:windows": "if exist dist (if exist dist-electron (jest) else (tsc && vite build && npm run copy-backend && jest)) else (tsc && vite build && npm run copy-backend && jest)",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
