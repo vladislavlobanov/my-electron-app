@@ -51,7 +51,7 @@ jobs:
 
       - name: Build
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
   build-macos:
@@ -75,7 +75,7 @@ jobs:
 
       - name: Build
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
   test:
