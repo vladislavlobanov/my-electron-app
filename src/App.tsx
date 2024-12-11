@@ -1,65 +1,67 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 
+enum ThemeEnum {
+  Light = "light",
+  Dark = "dark",
+  System = "system",
+}
+interface Settings {
+  theme: ThemeEnum;
+  uri: string;
+  dbName: string;
+  collectionName: string;
+}
+
 function App() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<object | string>();
   const [isAdvanced, setIsAdvanced] = useState(false);
   const [history, setHistory] = useState([]);
+  const [settings, setSettings] = useState<Settings | null>(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [theme, setTheme] = useState("system");
 
-  // New state variables for DB settings
-  const [uri, setUri] = useState("");
-  const [dbName, setDbName] = useState("");
-  const [collectionName, setCollectionName] = useState("");
-
-  // Store previous settings for reset
-  const [prevSettings, setPrevSettings] = useState({
-    theme: "system",
-    uri: "",
-    dbName: "",
-    collectionName: "",
-  });
-
-  useEffect(() => {
-    const fetchDatabaseConfig = async () => {
-      const response = await fetch("http://localhost:5001/getDatabaseConfig");
-      if (response.ok) {
-        const config = await response.json();
-        setUri(config.uri);
-        setDbName(config.dbName);
-        setCollectionName(config.collectionName);
-        setPrevSettings(config);
-      }
-    };
-
-    fetchDatabaseConfig();
-  }, []);
+  const [theme, setTheme] = useState<ThemeEnum>();
+  const [uri, setUri] = useState<string>();
+  const [dbName, setDbName] = useState<string>();
+  const [collectionName, setCollectionName] = useState<string>();
 
   useEffect(() => {
     window.ipcRenderer.on("open-settings", () => {
       setShowSettings(true);
     });
+    fetchSettings();
+    fetchHistory();
   }, []);
 
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
-
-  useEffect(() => {
-    if (theme === "system") {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleChange = () => {
-        applyTheme("system");
-      };
-      mediaQuery.addEventListener("change", handleChange);
-      return () => {
-        mediaQuery.removeEventListener("change", handleChange);
-      };
+    if (theme) {
+      applyTheme(theme);
     }
   }, [theme]);
 
-  const applyTheme = (selectedTheme: string) => {
+  useEffect(() => {
+    setTheme(settings?.theme);
+    setUri(settings?.uri);
+    setDbName(settings?.dbName);
+    setCollectionName(settings?.collectionName);
+  }, [settings]);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/api/settings");
+      const data = await response.json();
+
+      if (response.ok && data) {
+        setSettings(data);
+      } else {
+        console.error(data.error || "Failed to fetch settings.");
+      }
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
+  const applyTheme = (selectedTheme: ThemeEnum) => {
     const root = document.documentElement;
     if (selectedTheme === "light") {
       root.classList.remove("dark-theme");
@@ -82,35 +84,41 @@ function App() {
   };
 
   const handleThemeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTheme(e.target.value);
+    setTheme(e.target.value as ThemeEnum);
   };
 
   const handleSettingsClose = () => {
+    setTheme(settings?.theme);
+    setUri(settings?.uri);
+    setDbName(settings?.dbName);
+    setCollectionName(settings?.collectionName);
     setShowSettings(false);
   };
 
-  const handleApplySettings = async () => {
-    setPrevSettings({ theme, uri, dbName, collectionName });
+  async function updateSettings(settingsData: Settings) {
+    try {
+      const response = await fetch("http://localhost:5001/api/settings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(settingsData),
+      });
 
-    // Send database configuration to the server
-    await fetch("http://localhost:5001/setDatabaseConfig", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ uri, dbName, collectionName }),
-    });
+      setSettings(settingsData);
 
-    setShowSettings(false);
-  };
-
-  const handleCancelSettings = () => {
-    setTheme(prevSettings.theme);
-    setUri(prevSettings.uri);
-    setDbName(prevSettings.dbName);
-    setCollectionName(prevSettings.collectionName);
-    setShowSettings(false);
-  };
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setShowSettings(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Request failed:", error.message);
+      } else {
+        console.error("Unknown error occurred", error);
+      }
+    }
+  }
 
   const handleQuerySubmit = async () => {
     try {
@@ -172,9 +180,7 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    fetchHistory();
-  }, []);
+  if (!settings) return;
 
   return (
     <div className="container mt-5">
@@ -203,7 +209,7 @@ function App() {
                       name="themeOptions"
                       id="lightTheme"
                       value="light"
-                      checked={theme === "light"}
+                      defaultChecked={settings.theme === "light"}
                       onChange={handleThemeChange}
                     />
                     <label className="form-check-label" htmlFor="lightTheme">
@@ -217,7 +223,7 @@ function App() {
                       name="themeOptions"
                       id="darkTheme"
                       value="dark"
-                      checked={theme === "dark"}
+                      defaultChecked={settings.theme === "dark"}
                       onChange={handleThemeChange}
                     />
                     <label className="form-check-label" htmlFor="darkTheme">
@@ -231,7 +237,7 @@ function App() {
                       name="themeOptions"
                       id="systemTheme"
                       value="system"
-                      checked={theme === "system"}
+                      defaultChecked={settings.theme === "system"}
                       onChange={handleThemeChange}
                     />
                     <label className="form-check-label" htmlFor="systemTheme">
@@ -271,7 +277,7 @@ function App() {
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={handleCancelSettings}
+                  onClick={handleSettingsClose}
                 >
                   Cancel
                 </button>
@@ -279,7 +285,14 @@ function App() {
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={handleApplySettings}
+                  onClick={() =>
+                    updateSettings({
+                      theme,
+                      uri,
+                      dbName,
+                      collectionName,
+                    } as Settings)
+                  }
                 >
                   Apply
                 </button>

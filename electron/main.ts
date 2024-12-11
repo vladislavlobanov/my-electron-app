@@ -2,7 +2,8 @@ import { app, BrowserWindow, Menu, utilityProcess } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { ChildProcess, spawn } from "node:child_process";
+import { ChildProcess, spawn, exec } from "node:child_process";
+import chokidar from "chokidar";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -103,20 +104,20 @@ function createWindow() {
 function startBackendDev() {
   const serverPath = path.join(__dirname, "..", "backend", "server.js");
 
-  // Spawn the backend server
-  const serverProcess = spawn("node", [serverPath]);
-
-  // // Handle backend server output
-  serverProcess.stdout.on("data", (data) => {
-    console.log(`Backend: ${data.toString()}`);
+  const forked = utilityProcess.fork(serverPath, [], {
+    cwd: __dirname,
+    stdio: "pipe",
   });
 
-  serverProcess.stderr.on("data", (data) => {
-    console.error(`Backend Error: ${data.toString()}`);
+  forked.stdout?.on("data", (data) => {
+    const message = data.toString().trim();
+    console.log(`Backend: ${message}`);
   });
 
-  serverProcess.on("exit", (code) => {
-    console.log(`Backend server exited with code ${code}`);
+  forked.on("exit", (code: number | null) => {
+    if (code !== 0) {
+      console.error(`Backend process exited with code ${code}`);
+    }
   });
 }
 
@@ -125,24 +126,9 @@ function startBackendProd(): Promise<void> {
 
   return new Promise((resolve, reject) => {
     try {
-      const forked = utilityProcess.fork(serverPath, [], {
+      utilityProcess.fork(serverPath, [], {
         cwd: __dirname,
         stdio: "pipe",
-      });
-
-      forked.stdout?.on("data", (data) => {
-        const message = data.toString().trim();
-        console.log(`Backend: ${message}`);
-        if (message.includes("ready")) {
-          resolve(); // Resolve when the backend signals readiness
-        }
-      });
-
-      forked.on("exit", (code: number | null) => {
-        if (code !== 0) {
-          console.error(`Backend process exited with code ${code}`);
-          reject(new Error(`Backend process exited with code ${code}`));
-        }
       });
     } catch (err) {
       console.error("Failed to fork backend process:", err);

@@ -38,6 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "@vitejs/plugin-react": "^4.2.1",
+    "chokidar": "^4.0.1",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "electron": "^30.0.1",
