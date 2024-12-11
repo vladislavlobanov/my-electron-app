@@ -1,10 +1,6 @@
 import { MongoClient } from "mongodb";
 
-let uri = "mongodb://localhost:27017"; // Replace with your MongoDB URI
-let dbName = "test"; // Replace with your database name
-let collectionName = "test"; // Replace with your collection name
-
-export async function executeQuery(query) {
+export async function executeQuery(query, uri, dbName, collectionName) {
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -17,18 +13,4 @@ export async function executeQuery(query) {
   } finally {
     await client.close();
   }
-}
-
-export function setDatabaseConfig(newUri, newDbName, newCollectionName) {
-  uri = newUri;
-  dbName = newDbName;
-  collectionName = newCollectionName;
-}
-
-export function getDatabaseConfig() {
-  return {
-    uri,
-    dbName,
-    collectionName,
-  };
 }

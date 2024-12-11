@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import fs from "fs";
 import sqlite3 from "sqlite3";
-import { executeQuery, setDatabaseConfig, getDatabaseConfig } from "./db.js";
+import { executeQuery } from "./db.js";
 import { fileURLToPath } from "url";
 
 // Determine __dirname in ES Modules
@@ -17,15 +17,42 @@ const app = express();
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 
+//Fetch settings from SQLite
+async function getSettings() {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM settings WHERE id = 1", (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+}
+
 app.post("/query", async (req, res) => {
-  const { query } = req.body;
+  const { query } = req.body; // The query is sent in the request body
   console.log("Received query:", query); // Log the received query
 
   try {
-    const result = await executeQuery(query);
+    // Step 1: Get the settings from the SQLite database
+    const settings = await getSettings();
+    if (!settings) {
+      return res.status(500).send({ error: "Settings not found." });
+    }
+
+    // Step 2: Extract URI, dbName, and collectionName from the settings
+    const { uri, dbName, collectionName } = settings;
+    console.log("Using settings:", uri, dbName, collectionName);
+
+    // Step 3: Execute the query using the settings
+    const result = await executeQuery(query, uri, dbName, collectionName);
     console.log("Query executed successfully:", result); // Log the result on success
+
+    // Step 4: Send back the result as the response
     res.json(result);
-  } catch {
+  } catch (error) {
+    console.error("Query execution failed:", error);
     res.status(500).send({ error: "Query execution failed." });
   }
 });
@@ -45,11 +72,25 @@ if (!fs.existsSync(localStorageFolder)) {
 const db = new sqlite3.Database(path.join(localStorageFolder, "app.db"));
 
 db.exec(`
+  -- Create the first table 'queries' if it does not exist
   CREATE TABLE IF NOT EXISTS queries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     query TEXT NOT NULL,
     output TEXT NOT NULL
   );
+
+  -- Create the second table 'settings' if it does not exist
+  CREATE TABLE IF NOT EXISTS settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme TEXT CHECK(theme IN ('light', 'dark', 'system')) NOT NULL,
+    uri TEXT NOT NULL,
+    dbName TEXT NOT NULL,
+    collectionName TEXT NOT NULL
+  );
+
+  -- Insert the single row into 'settings' if it doesn't already exist
+  INSERT OR IGNORE INTO settings (id, theme, uri, dbName, collectionName)
+  VALUES (1, 'system', 'mongodb://localhost:27017', 'test', 'test');
 `);
 
 // GET all saved queries
@@ -93,17 +134,41 @@ app.post("/api/queries", (req, res) => {
   }
 });
 
-app.post("/setDatabaseConfig", (req, res) => {
-  const { uri, dbName, collectionName } = req.body;
-  setDatabaseConfig(uri, dbName, collectionName);
-  res.send({ message: "Database configuration updated." });
-  console.log("setDatabaseConfig:", uri, dbName, collectionName);
+// GET /api/settings - Get settings
+app.get("/api/settings", (req, res) => {
+  db.get("SELECT * FROM settings WHERE id = 1", (err, row) => {
+    if (err) {
+      console.error("Error fetching settings:", err);
+      return res.status(500).json({ error: "Failed to fetch settings" });
+    }
+    if (!row) {
+      return res.status(404).json({ error: "Settings not found" });
+    }
+    res.json(row);
+  });
 });
 
-app.get("/getDatabaseConfig", (req, res) => {
-  const config = getDatabaseConfig();
-  res.json(config);
-  console.log("getDatabaseConfig:", config);
+// POST /api/settings - Update or rewrite settings
+app.post("/api/settings", (req, res) => {
+  const { theme, uri, dbName, collectionName } = req.body;
+
+  db.run(
+    `INSERT INTO settings (id, theme, uri, dbName, collectionName)
+     VALUES (1, ?, ?, ?, ?)
+     ON CONFLICT(id) DO UPDATE SET
+       theme = excluded.theme,
+       uri = excluded.uri,
+       dbName = excluded.dbName,
+       collectionName = excluded.collectionName`,
+    [theme, uri, dbName, collectionName],
+    function (err) {
+      if (err) {
+        console.error("Error updating settings:", err);
+        return res.status(500).json({ error: "Failed to update settings" });
+      }
+      res.json({ message: "Settings updated successfully" });
+    }
+  );
 });
 
 app.listen(5001, () => {
