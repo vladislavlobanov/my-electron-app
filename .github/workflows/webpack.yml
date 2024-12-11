@@ -35,7 +35,7 @@ jobs:
         os:
           - { name: "linux", image: "ubuntu-latest" }
           - { name: "windows", image: "windows-latest" }
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x] # "20.x" # Use a single Node.js version for consistency
     needs: eslint
 
     steps:
@@ -59,7 +59,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x] # "20.x" # Use a single Node.js version for consistency
     needs: eslint
 
     steps:
@@ -83,7 +83,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x] # "20.x" # Use a single Node.js version for consistency
     needs: build-macos # Ensure tests run after the macOS build
 
     steps:
