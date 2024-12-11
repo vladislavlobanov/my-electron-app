@@ -152,14 +152,19 @@ function startBackendProd(): Promise<void> {
 }
 
 app.whenReady().then(async () => {
-  try {
-    console.log("Starting backend...");
-    await startBackendProd(); // Await backend startup
-    console.log("Backend started successfully.");
-    createWindow(); // Create the Electron window after backend is ready
-  } catch (error) {
-    console.error("Failed to start backend:", error);
-    app.quit(); // Quit the app if the backend fails to start
+  if (isDev) {
+    startBackendDev();
+    createWindow();
+  } else {
+    try {
+      console.log("Starting backend...");
+      await startBackendProd(); // Await backend startup
+      console.log("Backend started successfully.");
+      createWindow(); // Create the Electron window after backend is ready
+    } catch (error) {
+      console.error("Failed to start backend:", error);
+      app.quit(); // Quit the app if the backend fails to start
+    }
   }
 });
 
