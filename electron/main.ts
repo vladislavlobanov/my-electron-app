@@ -1,11 +1,7 @@
 import { app, BrowserWindow, Menu, utilityProcess } from "electron";
-import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { ChildProcess, spawn, exec } from "node:child_process";
-import chokidar from "chokidar";
 
-const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // The built directory structure
