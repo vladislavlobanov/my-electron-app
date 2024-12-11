@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
-  "description": "Sandbox project for TDD trainig",
+  "description": "Sandbox project for TDD training",
   "author": {
     "name": "De-risk team",
     "email": "derisk@3tsoftwarelabs.com"
