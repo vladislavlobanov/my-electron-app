@@ -120,19 +120,33 @@ function startBackendDev() {
 function startBackendProd(): Promise<void> {
   const serverPath: string = path.join(MAIN_DIST, "server.js");
 
-  return new Promise((reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      utilityProcess.fork(serverPath, [], {
+      const forked = utilityProcess.fork(serverPath, [], {
         cwd: __dirname,
         stdio: "pipe",
       });
+
+      forked.stdout?.on("data", (data) => {
+        const message = data.toString().trim();
+        console.log(`Backend: ${message}`);
+        if (message.includes("ready")) {
+          resolve(); // Resolve when the backend signals readiness
+        }
+      });
+
+      forked.on("exit", (code: number | null) => {
+        if (code !== 0) {
+          console.error(`Backend process exited with code ${code}`);
+          reject(new Error(`Backend process exited with code ${code}`));
+        }
+      });
     } catch (err) {
       console.error("Failed to fork backend process:", err);
-      reject();
+      reject(err);
     }
   });
 }
-
 app.whenReady().then(async () => {
   if (isDev) {
     startBackendDev();
