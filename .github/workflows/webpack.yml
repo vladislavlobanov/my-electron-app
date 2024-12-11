@@ -28,48 +28,19 @@ jobs:
         continue-on-error: true # Ensure the job continues even if ESLint finds errors
 
 
-  build-macos:
-    name: Build on MacOS with Node.js ${{ matrix.node-version }}
-    runs-on: macos-latest
+  build:
+    name: Build on ${{ matrix.os }} with Node.js ${{ matrix.node-version }}
+    runs-on: ${{ matrix.os }}
+    needs: eslint
     strategy:
       matrix:
-        node-version: [20.x] # "20.x" # Use a single Node.js version for consistency
-    needs: eslint
-
+        os: [macos-latest, windows-latest]
+        node-version: ["20.x"]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run build
-
-      - name: Test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm test --timeout=15000
-
-
-  build-windows:
-    name: Build on Windows with Node.js ${{ matrix.node-version }}
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        node-version: [20.x] # "20.x" # Use a single Node.js version for consistency
-    needs: eslint
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
