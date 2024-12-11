@@ -207,7 +207,7 @@ function App() {
                       name="themeOptions"
                       id="lightTheme"
                       value="light"
-                      defaultChecked={settings.theme === "light"}
+                      defaultChecked={settings?.theme === "light"}
                       onChange={handleThemeChange}
                     />
                     <label className="form-check-label" htmlFor="lightTheme">
@@ -221,7 +221,7 @@ function App() {
                       name="themeOptions"
                       id="darkTheme"
                       value="dark"
-                      defaultChecked={settings.theme === "dark"}
+                      defaultChecked={settings?.theme === "dark"}
                       onChange={handleThemeChange}
                     />
                     <label className="form-check-label" htmlFor="darkTheme">
@@ -235,7 +235,7 @@ function App() {
                       name="themeOptions"
                       id="systemTheme"
                       value="system"
-                      defaultChecked={settings.theme === "system"}
+                      defaultChecked={settings?.theme === "system"}
                       onChange={handleThemeChange}
                     />
                     <label className="form-check-label" htmlFor="systemTheme">

@@ -120,7 +120,7 @@ function startBackendDev() {
 function startBackendProd(): Promise<void> {
   const serverPath: string = path.join(MAIN_DIST, "server.js");
 
-  return new Promise((resolve, reject) => {
+  return new Promise((reject) => {
     try {
       utilityProcess.fork(serverPath, [], {
         cwd: __dirname,
@@ -128,7 +128,7 @@ function startBackendProd(): Promise<void> {
       });
     } catch (err) {
       console.error("Failed to fork backend process:", err);
-      reject(err);
+      reject();
     }
   });
 }
