@@ -55,8 +55,8 @@ jobs:
         run: npm run build
 
   build-macos:
-    name: Build on macOS with Node.js ${{ matrix.node-version }}
-    runs-on: macos-latest
+    name: Build on Windows with Node.js ${{ matrix.node-version }}
+    runs-on: windows-latest
     strategy:
       matrix:
         node-version: [20.x] # "20.x" # Use a single Node.js version for consistency
@@ -98,4 +98,4 @@ jobs:
         run: npm ci
 
       - name: Run Tests
-        run: npm test --timeout=15000
+        run: npm test:windows --timeout=15000
