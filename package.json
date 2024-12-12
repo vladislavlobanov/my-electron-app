@@ -1,5 +1,6 @@
 {
   "name": "my-electron-app",
+  "productName": "MongoDB Query Executor",
   "version": "1.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
