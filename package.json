@@ -16,6 +16,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "copy-backend": "copyfiles -f backend/**/* dist-electron/",
     "rebuildDB": "electron-rebuild -f -w sqlite3",
+    "release": "electron-builder",
     "test": "run-script-os",
     "test:default": "if [ -d dist ] && [ -d dist-electron ]; then jest; else tsc && vite build && npm run copy-backend && jest; fi",
     "test:windows": "if exist dist (if exist dist-electron (jest) else (tsc && vite build && npm run copy-backend && jest)) else (tsc && vite build && npm run copy-backend && jest)",
