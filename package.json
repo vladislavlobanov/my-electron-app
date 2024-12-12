@@ -9,7 +9,7 @@
     "name": "De-risk team",
     "email": "derisk@3tsoftwarelabs.com"
   },
-  "license": "Apache-2.0",
+  "license": "MIT Licence",
   "scripts": {
     "dev": "cross-env DEV= vite",
     "build": "tsc && vite build && npm run copy-backend && electron-builder",
