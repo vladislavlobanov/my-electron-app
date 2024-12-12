@@ -10,6 +10,9 @@
     "email": "derisk@3tsoftwarelabs.com"
   },
   "license": "MIT Licence",
+  "publishConfig": {
+    "@vaisakhsasikumar:registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "dev": "cross-env DEV= vite",
     "build": "tsc && vite build && npm run copy-backend && electron-builder",
