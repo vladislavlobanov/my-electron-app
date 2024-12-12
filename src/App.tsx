@@ -149,7 +149,7 @@ function App() {
 
   const handleHistoryItemClick = (item: { query: string; output: string }) => {
     setQuery(item.query);
-    setResult(item.output);
+    setResult(JSON.parse(item.output));
   };
 
   const addQueryToHistory = async (parsedQuery: string, result: string) => {
