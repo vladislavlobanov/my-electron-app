@@ -28,7 +28,12 @@ jobs:
         run: |
           node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version = '1.0.0+' + new Date().toLocaleDateString('en-GB').replaceAll('/', '-'); fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');"
 
+      - name: Instal dependencies
       - run: npm ci
+
+      - name: Build app
+      - run: npm run build
+
       - name: Release app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
