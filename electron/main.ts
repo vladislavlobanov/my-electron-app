@@ -77,7 +77,7 @@ function createWindow() {
     width: 680,
     height: 644,
     resizable: false,
-    title: "My App",
+    title: "MongoDB Query Executor",
     titleBarStyle: "hidden",
     ...(process.platform !== "darwin" ? { titleBarOverlay: true } : {}),
     webPreferences: {

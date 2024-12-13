@@ -197,9 +197,13 @@ body {
   justify-content: center;
   align-items: center;
   -webkit-app-region: drag;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .app-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -212,6 +216,7 @@ body {
   flex: 1;
   height: 100%;
   padding: 20px;
+  overflow: auto;
 }
 
 .app-top {
@@ -256,7 +261,7 @@ body {
 
 .app-results pre,
 .app-history .list-group {
-  overflow: scroll;
+  overflow-X: auto;
 }
 
 .app-history {
