@@ -45,7 +45,7 @@ jobs:
         run: npm run build
 
       - name: Pack app
-        run: npm pack
+        run: npm run pack
 
       - name: Get package name and version
         id: get_package_info
