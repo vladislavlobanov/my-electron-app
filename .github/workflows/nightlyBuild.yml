@@ -8,6 +8,8 @@ permissions: write-all
 
 jobs:
   build:
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
         os:
@@ -35,6 +37,4 @@ jobs:
         run: npm run build
 
       - name: Release app
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run release
