@@ -11,6 +11,8 @@ permissions: write-all
 
 jobs:
   build:
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +41,8 @@ jobs:
 
       - name: Build app
         run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: npm publish --access public  --registry=https://npm.pkg.github.com/
         env:
