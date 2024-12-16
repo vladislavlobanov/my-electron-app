@@ -50,9 +50,10 @@ jobs:
       - name: Get package name and version
         id: get_package_info
         run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name.split('/')[1]")
+          PACKAGE_NAME=$(node -p "require('./package.json').name.split('/')[1]") # Get the package name without scope
+          PACKAGE_SCOPE=$(node -p "require('./package.json').name.split('/')[0].replace('@', '')") # Get the scope part without the @
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          echo "PACKAGE_TAR=${PACKAGE_NAME}-${PACKAGE_VERSION}.tgz" >> $GITHUB_ENV
+          echo "PACKAGE_TAR=${PACKAGE_SCOPE}-${PACKAGE_NAME}-${PACKAGE_VERSION}.tgz" >> $GITHUB_EN
 
       - name: Publish specific tarball
         run: |
