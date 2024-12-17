@@ -56,9 +56,6 @@ jobs:
           PACKAGE_TAR="${PACKAGE_SCOPE}-${PACKAGE_NAME}-${PACKAGE_VERSION}.tgz"
           echo "PACKAGE_TAR=${PACKAGE_TAR}" >> $GITHUB_ENV
           echo "Tarball name: $PACKAGE_TAR" # Print to log for debugging
-
-      - name: Rename tarball
-        run: |
           NEW_TAR_NAME="${PACKAGE_NAME}-${PACKAGE_SCOPE}.tgz"
           echo "Renaming tarball to: $NEW_TAR_NAME"
           mv "${PACKAGE_TAR}" "${NEW_TAR_NAME}"
