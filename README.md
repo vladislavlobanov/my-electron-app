@@ -54,7 +54,7 @@ The Simple Electron MongoDB Query Tool can be deployed as a native desktop appli
 
 # Project Board
 
-![Board](https://github.com/users/vaisakhsasikumar/projects/1/views/1)
+[Board](https://github.com/users/vaisakhsasikumar/projects/1/views/1)
 
 # Proof-of-Concept Desktop Application using Electron
 
