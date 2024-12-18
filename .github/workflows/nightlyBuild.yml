@@ -8,17 +8,10 @@ permissions: write-all
 
 jobs:
   build:
+    name: Nightly Build
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    strategy:
-      matrix:
-        os:
-          [
-            { name: "linux", image: "ubuntu-latest" },
-            { name: "windows", image: "windows-latest" },
-            { name: "macos", image: "macos-latest" },
-          ]
-    runs-on: ${{ matrix.os.image }}
+    runs-on: macos-latest
     steps:
       - name: Github checkout
         uses: actions/checkout@v4
