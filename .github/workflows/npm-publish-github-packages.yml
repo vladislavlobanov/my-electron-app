@@ -44,32 +44,5 @@ jobs:
       - name: Build app
         run: npm run build
 
-      - name: Pack app
-        run: npm run pack
-
-      - name: Get package name and version
-        id: get_package_info
-        run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name.split('/')[1]") # Get the package name without scope
-          PACKAGE_SCOPE=$(node -p "require('./package.json').name.split('/')[0].replace('@', '')") # Get the scope part without the @
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          PACKAGE_TAR="${PACKAGE_SCOPE}-${PACKAGE_NAME}-${PACKAGE_VERSION}.tgz"
-          echo "PACKAGE_TAR=${PACKAGE_TAR}" >> $GITHUB_ENV
-          echo "Tarball name: $PACKAGE_TAR" # Print to log for debugging
-          NEW_TAR_NAME="${PACKAGE_NAME}-${PACKAGE_VERSION}.tgz"
-          echo "Renaming tarball to: $NEW_TAR_NAME"
-          mv "${PACKAGE_TAR}" "${NEW_TAR_NAME}"
-          echo "NEW_TAR_NAME=${NEW_TAR_NAME}" >> $GITHUB_ENV
-
-      - name: Publish specific tarball
-        run: |
-          echo "Publishing: ${{ env.NEW_TAR_NAME }}"
-          npm publish ./${{ env.NEW_TAR_NAME }} --access public --registry=https://npm.pkg.github.com/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build app
-        run: npm run build
-
       - name: Release app
         run: npm run release
