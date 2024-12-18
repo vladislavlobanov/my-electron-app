@@ -96,3 +96,4 @@ To provide hands-on experience with:
 ## Test Cases
 
 [Click here to view the Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/TestCases.md)
+[Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
