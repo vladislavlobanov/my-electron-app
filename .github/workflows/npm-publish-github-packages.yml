@@ -67,3 +67,9 @@ jobs:
           npm publish ./${{ env.NEW_TAR_NAME }} --access public --registry=https://npm.pkg.github.com/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build app
+        run: npm run build
+
+      - name: Release app
+        run: npm run release
