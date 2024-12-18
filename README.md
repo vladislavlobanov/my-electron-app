@@ -10,11 +10,11 @@ A desktop application built with Electron that allows users to run a given Mongo
 
 # Contributors
 
-- Vaisakh Sasikumar
-- Andrei Kim
-- Vlad Lobanov
-- Hazel Ozmel
-- Ivan Martynov
+- [Vaisakh Sasikumar](https://github.com/vaisakhsasikumar)
+- [Andrei Kim](https://github.com/andrei-kim-3tsoftwarelabs)
+- [Vlad Lobanov](https://github.com/vladislavlobanov)
+- [Hazel Ozmel](https://github.com/Hazel3t)
+- [Ivan Martynov](https://github.com/MartynovIvan)
 
 # Use cases for the Simple Electron MongoDB Query Tool:
 
