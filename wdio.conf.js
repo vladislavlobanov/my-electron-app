@@ -54,7 +54,7 @@ export const config = {
         args: ['headless', 'disable-gpu']
       },
       "wdio:electronServiceOptions": {
-        appBinaryPath: "./release/1.0.4/mac-arm64/MongoDB Query Executor.app/Contents/MacOS/MongoDB Query Executor",
+        appBinaryPath: "/Applications/MongoDB Query Executor.app/Contents/MacOS/MongoDB Query Executor",
         appArgs: ['headless'],
       },
     },
