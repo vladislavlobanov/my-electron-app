@@ -89,8 +89,8 @@ To provide hands-on experience with:
 
 2. **Build, Run and Deploy**:
    ```bash
-   npm run dev
    npm run build
+   npm run dev
    ```
 
 ## Test Cases
