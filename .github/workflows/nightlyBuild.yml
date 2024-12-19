@@ -20,8 +20,7 @@ jobs:
         with:
           node-version: 20
       - name: Update package.json version
-        run: |
-          node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version += '+' + new Date().toLocaleDateString('en-GB').replaceAll('/', '-'); fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');"
+        run: npm --no-git-tag-version --preid=$(date +%Y%m%d) version prerelease
 
       - name: Install dependencies
         run: npm ci
