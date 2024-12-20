@@ -9,7 +9,7 @@ on:
 jobs:
   compile:
     name: Compile Code
-    runs-on: macos-lastest
+    runs-on: macos-latest
     steps:
       - name: Setup Environment
         uses: ./.github/workflows/setup.yml
@@ -21,7 +21,7 @@ jobs:
 
   unit_tests:
     name: Run Unit Tests
-    runs-on: macos-lastest
+    runs-on: macos-latest
     needs: compile
 
     steps:
@@ -35,7 +35,7 @@ jobs:
 
   integration_tests:
     name: Run Narrow Integration Tests
-    runs-on: macos-lastest
+    runs-on: macos-latest
     needs: unit_tests
 
     steps:
@@ -50,7 +50,7 @@ jobs:
 
   component_tests:
     name: Run Component Tests
-    runs-on: macos-lastest
+    runs-on: macos-latest
     needs: integration_tests
 
     steps:
@@ -65,7 +65,7 @@ jobs:
 
   verification_tests:
     name: Run Contract Provider Verification Tests
-    runs-on: macos-lastest
+    runs-on: macos-latest
     needs: component_tests
 
     steps:
@@ -80,7 +80,7 @@ jobs:
 
   linter:
     name: Run Linter
-    runs-on: macos-lastest
+    runs-on: macos-latest
     needs: verification_tests
 
     steps:
