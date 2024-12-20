@@ -19,15 +19,13 @@
   },
   "scripts": {
     "dev": "cross-env DEV= vite",
-    "build": "tsc && vite build && npm run copy-backend && electron-builder",
+    "build": "vite build && npm run copy-backend && electron-builder",
     "pack": "npm pack",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "copy-backend": "copyfiles -f backend/**/* dist-electron/",
     "rebuildDB": "electron-rebuild -f -w sqlite3",
     "release": "electron-builder",
-    "test": "run-script-os",
-    "test:default": "if [ -d dist ] && [ -d dist-electron ]; then jest; else tsc && vite build && npm run copy-backend && jest; fi",
-    "test:windows": "if exist dist (if exist dist-electron (jest) else (tsc && vite build && npm run copy-backend && jest)) else (tsc && vite build && npm run copy-backend && jest)",
+    "test": "jest",
     "postinstall": "electron-builder install-app-deps",
     "test:e2e": "wdio run ./wdio.conf.js"
   },

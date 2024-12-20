@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Commit Stage
 
 on:
   push:
@@ -7,9 +7,11 @@ on:
     branches: ["main"]
 
 jobs:
-  eslint:
-    name: Run ESLint
-    runs-on: ubuntu-latest
+  commit:
+    name: Commit Stage
+    runs-on: macos-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout Repository
@@ -18,40 +20,31 @@ jobs:
       - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20.x" # Use a single Node.js version for consistency
+          node-version: 20
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Compile Code
+        run: npx tsc
+
+      - name: Run Unit Tests
+        run: npm run test
+
+      - name: Run Narrow Integration Tests
+        # TODO: replace with command for Narrow Integration Tests
+        run: npm run test
+
+      - name: Run Component Tests
+        # TODO: replace with command for Component Tests
+        run: npm run test
+
+      - name: Run Component Tests
+        # TODO: replace with command for Contract Provider Verification Tests
+        run: npm run test
 
       - name: Run ESLint
         run: npm run lint
-        continue-on-error: true # Ensure the job continues even if ESLint finds errors
-
-  build:
-    name: Build with Node.js ${{ matrix.node-version }}
-    runs-on: macos-latest
-    needs: eslint
-    strategy:
-      matrix:
-        node-version: ["20.x"]
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set Up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Dependencies
-        run: npm ci
 
       - name: Build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
-
-      - name: Test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm test --timeout=15000
