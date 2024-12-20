@@ -1,9 +1,9 @@
 name: Nightly Build
 
-# on:
-#   schedule:
-#     - cron: "0 0 * * 1-5"
-on: [workflow_dispatch]
+on:
+  schedule:
+    - cron: "0 0 * * 1-5"
+  workflow_dispatch:
 
 permissions: write-all
 
@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MongoDB Query Executor
-          path: ./release/**/*.dmg
+          path: ./**/*.dmg
