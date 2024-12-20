@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MongoDB Query Executor
-          path: ./**/*.dmg
+          path: ./release/**/*.dmg
