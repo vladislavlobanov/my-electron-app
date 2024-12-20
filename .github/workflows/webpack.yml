@@ -12,7 +12,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Setup Environment
-        uses: ./.github/workflows/setup.yml
+        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
         with:
           node_version: "20"
 
@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Setup Environment
-        uses: ./.github/workflows/setup.yml
+        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
         with:
           node_version: "20"
 
@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Setup Environment
-        uses: ./.github/workflows/setup.yml
+        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
         with:
           node_version: "20"
 
@@ -55,7 +55,7 @@ jobs:
 
     steps:
       - name: Setup Environment
-        uses: ./.github/workflows/setup.yml
+        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
         with:
           node_version: "20"
 
@@ -70,7 +70,7 @@ jobs:
 
     steps:
       - name: Setup Environment
-        uses: ./.github/workflows/setup.yml
+        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
         with:
           node_version: "20"
 
@@ -85,7 +85,7 @@ jobs:
 
     steps:
       - name: Setup Environment
-        uses: ./.github/workflows/setup.yml
+        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
         with:
           node_version: "20"
 
@@ -101,7 +101,7 @@ jobs:
 
     steps:
       - name: Setup Environment
-        uses: ./.github/workflows/setup.yml
+        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
         with:
           node_version: "20"
 
