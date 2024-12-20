@@ -1,7 +1,8 @@
-import { _electron as electron, ElectronApplication, Page } from "playwright";
-import assert from "assert/strict";
-import path from "path";
-import { describe, beforeAll, afterAll, test } from "@jest/globals";
+// import { _electron as electron, ElectronApplication, Page } from "playwright";
+// import assert from "assert/strict";
+// import path from "path";
+// import { describe, beforeAll, afterAll, test } from "@jest/globals";
+import { describe } from "@jest/globals";
 
 // describe("Electron Application Tests", () => {
 //   let electronApp: ElectronApplication;
