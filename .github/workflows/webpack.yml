@@ -11,10 +11,16 @@ jobs:
     name: Compile Code
     runs-on: macos-latest
     steps:
-      - name: Setup Environment
-        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
         with:
-          node_version: "20"
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Compile Code
         run: npx tsc
@@ -25,10 +31,16 @@ jobs:
     needs: compile
 
     steps:
-      - name: Setup Environment
-        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
         with:
-          node_version: "20"
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run Unit Tests
         run: npm run test
@@ -39,10 +51,16 @@ jobs:
     needs: unit_tests
 
     steps:
-      - name: Setup Environment
-        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
         with:
-          node_version: "20"
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run Narrow Integration Tests
         # TODO: replace with command for Narrow Integration Tests
@@ -54,10 +72,16 @@ jobs:
     needs: integration_tests
 
     steps:
-      - name: Setup Environment
-        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
         with:
-          node_version: "20"
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run Component Tests
         # TODO: replace with command for Component Tests
@@ -69,10 +93,16 @@ jobs:
     needs: component_tests
 
     steps:
-      - name: Setup Environment
-        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
         with:
-          node_version: "20"
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run Component Tests
         # TODO: replace with command for Contract Provider Verification Tests
@@ -84,10 +114,16 @@ jobs:
     needs: verification_tests
 
     steps:
-      - name: Setup Environment
-        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
         with:
-          node_version: "20"
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run ESLint
         run: npm run lint
@@ -100,13 +136,16 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Setup Environment
-        uses: andrei-kim-3tsoftwarelabs/my-electron-app/.github/workflows/setup.yml@main
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
         with:
-          node_version: "20"
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Build
         run: npm run build
-
-      - name: Test
-        run: npm test --timeout=15000
