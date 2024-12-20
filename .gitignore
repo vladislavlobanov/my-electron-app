@@ -142,3 +142,6 @@ dist/
 dist-electron/
 release/
 dist-ssr
+
+# Hide system files
+.DS_Store
