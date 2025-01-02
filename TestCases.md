@@ -9,7 +9,7 @@
 
 
 # Feature: Close my-electron-app
-## Scenario: User successfully launches the app
+## Scenario: User successfully closes the app
 **Given** the user has already opened the app     
 **When** the user clicks the cross button at the top corner of the left side      
 **Then** the user should see the app is closed successfully      
