@@ -1,3 +1,22 @@
+# SMOKE TEST CASES
+
+# Feature: Launch my-electron-app
+## Scenario: User successfully launches the app
+**Given** the user is double-clicked to the latest app's build
+**And** drags and drops the app to the Applications folder
+**When** the user clicks and launches the app  
+**Then** the user should see the app is opened successfully
+
+
+# Feature: Close my-electron-app
+## Scenario: User successfully launches the app
+**Given** the user has already opened the app
+**When** the user clicks the cross button at the top corner of the left side
+**Then** the user should see the app is closed successfully
+
+
+# ACCEPTANCE TEST CASES
+
 # Feature: Running MongoDB `find()` Query
 
 ## Scenario 1: User successfully runs a `find` query
@@ -76,7 +95,7 @@
  **Given** the user has already opened the tool   
  **And** the user has already toggled the Advanced view: on  
  **When** the user runs a query  
- **Then** the user should see the query in the Query History under the Query Result   
+ **Then** the user should see the query in the Query History  
 
  ## Scenario 3: User successfully uses their previous saved query and the result
  **Given** the user has already toggled the Advanced view: on  
@@ -90,7 +109,7 @@
  **And** the user sees all the previous saved queries   
  **When** the user clicks the Advanced view: off   
  **And** the user clicks the Advanced view: on again   
- **Then** the user should see all the Query History under the Query Result again   
+ **Then** the user should see all the Query History again   
 
  ## Scenario 5: User sees the Query History after restarting the Electon tool
  **Given** the user has already toggled the Advanced view: on   
@@ -98,7 +117,7 @@
  **When** the user closes the Electron tool   
  **And** the user launches the Electron tool again   
  **And**  the user toggles the Advanced view from off to on   
- **Then** the user should see the previous saved queries under the Query History   
+ **Then** the user should see the previous saved queries   
 
  ## Scenario 6: The Query History continues to save queries when the Advanced view: off
  **Given** the user has toggled the Advanced view: off   
