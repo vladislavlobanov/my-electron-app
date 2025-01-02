@@ -1,21 +1,21 @@
-# SMOKE TEST CASES
+# Smoke Test Cases
 
 # Feature: Launch my-electron-app
 ## Scenario: User successfully launches the app
-**Given** the user is double-clicked to the latest app's build
-**And** drags and drops the app to the Applications folder
-**When** the user clicks and launches the app  
-**Then** the user should see the app is opened successfully
+**Given** the user is double-clicked to the latest app's build    
+**And** drags and drops the app to the Applications folder    
+**When** the user clicks and launches the app      
+**Then** the user should see the app is opened successfully    
 
 
 # Feature: Close my-electron-app
 ## Scenario: User successfully launches the app
-**Given** the user has already opened the app
-**When** the user clicks the cross button at the top corner of the left side
-**Then** the user should see the app is closed successfully
+**Given** the user has already opened the app     
+**When** the user clicks the cross button at the top corner of the left side      
+**Then** the user should see the app is closed successfully      
 
 
-# ACCEPTANCE TEST CASES
+# Acceptance Test Cases
 
 # Feature: Running MongoDB `find()` Query
 
