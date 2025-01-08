@@ -48,3 +48,29 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  commit_stage_badge:
+    name: Create status badge for workflow
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [commit]
+    steps:
+      - name: Commit Stage badge (Success)
+        if: ${{ !contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: commit_stage
+          LABEL: "Commit Stage"
+          STATUS: "Success"
+          COLOR: green
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit Stage badge (Failure)
+        if: ${{ contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: commit_stage
+          LABEL: "Commit Stage"
+          STATUS: "Failure"
+          COLOR: red
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
