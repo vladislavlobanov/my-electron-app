@@ -97,7 +97,10 @@ To provide hands-on experience with:
 
 ## Test Cases
 
-[Click here to view the Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/TestCases.md)
+[Acceptance Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/AcceptanceTestCases.md)
+[E2E Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/E2ETestCases.md)
+[Smoke Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/SmokeTestCases.md)
 
 
 [Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
+
