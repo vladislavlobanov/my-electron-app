@@ -17,7 +17,7 @@
 ## Scenario: User successfully writes the query in the app
 **Given** the user launches the Electron tool    
 **And** the app opens successfully    
-**When** the user writes `{ "name": "John Doe" }` into the `Enter MongoDB Query`field    
+**When** the user writes a value into the `Enter MongoDB Query`field    
 **Then** the user should write a query in the app successfully
 
 
