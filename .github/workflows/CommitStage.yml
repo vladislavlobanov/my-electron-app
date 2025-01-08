@@ -51,6 +51,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 5
+          name: MongoDB Query Executor
+          path: ./release/**/*.dmg
+
   commit_stage_badge:
     name: Create status badge for workflow
     runs-on: ubuntu-latest
