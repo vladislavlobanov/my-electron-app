@@ -1,8 +1,20 @@
-[![Nightly Build](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/badge.svg)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml)
-
 # System Name
 
 Simple Electron MongoDB Query Tool
+
+## Pipeline Dashboard
+
+### Component Stages
+
+| Component          | Commit Stage                                                                                                                                                                 | Acceptance Stage | Production Release Stage |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------ |
+| MongoDB Query Tool | [![Commit Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/commit_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/CommitStage.yml) | -                | -                        |
+
+### System Stages
+
+|        | Acceptance Stage                                                                                                                                                                               | Production Stage |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | -                |
 
 ## Description
 
@@ -58,9 +70,7 @@ The Simple Electron MongoDB Query Tool can be deployed as a native desktop appli
 
 # Proof-of-Concept Desktop Application using Electron
 
-
 ![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/screenshot.png)
-
 
 ## Technologies
 
@@ -102,7 +112,6 @@ To provide hands-on experience with:
 [E2E Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/E2ETestCases.md)
 
 [Smoke Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/SmokeTestCases.md)
-
 
 [Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
 
