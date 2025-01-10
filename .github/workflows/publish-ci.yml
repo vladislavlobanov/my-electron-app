@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 20
       - name: Update package.json version
-        run: npm --no-git-tag-version --preid=$(date +%Y%m%d) version prerelease
+        run: npm version prerelease
 
       - name: Install dependencies
         run: npm ci
