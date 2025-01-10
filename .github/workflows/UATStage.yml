@@ -87,4 +87,4 @@ jobs:
         with:
           draft: true
           name: ${{ github.event.inputs.name }}
-          files: ./MongoDB Query Executor
+          files: "**/*.dmg"
