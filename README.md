@@ -51,6 +51,9 @@ This project serves as a Test Driven Development (TDD) Sandbox, created as part 
 
 **SQLite**: Local database for local storage
 
+**OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode.
+
+
 # System Architecture Style
 
 The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style**, combining both frontend and backend functionalities within a single application. This approach simplifies development and deployment, enabling users to execute MongoDB queries directly from the Electron interface without requiring a separate server.
