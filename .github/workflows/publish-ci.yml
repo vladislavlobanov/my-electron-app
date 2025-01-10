@@ -13,49 +13,27 @@ permissions: write-all
 
 jobs:
   build:
-    name: Publish Release
+    name: Nightly Build
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout Repository
+      - name: Github checkout
         uses: actions/checkout@v4
-
-      # Step 2: Set up Node.js environment
-      - name: Set Up Node.js
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Update package.json version
+        run: npm --no-git-tag-version --preid=$(date +%Y%m%d) version prerelease
 
-      # Step 3: Set package.json version to match the release tag
-      - name: Set package.json Version
-        id: set_version
-        run: |
-          echo "Extracting tag name..."
-          TAG_NAME=${GITHUB_REF#refs/tags/}
-          echo "Tag name: $TAG_NAME"
-
-          # Remove leading 'v' if present (e.g., v1.0.8 or v1.0.8-0)
-          VERSION=${TAG_NAME#v}
-          echo "Setting package.json version to: $VERSION"
-
-          # Update package.json without creating a git commit/tag
-          npm version "$VERSION" --no-git-tag-version --preid=$(date +%Y%m%d)
-
-          # Export the version for later steps if needed
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      # Step 4: Install dependencies using npm CI
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
 
-      # Step 5: Build the Electron application
-      - name: Build Application
+      - name: Build app
         run: npm run build
 
-      # Step 6: Upload the generated .dmg artifact (optional)
-      - name: Upload .dmg Artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: MongoDB Query Executor
