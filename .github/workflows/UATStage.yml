@@ -33,6 +33,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: vaisakhsasikumar/my-electron-app
           run-id: ${{ github.event.inputs.run_id }}
 
       #   - name: Install MongoDB
