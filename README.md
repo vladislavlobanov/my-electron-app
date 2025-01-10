@@ -28,6 +28,10 @@ A desktop application built with Electron that allows users to run a given Mongo
 - [Hazel Ozmel](https://github.com/Hazel3t)
 - [Ivan Martynov](https://github.com/MartynovIvan)
 
+# Background Context
+
+This project serves as a Test Driven Development (TDD) Sandbox, created as part of a TDD training program led by [Valentina Jemuović](https://www.linkedin.com/in/valentinajemuovic) through [Optivem Journal](https://journal.optivem.com/). In this environment, we are simulating legacy code to practice and implement TDD transformation techniques, which will prepare us to apply these methods to real-world projects. We selected a desktop application for this project to align closely with the types of applications our company produces and to ensure relevance to real-life scenarios.
+
 # Use cases for the Simple Electron MongoDB Query Tool:
 
 1. **Running MongoDB Queries**: Users can input and execute MongoDB `find` queries, enabling them to retrieve specific data from the MongoDB database.
