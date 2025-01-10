@@ -54,13 +54,7 @@ jobs:
       - name: Build Application
         run: npm run build
 
-      # Step 6: Publish the Electron app using Electron Builder
-      - name: Publish with Electron Builder
-        run: npm run dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 7: Upload the generated .dmg artifact to the release
+      # Step 6: Upload the generated .dmg artifact to the release
       - name: Upload .dmg Artifact
         uses: actions/upload-artifact@v4
         with:
