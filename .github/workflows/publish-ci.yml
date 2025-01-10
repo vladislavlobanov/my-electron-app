@@ -41,7 +41,7 @@ jobs:
           echo "Setting package.json version to: $VERSION"
 
           # Update package.json without creating a git commit/tag
-          npm version "$VERSION" --no-git-tag-version version prerelease
+          npm version "$VERSION" --no-git-tag-version prerelease
 
           # Output the version for later steps if needed
           echo "VERSION=$VERSION" >> $GITHUB_ENV
