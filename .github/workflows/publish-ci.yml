@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 20
 
-      # Step 3: Set package.json version to the release tag
+      # Step 3: Set package.json version to match the release tag
       - name: Set package.json Version
         id: set_version
         run: |
@@ -36,14 +36,14 @@ jobs:
           TAG_NAME=${GITHUB_REF#refs/tags/}
           echo "Tag name: $TAG_NAME"
 
-          # Remove leading 'v' if present (e.g., v1.0.8 -> 1.0.8)
+          # Remove leading 'v' if present (e.g., v1.0.8 or v1.0.8-0)
           VERSION=${TAG_NAME#v}
           echo "Setting package.json version to: $VERSION"
 
           # Update package.json without creating a git commit/tag
-          npm version "$VERSION" --no-git-tag-version prerelease
+          npm version "$VERSION" --no-git-tag-version
 
-          # Output the version for later steps if needed
+          # Export the version for later steps if needed
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       # Step 4: Install dependencies using npm CI
@@ -54,7 +54,7 @@ jobs:
       - name: Build Application
         run: npm run build
 
-      # Step 6: Upload the generated .dmg artifact to the release
+      # Step 6: Upload the generated .dmg artifact (optional)
       - name: Upload .dmg Artifact
         uses: actions/upload-artifact@v4
         with:
