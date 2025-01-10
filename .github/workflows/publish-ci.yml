@@ -10,11 +10,12 @@ on:
   release:
     types: [created]
 
+
 permissions: write-all
 
 jobs:
   build:
-    name: Build .dmg installer
+    name: Nightly Build
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
@@ -27,21 +28,6 @@ jobs:
           node-version: 20
       - name: Update package.json version
         run: npm --no-git-tag-version --preid=$(date +%Y%m%d) version prerelease
-
-      - name: Run Unit Tests
-        run: npm run test
-
-      - name: Run Narrow Integration Tests
-        # TODO: replace with command for Narrow Integration Tests
-        run: npm run test
-
-      - name: Run Component Tests
-        # TODO: replace with command for Component Tests
-        run: npm run test
-
-      - name: Run Component Tests
-        # TODO: replace with command for Contract Provider Verification Tests
-        run: npm run test
 
       - name: Install dependencies
         run: npm ci
