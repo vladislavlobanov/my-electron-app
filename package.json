@@ -5,7 +5,7 @@
     "url": "https://github.com/vaisakhsasikumar/my-electron-app"
   },
   "productName": "MongoDB Query Executor",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "type": "module",
   "main": "dist-electron/main.js",
   "description": "Sandbox project for TDD training",
