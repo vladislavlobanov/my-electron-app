@@ -1,8 +1,20 @@
-[![Nightly Build](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/badge.svg)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml)
-
 # System Name
 
 Simple Electron MongoDB Query Tool
+
+## Pipeline Dashboard
+
+### Component Stages
+
+| Component          | Commit Stage                                                                                                                                                                 | Acceptance Stage | Production Release Stage |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------ |
+| MongoDB Query Tool | [![Commit Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/commit_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/CommitStage.yml) | -                | -                        |
+
+### System Stages
+
+|        | Acceptance Stage                                                                                                                                                                               | Production Stage |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | -                |
 
 ## Description
 
@@ -10,11 +22,15 @@ A desktop application built with Electron that allows users to run a given Mongo
 
 # Contributors
 
-- Vaisakh Sasikumar
-- Andrei Kim
-- Vlad Lobanov
-- Hazel Ozmel
-- Ivan Martynov
+- [Vaisakh Sasikumar](https://github.com/vaisakhsasikumar)
+- [Andrei Kim](https://github.com/andrei-kim-3tsoftwarelabs)
+- [Vlad Lobanov](https://github.com/vladislavlobanov)
+- [Hazel Ozmel](https://github.com/Hazel3t)
+- [Ivan Martynov](https://github.com/MartynovIvan)
+
+# Background Context
+
+This project serves as a Test Driven Development (TDD) Sandbox, created as part of a TDD training program led by [Valentina Jemuović](https://www.linkedin.com/in/valentinajemuovic) through [Optivem Journal](https://journal.optivem.com/). In this environment, we are simulating legacy code to practice and implement TDD transformation techniques, which will prepare us to apply these methods to real-world projects. We selected a desktop application for this project to align closely with the types of applications our company produces and to ensure relevance to real-life scenarios.
 
 # Use cases for the Simple Electron MongoDB Query Tool:
 
@@ -35,6 +51,9 @@ A desktop application built with Electron that allows users to run a given Mongo
 
 **SQLite**: Local database for local storage
 
+**OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode.
+
+
 # System Architecture Style
 
 The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style**, combining both frontend and backend functionalities within a single application. This approach simplifies development and deployment, enabling users to execute MongoDB queries directly from the Electron interface without requiring a separate server.
@@ -54,7 +73,7 @@ The Simple Electron MongoDB Query Tool can be deployed as a native desktop appli
 
 # Project Board
 
-![Board](https://github.com/users/vaisakhsasikumar/projects/1/views/1)
+[Board](https://github.com/users/vaisakhsasikumar/projects/1/views/1)
 
 # Proof-of-Concept Desktop Application using Electron
 
@@ -89,10 +108,17 @@ To provide hands-on experience with:
 
 2. **Build, Run and Deploy**:
    ```bash
-   npm run dev
    npm run build
+   npm run dev
    ```
 
 ## Test Cases
 
-[Click here to view the Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/TestCases.md)
+[Acceptance Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/AcceptanceTestCases.md)
+
+[E2E Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/E2ETestCases.md)
+
+[Smoke Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/SmokeTestCases.md)
+
+[Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
+

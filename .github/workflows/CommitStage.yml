@@ -1,0 +1,85 @@
+name: Commit Stage
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions: write-all
+
+jobs:
+  commit:
+    name: Commit Stage
+    runs-on: macos-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Compile Code
+        run: npx tsc
+
+      - name: Run Unit Tests
+        run: npm run test
+
+      - name: Run Narrow Integration Tests
+        # TODO: replace with command for Narrow Integration Tests
+        run: npm run test
+
+      - name: Run Component Tests
+        # TODO: replace with command for Component Tests
+        run: npm run test
+
+      - name: Run Component Tests
+        # TODO: replace with command for Contract Provider Verification Tests
+        run: npm run test
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 5
+          name: MongoDB Query Executor
+          path: ./release/**/*.dmg
+
+  commit_stage_badge:
+    name: Create status badge for workflow
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [commit]
+    steps:
+      - name: Commit Stage badge (Success)
+        if: ${{ !contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: commit_stage
+          LABEL: "Commit Stage"
+          STATUS: "Success"
+          COLOR: green
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit Stage badge (Failure)
+        if: ${{ contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: commit_stage
+          LABEL: "Commit Stage"
+          STATUS: "Failure"
+          COLOR: red
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
