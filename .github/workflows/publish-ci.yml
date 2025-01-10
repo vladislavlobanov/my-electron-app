@@ -4,7 +4,7 @@
 # For more information, see: https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md
 
 
-name: Maven Package
+name: Publish .dmg installer to Release
 
 on:
   release:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    name: Nightly Build
+    name: Build .dmg installer
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
