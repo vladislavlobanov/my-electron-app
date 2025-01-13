@@ -12,7 +12,6 @@ on:
 permissions:
   contents: write
 
-
 jobs:
   build:
     name: Build Release
@@ -21,6 +20,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       tag_name: ${{ steps.set_tag.outputs.tag_name }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -61,24 +61,7 @@ jobs:
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Upload .dmg artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dmgs
-          path: ./release/**/*.dmg
-
-  publish_dmg:
-    name: Publish .dmg to Release
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-
-      - name: Set TAG_NAME from build
-        run: echo "TAG_NAME=${{ needs.build.outputs.tag_name }}" >> $GITHUB_ENV
-
-      - name: Create Release if Not Exists
+      - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -88,16 +71,26 @@ jobs:
           release_name: Release ${{ env.TAG_NAME }}
           draft: false
           prerelease: false
-        continue-on-error: true
+
+      - name: Upload .dmg artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmgs
+          path: ./release/**/*.dmg
+
+      - name: Get DMG file path
+        id: get_dmg_path
+        run: |
+          DMG_FILE=$(find ./release -type f -name "*.dmg")
+          echo "dmg_path=$DMG_FILE" >> $GITHUB_OUTPUT
 
       - name: Upload .dmg to Release
-        if: steps.create_release.outcome == 'success'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/**/*.dmg
+          asset_path: ${{ steps.get_dmg_path.outputs.dmg_path }}
           asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
           asset_content_type: application/octet-stream
 
