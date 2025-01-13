@@ -25,7 +25,7 @@
 #
 # Major Tag Update:
 #   - Updates a major tag (e.g., 'v1') to point to the newly released version.
-#   - Uses 'actions/publish-action' to handle the tag update and can send a notification to Slack if `SLACK_WEBHOOK` is defined as a GitHub secret.
+#   - Uses 'actions/publish-action' to handle the tag update.
 #
 # Permissions:
 #   - The `write-all` permission is required for the workflow to perform all the required actions, including updating tags.
@@ -65,7 +65,6 @@ jobs:
         uses: actions/publish-action@v0.3.0
         with:
           source-tag: ${{ env.TAG_NAME }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           
 
   build:
