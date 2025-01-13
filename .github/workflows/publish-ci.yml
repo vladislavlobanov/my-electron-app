@@ -21,6 +21,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       tag_name: ${{ steps.set_tag.outputs.tag_name }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -61,20 +62,6 @@ jobs:
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Upload .dmg artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dmgs
-          path: ./release/**/*.dmg
-
-  publish_dmg:
-    name: Publish .dmg to Release
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-
       - name: Set TAG_NAME from build
         run: echo "TAG_NAME=${{ needs.build.outputs.tag_name }}" >> $GITHUB_ENV
 
@@ -89,6 +76,13 @@ jobs:
           draft: false
           prerelease: false
         continue-on-error: true
+
+      - name: Upload .dmg artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmgs
+          path: ./release/**/*.dmg
+
 
       - name: Upload .dmg to Release
         if: steps.create_release.outcome == 'success'
