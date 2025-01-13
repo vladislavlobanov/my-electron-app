@@ -78,13 +78,19 @@ jobs:
           name: dmgs
           path: ./release/**/*.dmg
 
+      - name: Get DMG file path
+        id: get_dmg_path
+        run: |
+          DMG_FILE=$(find ./release -type f -name "*.dmg")
+          echo "dmg_path=$DMG_FILE" >> $GITHUB_OUTPUT
+
       - name: Upload .dmg to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/**/*.dmg
+          asset_path: ${{ steps.get_dmg_path.outputs.dmg_path }}
           asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
           asset_content_type: application/octet-stream
 
