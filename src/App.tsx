@@ -34,8 +34,22 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (theme) {
+    if (theme && theme !== "system") {
       applyTheme(theme);
+    }
+
+    if (theme === "system") {
+      const root = document.documentElement;
+
+      window.ipcRenderer.on("set-dark-theme", (_channel, prefersDark) => {
+        if (prefersDark) {
+          root.classList.remove("light-theme");
+          root.classList.add("dark-theme");
+        } else {
+          root.classList.remove("dark-theme");
+          root.classList.add("light-theme");
+        }
+      });
     }
   }, [theme]);
 
@@ -69,17 +83,6 @@ function App() {
     } else if (selectedTheme === "dark") {
       root.classList.remove("light-theme");
       root.classList.add("dark-theme");
-    } else if (selectedTheme === "system") {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      if (prefersDark) {
-        root.classList.remove("light-theme");
-        root.classList.add("dark-theme");
-      } else {
-        root.classList.remove("dark-theme");
-        root.classList.add("light-theme");
-      }
     }
   };
 
