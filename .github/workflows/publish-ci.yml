@@ -93,7 +93,7 @@ jobs:
           ASSET_NAME="MongoDB_Query_Executor_${TAG_NAME}.dmg"
           
           # Upload the asset, overwrite if it exists
-          gh release upload "$TAG_NAME" "$DMG_PATH" --clobber --asset-name "$ASSET_NAME"
+          gh release upload "$TAG_NAME" "$DMG_PATH" --clobber "$ASSET_NAME"
 
       - name: Confirm Upload
         if: success()
