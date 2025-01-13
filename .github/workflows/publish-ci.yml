@@ -84,26 +84,23 @@ jobs:
           DMG_FILE=$(find ./release -type f -name "*.dmg" | head -n 1)
           echo "dmg_path=$DMG_FILE" >> $GITHUB_OUTPUT
 
-      - name: Rename DMG File (Optional)
+      - name: Rename DMG File
+        id: rename_dmg
         run: |
           DMG_PATH="${{ steps.get_dmg_path.outputs.dmg_path }}"
           TAG_NAME="${{ env.TAG_NAME }}"
           ASSET_NAME="MongoDB_Query_Executor_${TAG_NAME}.dmg"
-          mv "$DMG_PATH" "./release/$ASSET_NAME"
-          echo "dmg_path=./release/$ASSET_NAME" >> $GITHUB_OUTPUT
+          NEW_DMG_PATH="./release/$ASSET_NAME"
+          mv "$DMG_PATH" "$NEW_DMG_PATH"
+          echo "new_dmg_path=$NEW_DMG_PATH" >> $GITHUB_OUTPUT # Output the new path
 
       - name: Upload .dmg to Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          DMG_PATH="${{ steps.get_dmg_path.outputs.dmg_path }}"
-          TAG_NAME="${{ env.TAG_NAME }}"
-          ASSET_NAME="MongoDB_Query_Executor_${TAG_NAME}.dmg"
+          DMG_PATH="${{ steps.rename_dmg.outputs.new_dmg_path }}" # Use the output from rename step
 
-          # If you performed the rename step, use the new ASSET_NAME path
-          # Otherwise, use DMG_PATH directly
-          # Uncomment the following line if you added the rename step
-          # DMG_PATH="./release/$ASSET_NAME"
+          TAG_NAME="${{ env.TAG_NAME }}"
 
           # Upload the asset, overwrite if it exists
           gh release upload "$TAG_NAME" "$DMG_PATH" --clobber
