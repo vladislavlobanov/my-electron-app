@@ -81,9 +81,9 @@ jobs:
       - name: Set version in package.json
         id: set_version
         run: |
-            VERSION="${{ env.TAG_NAME }}"
-            VERSION="${VERSION#v}"
-            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          VERSION="${{ env.TAG_NAME }}"
+          VERSION="${VERSION#v}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
       - name: Set version in package.json
         run: |
           if [[ "${{ steps.set_version.outputs.VERSION }}" == *"-"* ]]; then
