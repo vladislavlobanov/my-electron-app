@@ -47,10 +47,11 @@ on:
         description: 'Tag name that the major tag will point to'
         required: true
 
+
 env:
   TAG_NAME: ${{ github.event.inputs.TAG_NAME || github.event.release.tag_name }}
-
-permissions: write-all
+permissions:
+  contents: write
 
 jobs:
 
@@ -65,44 +66,3 @@ jobs:
         with:
           source-tag: ${{ env.TAG_NAME }}
           
-
-  build:
-    name: Publish Pre Release
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    runs-on: macos-latest
-    steps:
-      - name: Github checkout
-        uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Set version in package.json
-        id: set_version
-        run: |
-          VERSION="${{ env.TAG_NAME }}"
-          VERSION="${VERSION#v}"
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-      - name: Set version in package.json
-        run: |
-          if [[ "${{ steps.set_version.outputs.VERSION }}" == *"-"* ]]; then
-             npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
-          else
-             npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
-             npm --no-git-tag-version  version prerelease --preid $(date +%Y%m%d)
-          fi
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build app
-        run: npm run build
-        
-      - name: Remove blockmap files
-        run: find ./release -type f -name '*.blockmap' -delete
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: MongoDB Query Executor
-          path: ./release/**/*.dmg
