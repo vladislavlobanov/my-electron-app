@@ -61,22 +61,22 @@ jobs:
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create or Update Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
-          draft: false
-          prerelease: false
-
-      - name: Upload .dmg artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dmgs
-          path: ./release/**/*.dmg
+        run: |
+          TAG_NAME=${{ env.TAG_NAME }}
+          RELEASE_NAME="Release ${TAG_NAME}"
+          BODY="Automatic release of version ${TAG_NAME}"
+          
+          # Check if release exists
+          if gh release view "$TAG_NAME" > /dev/null 2>&1; then
+            echo "Release $TAG_NAME already exists. Updating..."
+            gh release edit "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          else
+            echo "Creating release $TAG_NAME"
+            gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          fi
 
       - name: Get DMG file path
         id: get_dmg_path
@@ -85,14 +85,15 @@ jobs:
           echo "dmg_path=$DMG_FILE" >> $GITHUB_OUTPUT
 
       - name: Upload .dmg to Release
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.get_dmg_path.outputs.dmg_path }}
-          asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
-          asset_content_type: application/octet-stream
+        run: |
+          DMG_PATH="${{ steps.get_dmg_path.outputs.dmg_path }}"
+          TAG_NAME=${{ env.TAG_NAME }}
+          ASSET_NAME="MongoDB_Query_Executor_${TAG_NAME}.dmg"
+          
+          # Upload the asset, overwrite if it exists
+          gh release upload "$TAG_NAME" "$DMG_PATH" --clobber --name "$ASSET_NAME"
 
       - name: Confirm Upload
         if: success()
