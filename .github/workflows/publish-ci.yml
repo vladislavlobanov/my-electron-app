@@ -118,12 +118,6 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
-      - name: Download .dmg artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: dmgs
-          path: ./downloaded_release
-
       - name: Set TAG_NAME from build
         run: echo "TAG_NAME=${{ needs.build.outputs.tag_name }}" >> $GITHUB_ENV
 
