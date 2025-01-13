@@ -1,41 +1,3 @@
-# This workflow automates the process of building and publishing an Electron application (.dmg installer) to GitHub Releases and updating a major tag.
-#
-# Workflow Execution:
-#   - This workflow is triggered in two ways:
-#     1. Automatically when a new release is created in the repository (event `release: { types: [released] }`).
-#     2. Manually via workflow dispatch. When manually triggered, a TAG_NAME input must be provided (for example 'v1.2.3' or 'v1.2.3-rc.1').
-#
-# Tag Name Input:
-#   - The `TAG_NAME` input, either from the release or the manual trigger, determines the target version for publishing.
-#
-# Versioning Strategy:
-#   - Extracts the version from the provided `TAG_NAME` by removing the "v" prefix.
-#   - If the `TAG_NAME` has `-` in its name, it is considered a pre-release and will use provided version as is.
-#   - If the `TAG_NAME` does not have `-` in its name, it's considered as a normal release. In this case will add the prerelease identifier to it, which based on current date in format `YYYYMMDD`.
-#   - The extracted version is then used to update the `version` field in the `package.json` file.
-#
-# Build Process:
-#   - Sets up a Node.js environment.
-#   - Installs dependencies using `npm ci`.
-#   - Builds the Electron application using `npm run build`.
-#   - Removes `.blockmap` files, which are not needed for distribution.
-#
-# Artifact Upload:
-#   - Uploads all generated `.dmg` installer files as a workflow artifact.
-#
-# Major Tag Update:
-#   - Updates a major tag (e.g., 'v1') to point to the newly released version.
-#   - Uses 'actions/publish-action' to handle the tag update.
-#
-# Permissions:
-#   - The `write-all` permission is required for the workflow to perform all the required actions, including updating tags.
-#
-# Key Benefits:
-#   - Automated versioning and release process.
-#   - Consistent versioning by using the release tag as the source of truth.
-#   - Ensures major tags always point to the latest patch or minor release.
-#   - Simplifies the process of distributing Electron applications via GitHub Packages.
-
 name: Publish .dmg Installer to Release
 
 on:
@@ -88,12 +50,7 @@ jobs:
 
       - name: Update version in package.json
         run: |
-          if [[ "${{ steps.set_version.outputs.VERSION }}" == *"-"* ]]; then
-             npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
-          else
-             npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
-             npm --no-git-tag-version version prerelease --preid=$(date +%Y%m%d)
-          fi
+          npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
 
       - name: Install dependencies
         run: npm ci
@@ -140,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./downloaded_release/**/*.dmg
+          asset_path: ./release/**/*.dmg
           asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
           asset_content_type: application/octet-stream
 
