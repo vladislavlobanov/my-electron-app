@@ -1,19 +1,74 @@
-# This workflow will build an electron application using npm and then publish it to GitHub Packages when a release is created.
-# It updates the version in package.json for each release with a pre-release identifier based on the current date,
-# and uploads the built artifacts (in this case, .dmg files) as an upload artifact.
-# For more information, see: https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md
+# This workflow automates the process of building and publishing an Electron application (.dmg installer) to GitHub Releases and updating a major tag.
+#
+# Workflow Execution:
+#   - This workflow is triggered in two ways:
+#     1. Automatically when a new release is created in the repository (event `release: { types: [released] }`).
+#     2. Manually via workflow dispatch. When manually triggered, a TAG_NAME input must be provided (for example 'v1.2.3' or 'v1.2.3-rc.1').
+#
+# Tag Name Input:
+#   - The `TAG_NAME` input, either from the release or the manual trigger, determines the target version for publishing.
+#
+# Versioning Strategy:
+#   - Extracts the version from the provided `TAG_NAME` by removing the "v" prefix.
+#   - If the `TAG_NAME` has `-` in its name, it is considered a pre-release and will use provided version as is.
+#   - If the `TAG_NAME` does not have `-` in its name, it's considered as a normal release. In this case will add the prerelease identifier to it, which based on current date in format `YYYYMMDD`.
+#   - The extracted version is then used to update the `version` field in the `package.json` file.
+#
+# Build Process:
+#   - Sets up a Node.js environment.
+#   - Installs dependencies using `npm ci`.
+#   - Builds the Electron application using `npm run build`.
+#   - Removes `.blockmap` files, which are not needed for distribution.
+#
+# Artifact Upload:
+#   - Uploads all generated `.dmg` installer files as a workflow artifact.
+#
+# Major Tag Update:
+#   - Updates a major tag (e.g., 'v1') to point to the newly released version.
+#   - Uses 'actions/publish-action' to handle the tag update.
+#
+# Permissions:
+#   - The `write-all` permission is required for the workflow to perform all the required actions, including updating tags.
+#
+# Key Benefits:
+#   - Automated versioning and release process.
+#   - Consistent versioning by using the release tag as the source of truth.
+#   - Ensures major tags always point to the latest patch or minor release.
+#   - Simplifies the process of distributing Electron applications via GitHub Packages.
 
 name: Publish .dmg Installer to Release
 
 on:
   release:
-    types: [created]
+    types: [released]
+  workflow_dispatch:
+    inputs:
+      TAG_NAME:
+        description: 'Tag name that the major tag will point to'
+        required: true
+
+env:
+  TAG_NAME: ${{ github.event.inputs.TAG_NAME || github.event.release.tag_name }}
+  VERSION: ${{  replace(env.TAG_NAME, 'v', '') }}
 
 permissions: write-all
 
 jobs:
+
+  update_tag:
+    name: Update the major tag to include the ${{ env.TAG_NAME }} changes
+    environment:
+      name: releaseNewActionVersion
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update the ${{ env.TAG_NAME }} tag
+        uses: actions/publish-action@v0.3.0
+        with:
+          source-tag: ${{ env.TAG_NAME }}
+          
+
   build:
-    name: Publish Release
+    name: Publish Pre Release
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
@@ -24,8 +79,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Update package.json version
-        run: npm --no-git-tag-version --preid=$(date +%Y%m%d) version prerelease
+      - name: Set version in package.json
+        run: |
+          if [[ $VERSION == *"-"* ]]; then
+             npm version $VERSION --no-git-tag-version
+          else
+             npm version $VERSION --no-git-tag-version
+             npm --no-git-tag-version  version prerelease --preid $(date +%Y%m%d)
+          fi
 
       - name: Install dependencies
         run: npm ci
