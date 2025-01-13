@@ -47,16 +47,19 @@ on:
         description: 'Tag name for the release'
         required: true
 
-permissions:
-  contents: write
+permissions: write-all
 
 jobs:
-  publish_dmg:
-    runs-on: ubuntu-latest
 
+  build:
+  
+    name: Build Release
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: macos-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Github checkout
+        uses: actions/checkout@v4
 
       - name: Set TAG_NAME
         id: set_tag
@@ -66,6 +69,42 @@ jobs:
           else
             echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           fi
+          
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set version in package.json
+        id: set_version
+        run: |
+            VERSION="${{ env.TAG_NAME }}"
+            VERSION="${VERSION#v}"
+            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+  
+      - name: Set version in package.json
+        run: |
+          if [[ "${{ steps.set_version.outputs.VERSION }}" == *"-"* ]]; then
+             npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
+          else
+             npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
+             npm --no-git-tag-version  version prerelease --preid $(date +%Y%m%d)
+          fi
+  
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+        
+      - name: Remove blockmap files
+        run: find ./release -type f -name '*.blockmap' -delete
+
+          
+  publish_dmg:
+    runs-on: ubuntu-latest
+
+    steps:
 
       - name: Create Release if Not Exists
         id: create_release
@@ -79,15 +118,11 @@ jobs:
           prerelease: false
         continue-on-error: true  # Prevent failure if release exists
 
-      - name: Upload .dmg Installer to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: path/to/your/installer.dmg
-          asset_name: installer-${{ env.TAG_NAME }}.dmg
-          asset_content_type: application/octet-stream
+          name: MongoDB Query Executor
+          path: ./release/**/*.dmg
 
       - name: Publish the Release
         if: steps.create_release.outcome == 'success'
