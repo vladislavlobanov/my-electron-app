@@ -40,69 +40,110 @@ name: Publish .dmg Installer to Release
 
 on:
   release:
-    types: [released]
+    types: [published]
   workflow_dispatch:
     inputs:
       TAG_NAME:
-        description: 'Tag name that the major tag will point to'
+        description: 'Tag name for the release'
         required: true
 
-env:
-  TAG_NAME: ${{ github.event.inputs.TAG_NAME || github.event.release.tag_name }}
+permissions:
+  contents: read
 
-permissions: write-all
 
 jobs:
-
-  update_tag:
-    name: Update the major tag to include the ${{ env.TAG_NAME }} changes
-    environment:
-      name: releaseNewActionVersion
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update the ${{ env.TAG_NAME }} tag
-        uses: actions/publish-action@v0.3.0
-        with:
-          source-tag: ${{ env.TAG_NAME }}
-          
-
   build:
-    name: Publish Pre Release
+    name: Build Release
+    runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    runs-on: macos-latest
+    outputs:
+      tag_name: ${{ steps.set_tag.outputs.tag_name }}
     steps:
-      - name: Github checkout
+      - name: Check out repository
         uses: actions/checkout@v4
-      - name: Use Node.js
+
+      - name: Set TAG_NAME
+        id: set_tag
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "TAG_NAME=${{ github.event.inputs.TAG_NAME }}" >> $GITHUB_ENV
+            echo "tag_name=${{ github.event.inputs.TAG_NAME }}" >> $GITHUB_OUTPUT
+          else
+            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            echo "tag_name=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Set version in package.json
         id: set_version
         run: |
-            VERSION="${{ env.TAG_NAME }}"
-            VERSION="${VERSION#v}"
-            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-      - name: Set version in package.json
+          VERSION="${{ env.TAG_NAME }}"
+          VERSION="${VERSION#v}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update version in package.json
         run: |
           if [[ "${{ steps.set_version.outputs.VERSION }}" == *"-"* ]]; then
              npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
           else
              npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
-             npm --no-git-tag-version  version prerelease --preid $(date +%Y%m%d)
+             npm --no-git-tag-version version prerelease --preid=$(date +%Y%m%d)
           fi
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build app
         run: npm run build
-        
+
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Upload artifact
+      - name: Upload .dmg artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MongoDB Query Executor
+          name: dmgs
           path: ./release/**/*.dmg
+
+  publish_dmg:
+    name: Publish .dmg to Release
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      - name: Set TAG_NAME from build
+        run: echo "TAG_NAME=${{ needs.build.outputs.tag_name }}" >> $GITHUB_ENV
+
+      - name: Create Release if Not Exists
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
+          draft: false
+          prerelease: false
+        continue-on-error: true
+
+      - name: Upload .dmg to Release
+        if: steps.create_release.outcome == 'success'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./downloaded_release/**/*.dmg
+          asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
+          asset_content_type: application/octet-stream
+
+      - name: Confirm Upload
+        if: success()
+        run: echo "Release created and .dmg uploaded successfully."
