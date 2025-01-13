@@ -1,6 +1,7 @@
 import { app, BrowserWindow, Menu, utilityProcess } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { nativeTheme } from "electron";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -143,6 +144,16 @@ function startBackendProd(): Promise<void> {
     }
   });
 }
+
+nativeTheme.on("updated", () => {
+  const isDarkMode = nativeTheme.shouldUseDarkColors;
+  console.log("System theme changed. Dark mode:", isDarkMode);
+
+  if (mainWindow) {
+    mainWindow.webContents.send("set-dark-theme", isDarkMode);
+  }
+});
+
 app.whenReady().then(async () => {
   if (isDev) {
     startBackendDev();
