@@ -41,7 +41,7 @@ function App() {
     if (theme === "system") {
       const root = document.documentElement;
 
-      window.ipcRenderer.on("set-dark-theme", (channel, prefersDark) => {
+      window.ipcRenderer.on("set-dark-theme", (_channel, prefersDark) => {
         if (prefersDark) {
           root.classList.remove("light-theme");
           root.classList.add("dark-theme");
