@@ -1,30 +1,56 @@
-# This workflow will build an electron application using npm and then publish it to GitHub Packages when a release is created.
-# It updates the version in package.json for each release with a pre-release identifier based on the current date,
-# and uploads the built artifacts (in this case, .dmg files) as an upload artifact.
-# For more information, see: https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md
-
-
-name: Publish .dmg installer to Release
+name: Publish .dmg Installer to Release
 
 on:
   release:
-    types: [created]
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      TAG_NAME:
+        description: 'Tag name for the release'
+        required: true
+
+permissions:
+  contents: write
+
 
 jobs:
   build:
-    name: Build .dmg installer
+    name: Build Release
+    runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    runs-on: macos-latest
+    outputs:
+      tag_name: ${{ steps.set_tag.outputs.tag_name }}
     steps:
-      - name: Github checkout
+      - name: Check out repository
         uses: actions/checkout@v4
-      - name: Use Node.js
+
+      - name: Set TAG_NAME
+        id: set_tag
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "TAG_NAME=${{ github.event.inputs.TAG_NAME }}" >> $GITHUB_ENV
+            echo "tag_name=${{ github.event.inputs.TAG_NAME }}" >> $GITHUB_OUTPUT
+          else
+            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            echo "tag_name=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Update package.json version
-        run: npm --no-git-tag-version --preid=$(date +%Y%m%d) version prerelease
+
+      - name: Set version in package.json
+        id: set_version
+        run: |
+          VERSION="${{ env.TAG_NAME }}"
+          VERSION="${VERSION#v}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update version in package.json
+        run: |
+          npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
 
       - name: Install dependencies
         run: npm ci
@@ -32,8 +58,49 @@ jobs:
       - name: Build app
         run: npm run build
 
-      - name: Upload artifact
+      - name: Remove blockmap files
+        run: find ./release -type f -name '*.blockmap' -delete
+
+      - name: Upload .dmg artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MongoDB Query Executor
+          name: dmgs
           path: ./release/**/*.dmg
+
+  publish_dmg:
+    name: Publish .dmg to Release
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      - name: Set TAG_NAME from build
+        run: echo "TAG_NAME=${{ needs.build.outputs.tag_name }}" >> $GITHUB_ENV
+
+      - name: Create Release if Not Exists
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
+          draft: false
+          prerelease: false
+        continue-on-error: true
+
+      - name: Upload .dmg to Release
+        if: steps.create_release.outcome == 'success'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/**/*.dmg
+          asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
+          asset_content_type: application/octet-stream
+
+      - name: Confirm Upload
+        if: success()
+        run: echo "Release created and .dmg uploaded successfully."
