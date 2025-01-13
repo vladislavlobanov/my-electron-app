@@ -12,7 +12,6 @@ on:
 permissions:
   contents: write
 
-
 jobs:
   build:
     name: Build Release
@@ -62,10 +61,7 @@ jobs:
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Set TAG_NAME from build
-        run: echo "TAG_NAME=${{ needs.build.outputs.tag_name }}" >> $GITHUB_ENV
-
-      - name: Create Release if Not Exists
+      - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -75,7 +71,6 @@ jobs:
           release_name: Release ${{ env.TAG_NAME }}
           draft: false
           prerelease: false
-        continue-on-error: true
 
       - name: Upload .dmg artifact
         uses: actions/upload-artifact@v4
@@ -83,9 +78,7 @@ jobs:
           name: dmgs
           path: ./release/**/*.dmg
 
-
       - name: Upload .dmg to Release
-        if: steps.create_release.outcome == 'success'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
