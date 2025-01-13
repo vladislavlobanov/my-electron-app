@@ -1,7 +1,12 @@
-import { app, BrowserWindow, Menu, utilityProcess } from "electron";
+import {
+  app,
+  BrowserWindow,
+  Menu,
+  utilityProcess,
+  nativeTheme,
+} from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { nativeTheme } from "electron";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
