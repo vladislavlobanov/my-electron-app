@@ -61,7 +61,21 @@ jobs:
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Create Release
+      - name: Check if release exists
+        id: check_release
+        run: |
+          RELEASE_ID=$(gh release view ${{ env.TAG_NAME }} --json id --jq .id 2>/dev/null)
+          if [ -z "$RELEASE_ID" ]; then
+            echo "release_exists=false" >> $GITHUB_OUTPUT
+          else
+            echo "release_exists=true" >> $GITHUB_OUTPUT
+            echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release if not exists
+        if: steps.check_release.outputs.release_exists == 'false'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -85,6 +99,7 @@ jobs:
           echo "dmg_path=$DMG_FILE" >> $GITHUB_OUTPUT
 
       - name: Upload .dmg to Release
+        if: steps.check_release.outputs.release_exists == 'false'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -94,6 +109,14 @@ jobs:
           asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
           asset_content_type: application/octet-stream
 
+      - name: Update release if it exists
+        if: steps.check_release.outputs.release_exists == 'true'
+        id: update_release
+        run: |
+          gh release upload ${{ steps.get_dmg_path.outputs.dmg_path }} --repo ${{ github.repository }} --release-id ${{ steps.check_release.outputs.release_id }}  --name MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Confirm Upload
         if: success()
-        run: echo "Release created and .dmg uploaded successfully."
+        run: echo "Release created/updated and .dmg uploaded successfully."
