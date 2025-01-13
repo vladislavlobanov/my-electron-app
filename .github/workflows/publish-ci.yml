@@ -64,7 +64,8 @@ jobs:
       - name: Check if release exists
         id: check_release
         run: |
-          RELEASE_ID=$(gh release view ${{ env.TAG_NAME }} --json id --jq .id 2>/dev/null)
+          TAG_NAME_NO_V=$(echo "${{ env.TAG_NAME }}" | sed 's/^v//')
+          RELEASE_ID=$(gh release view "$TAG_NAME_NO_V" --json id --jq .id 2>/dev/null)
           if [ -z "$RELEASE_ID" ]; then
             echo "release_exists=false" >> $GITHUB_OUTPUT
           else
