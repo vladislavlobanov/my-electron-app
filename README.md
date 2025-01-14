@@ -149,5 +149,6 @@ To provide hands-on experience with:
 
 [Smoke Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/SmokeTestCases.md)
 
-[Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
+[External System Contract Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/ExternalSystemContractTestCases.md)
 
+[Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
