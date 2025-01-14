@@ -36,13 +36,16 @@ function App() {
   useEffect(() => {
     if (theme && theme !== "system") {
       applyTheme(theme);
-    } else  {
+    } else {
       const root = document.documentElement;
 
-      if (!root.classList.contains("light-theme") && !root.classList.contains("dark-theme")) {
-        const prefersDark = import.meta.env.WDIO_THEME ? import.meta.env.WDIO_THEME === "dark" : window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
+      if (
+        !root.classList.contains("light-theme") &&
+        !root.classList.contains("dark-theme")
+      ) {
+        const prefersDark = import.meta.env.VITE_WDIO_THEME
+          ? import.meta.env.VITE_WDIO_THEME === "dark"
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
         if (prefersDark) {
           root.classList.remove("light-theme");
           root.classList.add("dark-theme");
