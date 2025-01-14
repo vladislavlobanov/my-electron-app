@@ -36,10 +36,21 @@ function App() {
   useEffect(() => {
     if (theme && theme !== "system") {
       applyTheme(theme);
-    }
-
-    if (theme === "system") {
+    } else  {
       const root = document.documentElement;
+
+      if (!root.classList.contains("light-theme") && !root.classList.contains("dark-theme")) {
+        const prefersDark = import.meta.env.WDIO_THEME ? import.meta.env.WDIO_THEME === "dark" : window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        if (prefersDark) {
+          root.classList.remove("light-theme");
+          root.classList.add("dark-theme");
+        } else {
+          root.classList.remove("dark-theme");
+          root.classList.add("light-theme");
+        }
+      }
 
       window.ipcRenderer.on("set-dark-theme", (_channel, prefersDark) => {
         if (prefersDark) {
