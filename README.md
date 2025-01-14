@@ -60,7 +60,7 @@ The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style
 
 # Architecture Diagram
 
-![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/Diagram.png)
+![Flowchart](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/Diagram.mermaid)
 
 # Repository and Branching Strategy
 
