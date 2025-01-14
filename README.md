@@ -106,8 +106,23 @@ To provide hands-on experience with:
 - CI/CD automation with GitHub Actions
 
 ---
+## How to Install the Application from .dmg installer
 
-## Steps to Run the Application
+1. **Download** the `.dmg` from the [GitHub releases page](https://github.com/vaisakhsasikumar/my-electron-app/releases/latest).
+2. **Open Terminal** and navigate to the download location:
+   ```bash
+   cd ~/Downloads
+   ```
+3. **Run** the command to remove security attributes:
+   ```bash
+   xattr -c "MongoDB-Query-Executor-Mac-x.x.x-Installer.dmg"
+   ```
+4. **Mount** the `.dmg` by double-clicking it.
+5. **Drag** the app to your `Applications` folder.
+6. **Launch** the application from `Applications`.
+
+
+## Steps to Run the Application (from source code)
 
 1. **Install dependencies**:
 
