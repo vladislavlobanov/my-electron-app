@@ -1,7 +1,3 @@
-if (process.env.TEST === "true") {
-  import("wdio-electron-service/preload");
-}
-
 import { ipcRenderer, contextBridge } from "electron";
 
 // --------- Expose some API to the Renderer process ---------
