@@ -8,10 +8,6 @@ import {
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-if (process.env.TEST === "true") {
-  import("wdio-electron-service/main");
-}
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // The built directory structure
