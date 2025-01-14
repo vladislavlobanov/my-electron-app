@@ -152,3 +152,12 @@ To provide hands-on experience with:
 [External System Contract Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/ExternalSystemContractTestCases.md)
 
 [Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
+
+
+## Environments
+
+| **Environment Name** | **Purpose**                                | **Location**       | **Implementation**            |
+|----------------------|--------------------------------------------|--------------------|--------------------------------|
+| Acceptance Environment | Runs Automated Acceptance Tests          | Test Repositories  | Automated test pipelines       |
+| E2E Environment      | Executes E2E and Contract Tests            | Test Repositories  | Automated test suites in pipeline |
+| Production Environment | Hosts live system for end users           | Release Repositories | Automated deployments via GitHub Actions |
