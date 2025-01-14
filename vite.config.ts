@@ -5,6 +5,9 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    "import.meta.env.WDIO_THEME": JSON.stringify(process.env.WDIO_THEME),
+  },
   plugins: [
     react(),
     electron({
