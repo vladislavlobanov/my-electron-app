@@ -1,17 +1,32 @@
+# This workflow automates the process of building a macOS application, creating a release on GitHub,
+# and uploading the built .dmg installer to the corresponding release.
+#
+# It can be triggered manually via workflow dispatch or on a tag being created via workflow dispatch
+#
+# The workflow performs the following steps:
+# 1. Checks out the repository.
+# 2. Sets up Node.js environment.
+# 3. Sets the version from the tag in package.json.
+# 4. Installs project dependencies.
+# 5. Builds the application.
+# 6. Removes blockmap files to reduce installer size.
+# 7. Creates a new release or updates the existing release if one exists based on tag.
+# 8. Locates the generated .dmg file.
+# 9. Renames the .dmg file to include the version.
+# 10. Uploads the renamed .dmg file to the GitHub release.
+# 11. Confirms the upload was successful.
 name: Publish .dmg Installer to Release
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       TAG_NAME:
-        description: 'Tag name for the release'
+        description: 'Tag name for the release (e.g., v1.0.0)'
         required: true
 
+# Grant permission to write to contents to upload release assets.
 permissions:
   contents: write
-
 
 jobs:
   build:
@@ -19,8 +34,10 @@ jobs:
     runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Expose outputs for subsequent steps
     outputs:
       tag_name: ${{ steps.set_tag.outputs.tag_name }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -28,14 +45,12 @@ jobs:
       - name: Set TAG_NAME
         id: set_tag
         run: |
+          # If the workflow is triggered manually, set the TAG_NAME from the input
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             echo "TAG_NAME=${{ github.event.inputs.TAG_NAME }}" >> $GITHUB_ENV
             echo "tag_name=${{ github.event.inputs.TAG_NAME }}" >> $GITHUB_OUTPUT
-          else
-            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-            echo "tag_name=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          # No need for 'else' condition because it won't trigger without workflow_dispatch
           fi
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -44,12 +59,14 @@ jobs:
       - name: Set version in package.json
         id: set_version
         run: |
+          # Remove the 'v' prefix from the tag name if it exists
           VERSION="${{ env.TAG_NAME }}"
           VERSION="${VERSION#v}"
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Update version in package.json
         run: |
+          # Update the package.json with the extracted version
           npm version "${{ steps.set_version.outputs.VERSION }}" --no-git-tag-version
 
       - name: Install dependencies
@@ -61,45 +78,60 @@ jobs:
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Upload .dmg artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dmgs
-          path: ./release/**/*.dmg
-
-  publish_dmg:
-    name: Publish .dmg to Release
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-
-      - name: Set TAG_NAME from build
-        run: echo "TAG_NAME=${{ needs.build.outputs.tag_name }}" >> $GITHUB_ENV
-
-      - name: Create Release if Not Exists
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create or Update Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
-          draft: false
-          prerelease: false
-        continue-on-error: true
+        run: |
+          # Set variables for use in the create/update release step
+          TAG_NAME=${{ env.TAG_NAME }}
+          RELEASE_NAME="Release ${TAG_NAME}"
+          BODY="Automatic release of version ${TAG_NAME}"
+
+          # Check if release exists for the given tag
+          if gh release view "$TAG_NAME" > /dev/null 2>&1; then
+            echo "Release $TAG_NAME already exists. Updating..."
+            # If exists, update the title and notes
+            gh release edit "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          else
+            echo "Creating release $TAG_NAME"
+            # If it does not exist, create it
+            gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          fi
+
+      - name: Get DMG file path
+        id: get_dmg_path
+        run: |
+          # Find the first .dmg file in the release directory
+          DMG_FILE=$(find ./release -type f -name "*.dmg" | head -n 1)
+          echo "dmg_path=$DMG_FILE" >> $GITHUB_OUTPUT
+
+      - name: Rename DMG File
+        id: rename_dmg
+        run: |
+          # Get the DMG file path from the previous step
+          DMG_PATH="${{ steps.get_dmg_path.outputs.dmg_path }}"
+          # Get the tag name from the environment variable
+          TAG_NAME="${{ env.TAG_NAME }}"
+          # Define the new name for the .dmg file
+          ASSET_NAME="MongoDB_Query_Executor_${TAG_NAME}.dmg"
+          # Define the full new path for the .dmg file
+          NEW_DMG_PATH="./release/$ASSET_NAME"
+          # Rename the .dmg file
+          mv "$DMG_PATH" "$NEW_DMG_PATH"
+          # Output the new path for subsequent steps
+          echo "new_dmg_path=$NEW_DMG_PATH" >> $GITHUB_OUTPUT 
 
       - name: Upload .dmg to Release
-        if: steps.create_release.outcome == 'success'
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/**/*.dmg
-          asset_name: MongoDB_Query_Executor_${{ env.TAG_NAME }}.dmg
-          asset_content_type: application/octet-stream
+        run: |
+          # Get the new DMG file path from the previous step
+          DMG_PATH="${{ steps.rename_dmg.outputs.new_dmg_path }}"
+           # Get the tag name from the environment variable
+          TAG_NAME="${{ env.TAG_NAME }}"
+
+          # Upload the asset, overwriting if it exists
+          gh release upload "$TAG_NAME" "$DMG_PATH" --clobber
 
       - name: Confirm Upload
         if: success()
