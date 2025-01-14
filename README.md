@@ -60,7 +60,17 @@ The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style
 
 # Architecture Diagram
 
-![Flowchart](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/Diagram.mermaid)
+ ```mermaid
+flowchart LR
+    E["OS_Graphical_System"] -- "System_Changing_Theme" --> A["Electron_Frontend"]
+    A["Electron_Frontend"] -- "User_Queries" --> B{"Monolithic Backend"}
+    B -- "Execute_Queries" --> C{"MongoDB Database"}
+    C -- "Return_Data" --> B
+    B -- "JSON_Results" --> A
+    A <-- "Settings" --> B
+    A <-- "Query_History" --> B
+    B -- "Persistent Storage for Settings & History" --> D["Local_Storage"]
+   ```
 
 # Repository and Branching Strategy
 
