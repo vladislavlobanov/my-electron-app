@@ -1,7 +1,12 @@
 # This workflow automates the process of building a macOS application, creating a release on GitHub,
 # and uploading the built .dmg installer to the corresponding release.
 #
-# It can be triggered manually via workflow dispatch or on a tag being created via workflow dispatch
+# This script serves the purpose of **Production Deployment:**
+#    - **Trigger:** Release personnel manually trigger the workflow with `RELEASE_TYPE` set to `production`.
+#    - **Action:** Creates an official release on GitHub.
+#    - **Purpose:** Deploys the `.dmg` installer for end users, making it the current official release.
+#
+# By specifying the `RELEASE_TYPE`, the workflow adjusts its behavior to suit either UAT or Production needs.
 #
 # The workflow performs the following steps:
 # 1. Checks out the repository.
@@ -15,6 +20,7 @@
 # 9. Renames the .dmg file to include the version.
 # 10. Uploads the renamed .dmg file to the GitHub release.
 # 11. Confirms the upload was successful.
+
 name: Publish .dmg Installer to Release
 
 on:

@@ -1,7 +1,12 @@
 # This workflow automates the process of building a macOS application, creating a pre-release on GitHub,
 # and uploading the built .dmg installer to the corresponding pre-release.
 #
-# It can be triggered manually via workflow dispatch or on a tag being created via workflow dispatch
+# Additionally, this script functions as a **User Acceptance Testing (UAT)** stage:
+# - QA can trigger a pre-release build manually using this workflow.
+# - The generated pre-release .dmg installer can be manually installed and tested by the QA team.
+# - If the QA tests pass, the pre-release can be promoted to an official release, marking it as the current release.
+#
+# It can be triggered manually via workflow dispatch with a specific tag.
 #
 # The workflow performs the following steps:
 # 1. Checks out the repository.
@@ -10,11 +15,17 @@
 # 4. Installs project dependencies.
 # 5. Builds the application.
 # 6. Removes blockmap files to reduce installer size.
-# 7. Creates a new pre-release or updates the existing pre-release if one exists based on tag.
+# 7. Creates a new pre-release or updates the existing pre-release if one exists based on the tag.
 # 8. Locates the generated .dmg file.
 # 9. Renames the .dmg file to include the version.
 # 10. Uploads the renamed .dmg file to the GitHub pre-release.
 # 11. Confirms the upload was successful.
+#
+# ### UAT Workflow:
+# - **Trigger:** QA team members manually trigger the workflow with a specific tag (e.g., v1.0.0).
+# - **Testing:** The generated pre-release installer is installed and tested.
+# - **Promotion:** Upon successful testing, the pre-release can be converted to an official release either manually via GitHub UI or by triggering another workflow.
+
 name: Publish .dmg Installer to Pre-Release
 
 on:
