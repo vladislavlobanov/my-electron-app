@@ -1,5 +1,5 @@
-# This workflow automates the process of building a macOS application, creating a release on GitHub,
-# and uploading the built .dmg installer to the corresponding release.
+# This workflow automates the process of building a macOS application, creating a pre-release on GitHub,
+# and uploading the built .dmg installer to the corresponding pre-release.
 #
 # It can be triggered manually via workflow dispatch or on a tag being created via workflow dispatch
 #
@@ -10,18 +10,18 @@
 # 4. Installs project dependencies.
 # 5. Builds the application.
 # 6. Removes blockmap files to reduce installer size.
-# 7. Creates a new release or updates the existing release if one exists based on tag.
+# 7. Creates a new pre-release or updates the existing pre-release if one exists based on tag.
 # 8. Locates the generated .dmg file.
 # 9. Renames the .dmg file to include the version.
-# 10. Uploads the renamed .dmg file to the GitHub release.
+# 10. Uploads the renamed .dmg file to the GitHub pre-release.
 # 11. Confirms the upload was successful.
-name: Publish .dmg Installer to Release
+name: Publish .dmg Installer to Pre-Release
 
 on:
   workflow_dispatch:
     inputs:
       TAG_NAME:
-        description: 'Tag name for the release (e.g., v1.0.0)'
+        description: 'Tag name for the pre-release (e.g., v1.0.0)'
         required: true
 
 # Grant permission to write to contents to upload release assets.
@@ -30,7 +30,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Release
+    name: Build Pre-Release
     runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,6 +51,7 @@ jobs:
             echo "tag_name=${{ github.event.inputs.TAG_NAME }}" >> $GITHUB_OUTPUT
           # No need for 'else' condition because it won't trigger without workflow_dispatch
           fi
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -78,24 +79,24 @@ jobs:
       - name: Remove blockmap files
         run: find ./release -type f -name '*.blockmap' -delete
 
-      - name: Create or Update Release
+      - name: Create or Update Pre-Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Set variables for use in the create/update release step
           TAG_NAME=${{ env.TAG_NAME }}
-          RELEASE_NAME="Release ${TAG_NAME}"
-          BODY="Automatic release of version ${TAG_NAME}"
+          RELEASE_NAME="Pre-Release ${TAG_NAME}"
+          BODY="Automatic pre-release of version ${TAG_NAME}"
 
-          # Check if release exists for the given tag
+          # Check if pre-release exists for the given tag
           if gh release view "$TAG_NAME" > /dev/null 2>&1; then
-            echo "Release $TAG_NAME already exists. Updating..."
-            # If exists, update the title and notes
-            gh release edit "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+            echo "Pre-release $TAG_NAME already exists. Updating..."
+            # If exists, update the title, notes, and mark as pre-release
+            gh release edit "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY" --prerelease
           else
-            echo "Creating release $TAG_NAME"
-            # If it does not exist, create it
-            gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+            echo "Creating pre-release $TAG_NAME"
+            # If it does not exist, create it as a pre-release
+            gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY" --prerelease
           fi
 
       - name: Get DMG file path
@@ -121,13 +122,13 @@ jobs:
           # Output the new path for subsequent steps
           echo "new_dmg_path=$NEW_DMG_PATH" >> $GITHUB_OUTPUT 
 
-      - name: Upload .dmg to Release
+      - name: Upload .dmg to Pre-Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Get the new DMG file path from the previous step
           DMG_PATH="${{ steps.rename_dmg.outputs.new_dmg_path }}"
-           # Get the tag name from the environment variable
+          # Get the tag name from the environment variable
           TAG_NAME="${{ env.TAG_NAME }}"
 
           # Upload the asset, overwriting if it exists
@@ -135,4 +136,4 @@ jobs:
 
       - name: Confirm Upload
         if: success()
-        run: echo "Release created and .dmg uploaded successfully."
+        run: echo "Pre-release created and .dmg uploaded successfully."
