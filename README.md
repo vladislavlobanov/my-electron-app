@@ -123,8 +123,8 @@ To provide hands-on experience with:
 
 ### **Important Note**
 
-- **Installer Signing:** Currently, the installer is **not signed**, which is why you need to run the `xattr -c` command. We are working on getting the installer signed for smoother installation in the future.
-  
+- **Installer Signing:** Currently, the installer is **not signed**, which is why it is needed to run the `xattr -c` command.
+
 
 ## Steps to Run the Application (from source code)
 
