@@ -161,5 +161,5 @@ To provide hands-on experience with:
 | **Commit Environment**   | Executes tests upon commit         | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)      | Automated test pipelines via GitHub Actions |
 | **Acceptance Environment** | Runs Automated Acceptance Tests  | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)   | Automated test pipelines                |
 | **E2E Environment**          | Executes E2E and Contract Tests    | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)   | Automated test suites in pipeline       |
-| **Production Environment**   | Hosts live system for end users    | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)      | Automated deployments via GitHub Actions |
+| **Production Environment**   | Deploys installer for end users    | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)      | Automated deployments via GitHub Actions |
 
