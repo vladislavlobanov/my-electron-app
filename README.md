@@ -121,6 +121,10 @@ To provide hands-on experience with:
 5. **Drag** the app to your `Applications` folder.
 6. **Launch** the application from `Applications`.
 
+### **Important Note**
+
+- **Installer Signing:** Currently, the installer is **not signed**, which is why you need to run the `xattr -c` command. We are working on getting the installer signed for smoother installation in the future.
+  
 
 ## Steps to Run the Application (from source code)
 
