@@ -24,17 +24,28 @@ function App() {
   const [uri, setUri] = useState<string>();
   const [dbName, setDbName] = useState<string>();
   const [collectionName, setCollectionName] = useState<string>();
+  const [initialSystemTheme, setInitialSystemTheme] = useState<string>();
 
   useEffect(() => {
     window.ipcRenderer.on("open-settings", () => {
       setShowSettings(true);
     });
+
+    window.ipcRenderer.on(
+      "isDarkMode-onInitialOpen",
+      (_channel, prefersDark) => {
+        setInitialSystemTheme(prefersDark ? "dark" : "light");
+      }
+    );
+
     fetchSettings();
     fetchHistory();
   }, []);
 
   useEffect(() => {
-    if (theme && theme !== "system") {
+    if (!initialSystemTheme || !theme) return;
+
+    if (theme !== "system") {
       applyTheme(theme);
     } else {
       const root = document.documentElement;
@@ -43,9 +54,8 @@ function App() {
         !root.classList.contains("light-theme") &&
         !root.classList.contains("dark-theme")
       ) {
-        const prefersDark = import.meta.env.VITE_WDIO_THEME
-          ? import.meta.env.VITE_WDIO_THEME === "dark"
-          : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const prefersDark = initialSystemTheme === "dark";
+
         if (prefersDark) {
           root.classList.remove("light-theme");
           root.classList.add("dark-theme");
@@ -65,7 +75,7 @@ function App() {
         }
       });
     }
-  }, [theme]);
+  }, [theme, initialSystemTheme]);
 
   useEffect(() => {
     setTheme(settings?.theme);
