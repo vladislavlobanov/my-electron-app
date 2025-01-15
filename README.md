@@ -60,7 +60,17 @@ The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style
 
 # Architecture Diagram
 
-![Screenshot](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/Diagram.png)
+ ```mermaid
+flowchart LR
+    E["OS_Graphical_System"] -- "System_Changing_Theme" --> A["Electron_Frontend"]
+    A["Electron_Frontend"] -- "User_Queries" --> B{"Monolithic Backend"}
+    B -- "Execute_Queries" --> C{"MongoDB Database"}
+    C -- "Return_Data" --> B
+    B -- "JSON_Results" --> A
+    A <-- "Settings" --> B
+    A <-- "Query_History" --> B
+    B -- "Persistent Storage for Settings & History" --> D["Local_Storage"]
+   ```
 
 # Repository and Branching Strategy
 
@@ -96,8 +106,27 @@ To provide hands-on experience with:
 - CI/CD automation with GitHub Actions
 
 ---
+## How to Install the Application from .dmg installer
 
-## Steps to Run the Application
+1. **Download** the `.dmg` from the [GitHub releases page](https://github.com/vaisakhsasikumar/my-electron-app/releases/latest).
+2. **Open Terminal** and navigate to the download location:
+   ```bash
+   cd ~/Downloads
+   ```
+3. **Run** the command to remove security attributes:
+   ```bash
+   xattr -c "MongoDB-Query-Executor-Mac-x.x.x-Installer.dmg"
+   ```
+4. **Mount** the `.dmg` by double-clicking it.
+5. **Drag** the app to your `Applications` folder.
+6. **Launch** the application from `Applications`.
+
+### **Important Note**
+
+- **Installer Signing:** Currently, the installer is **not signed**, which is why it is needed to run the `xattr -c` command.
+
+
+## Steps to Run the Application (from source code)
 
 1. **Install dependencies**:
 
@@ -120,5 +149,18 @@ To provide hands-on experience with:
 
 [Smoke Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/SmokeTestCases.md)
 
+[External System Contract Test Cases](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/ExternalSystemContractTestCases.md)
+
 [Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
 
+
+## Environments
+
+
+| **Environment Name**     | **Purpose**                        | **Location**                                                                 | **Implementation**                             |
+|--------------------------|------------------------------------|------------------------------------------------------------------------------|-------------------------------------------------|
+| **Commit Environment**   | Executes tests upon commit         | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)      | Automated test pipelines via GitHub Actions     |
+| **Acceptance Environment** | Runs Automated Acceptance Tests  | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)   | Automated test pipelines                       |
+| **E2E Environment**         | Executes E2E and Contract Tests    | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)   | Automated test suites in pipeline              |
+| **UAT Environment**         | Runs Deployment and User Acceptance Testing | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/) | Manual trigger workflows via GitHub Actions    |
+| **Production Environment**  | Hosts live system for end users    | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)      | Automated deployments via GitHub Actions        |

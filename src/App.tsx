@@ -24,20 +24,58 @@ function App() {
   const [uri, setUri] = useState<string>();
   const [dbName, setDbName] = useState<string>();
   const [collectionName, setCollectionName] = useState<string>();
+  const [initialSystemTheme, setInitialSystemTheme] = useState<string>();
 
   useEffect(() => {
     window.ipcRenderer.on("open-settings", () => {
       setShowSettings(true);
     });
+
+    window.ipcRenderer.on(
+      "isDarkMode-onInitialOpen",
+      (_channel, prefersDark) => {
+        setInitialSystemTheme(prefersDark ? "dark" : "light");
+      }
+    );
+
     fetchSettings();
     fetchHistory();
   }, []);
 
   useEffect(() => {
-    if (theme) {
+    if (!initialSystemTheme || !theme) return;
+
+    if (theme !== "system") {
       applyTheme(theme);
+    } else {
+      const root = document.documentElement;
+
+      if (
+        !root.classList.contains("light-theme") &&
+        !root.classList.contains("dark-theme")
+      ) {
+        const prefersDark = initialSystemTheme === "dark";
+
+        if (prefersDark) {
+          root.classList.remove("light-theme");
+          root.classList.add("dark-theme");
+        } else {
+          root.classList.remove("dark-theme");
+          root.classList.add("light-theme");
+        }
+      }
+
+      window.ipcRenderer.on("set-dark-theme", (_channel, prefersDark) => {
+        if (prefersDark) {
+          root.classList.remove("light-theme");
+          root.classList.add("dark-theme");
+        } else {
+          root.classList.remove("dark-theme");
+          root.classList.add("light-theme");
+        }
+      });
     }
-  }, [theme]);
+  }, [theme, initialSystemTheme]);
 
   useEffect(() => {
     setTheme(settings?.theme);
@@ -69,17 +107,6 @@ function App() {
     } else if (selectedTheme === "dark") {
       root.classList.remove("light-theme");
       root.classList.add("dark-theme");
-    } else if (selectedTheme === "system") {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      if (prefersDark) {
-        root.classList.remove("light-theme");
-        root.classList.add("dark-theme");
-      } else {
-        root.classList.remove("dark-theme");
-        root.classList.add("light-theme");
-      }
     }
   };
 
