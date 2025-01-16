@@ -1,4 +1,4 @@
-# This GitHub Actions workflow is designed to facilitate the User Acceptance Testing (UAT) stage for an Electron app.
+# This GitHub Actions workflow is designed to facilitate the User Public Release stage for an Electron app.
 # It allows for manual triggering of the workflow, which enables the extraction of artifacts from a specific workflow run,
 # and the creation of a draft release with a tag that is specified by the user.
 #
@@ -29,7 +29,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: "Tag name for the UAT Stage pre-release (e.g., v1.0.0)"
+        description: "Tag name for the release (e.g., v1.0.0)"
         required: true
         type: string
       run_id:
@@ -58,11 +58,12 @@ jobs:
           repository: vaisakhsasikumar/my-electron-app
           run-id: ${{ github.event.inputs.run_id }}
 
+
       - name: Set Permissions
         run: chmod 755 automated_testing/install.sh
 
       - name: Run automated_testing/install.sh
-        run: sh automated_testing/install.sh
+        run: automated_testing/install.sh
 
       - name: Run Smoke Tests
         run: npm run test:smoke
@@ -77,14 +78,20 @@ jobs:
             echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
           fi
 
-      - name: Create Draft Pre-Release
+      - name: Create Git Tag
+        run: git tag ${{ github.event.inputs.tag_name }}
+
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
-          name: "Pre-Release ${{ github.event.inputs.tag_name }} for UAT"
+          name: "Release ${{ github.event.inputs.tag_name }}"
           files: "**/*.dmg"
-
 
       - name: Confirm Upload
         if: success()
-        run: echo "Pre-Release for UAT created and .dmg uploaded successfully."
+        run: echo "Release created and .dmg uploaded successfully."
+
+      - name: Push Git Tag
+        if: success()
+        run: |
+          git push origin ${{ github.event.inputs.tag_name }}
