@@ -1,3 +1,10 @@
+#### Where to take run_id:
+#
+#  Example of URL: https://github.com/MartynovIvan/my-electron-app/actions/runs/12813175513/artifacts/2441968314
+#     Explanation of URL: https://github.com/{owner}/{repo}/actions/runs/{run_id}/artifacts/{artifact_id}
+#     From this URL, `12813175513` is the `run_id` that you can supply to the workflow.
+#
+
 name: UAT Stage
 
 on:
