@@ -58,6 +58,15 @@ jobs:
           repository: vaisakhsasikumar/my-electron-app
           run-id: ${{ github.event.inputs.run_id }}
 
+      - name: Set Permissions
+        run: chmod 755 automated_testing/install.sh
+
+      - name: Run automated_testing/install.sh
+        run: sh automated_testing/install.sh
+
+      - name: Run Smoke Tests
+        run: npm run test:smoke
+
       - name: Check if Git Tag Exists
         run: |
           if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
