@@ -23,7 +23,7 @@
 #
 
 
-name: UAT Stage
+name: Publish Release Stage
 
 on:
   workflow_dispatch:
