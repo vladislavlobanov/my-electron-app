@@ -56,17 +56,45 @@ jobs:
             echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
           fi
 
-      - name: Create Git Tag
-        run: git tag ${{ github.event.inputs.tag_name }}
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-      - name: Push Git Tag
-        run: git push origin ${{ github.event.inputs.tag_name }}
+      - name: Create or Update Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="${{ github.event.inputs.tag_name }}"
+          RELEASE_NAME="Release ${TAG_NAME}"
+          BODY="Automatic release for tag ${TAG_NAME}"
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: "Release ${{ github.event.inputs.tag_name }}"
-          files: "**/*.dmg"
+          # Check if release exists for the tag
+          if gh release view "$TAG_NAME" > /dev/null 2>&1; then
+            echo "Release $TAG_NAME exists. Updating..."
+            gh release edit "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          else
+            echo "Creating release $TAG_NAME"
+            gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          fi
+
+      - name: Find .dmg File
+        id: find_dmg
+        run: |
+          DMG_PATH=$(find . -type f -name "*.dmg" | head -n 1)
+          if [ -z "$DMG_PATH" ]; then
+            echo "Error: .dmg file not found!"
+            exit 1
+          fi
+          echo "dmg_path=$DMG_PATH" >> $GITHUB_OUTPUT
+
+      - name: Upload .dmg to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="${{ github.event.inputs.tag_name }}"
+          DMG_PATH="${{ steps.find_dmg.outputs.dmg_path }}"
+          
+          echo "Uploading $DMG_PATH to release $TAG_NAME"
+          gh release upload "$TAG_NAME" "$DMG_PATH" --clobber
 
       - name: Confirm Upload
         if: success()
