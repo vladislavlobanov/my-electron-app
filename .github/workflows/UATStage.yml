@@ -46,6 +46,20 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
     steps:
+
+      - name: Check if Git Tag Exists
+        run: |
+          if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
+          then
+            echo "Tag '${{ github.event.inputs.tag_name }}' already exists."
+            exit 1
+          else
+            echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
+          fi
+
+      - name: Create Git Tag
+        run: git tag ${{ github.event.inputs.tag_name }}
+
       - name: Checkout Test Repository
         uses: actions/checkout@v4
         with:
@@ -69,16 +83,6 @@ jobs:
 
       - name: Run Smoke Tests
         run: npm run test:smoke
-
-      - name: Check if Git Tag Exists
-        run: |
-          if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
-          then
-            echo "Tag '${{ github.event.inputs.tag_name }}' already exists."
-            exit 1
-          else
-            echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
-          fi
 
       - name: Create Draft Pre-Release
         uses: softprops/action-gh-release@v2
