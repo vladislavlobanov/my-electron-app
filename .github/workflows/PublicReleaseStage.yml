@@ -76,6 +76,13 @@ jobs:
             gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
           fi
 
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: vaisakhsasikumar/my-electron-app
+          run-id: ${{ github.event.inputs.run_id }}
+
       - name: Find .dmg File
         id: find_dmg
         run: |
