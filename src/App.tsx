@@ -315,6 +315,7 @@ function App() {
                 </button>
                 <div className="ml-2 mr-2" style={{ width: "20px" }}></div>
                 <button
+                  data-testid={"applySeetingsModalButton"}
                   type="button"
                   className="btn btn-primary"
                   onClick={() =>
