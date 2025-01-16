@@ -23,7 +23,7 @@
 #
 
 
-name: UAT Stage
+name: Publish Release Stage
 
 on:
   workflow_dispatch:
@@ -64,6 +64,9 @@ jobs:
 
       - name: Run automated_testing/install.sh
         run: automated_testing/install.sh
+
+      - name: Run npm install
+        run: npm install
 
       - name: Run Smoke Tests
         run: npm run test:smoke
