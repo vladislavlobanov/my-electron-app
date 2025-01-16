@@ -69,8 +69,8 @@ flowchart LR
    A <-- "Settings" --> B
    A <-- "Query_History" --> B
    B -- "Persistent Storage for Settings & History" --> D["Local_Storage"]
-   B --> "Version check request" --> E{"Github API"}
-   E --> "Version response" --> B
+   B -- "Version check request" --> E{"Github API"}
+   E -- "Version response" --> B
 ```
 
 # Repository and Branching Strategy
