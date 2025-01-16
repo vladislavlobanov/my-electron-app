@@ -2,6 +2,12 @@
 # It allows for manual triggering of the workflow, which enables the extraction of artifacts from a specific workflow run,
 # and the creation of a draft release with a tag that is specified by the user.
 #
+# Additional Features:
+# 1. **Git Tag Validation**: Ensures that the specified tag does not already exist in the repository. If the tag exists,
+#    the workflow fails with an appropriate message to prevent duplicate tagging.
+# 2. **Pushing Git Tag**: After successfully creating and releasing, the new tag is pushed to the remote repository
+#    to make it available for future reference and collaborations.
+#
 # Input Parameters:
 # - tag_name: This parameter represents the tag name for the release, often following a semantic versioning format
 #   such as 'v1.0.0'. This tag is used to label the release in GitHub.
@@ -62,6 +68,16 @@ jobs:
 
       # Optionally install MongoDB, start services, run scripts, and tests
 
+      - name: Check if Git Tag Exists
+        run: |
+          if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
+          then
+            echo "Tag '${{ github.event.inputs.tag_name }}' already exists."
+            exit 1
+          else
+            echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
+          fi
+
       - name: Create Git Tag
         run: git tag ${{ github.event.inputs.tag_name }}
 
@@ -83,3 +99,8 @@ jobs:
       - name: Confirm Upload
         if: success()
         run: echo "Release created and .dmg uploaded successfully."
+
+      - name: Push Git Tag
+        if: success()
+        run: |
+          git push origin ${{ github.event.inputs.tag_name }}
