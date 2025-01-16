@@ -230,6 +230,7 @@ function App() {
                 <div className="form-group">
                   <div className="form-check">
                     <input
+                      data-testid={"lightThemeSelector"}
                       className="form-check-input"
                       type="radio"
                       name="themeOptions"
@@ -244,6 +245,7 @@ function App() {
                   </div>
                   <div className="form-check">
                     <input
+                      data-testid={"darkThemeSelector"}
                       className="form-check-input"
                       type="radio"
                       name="themeOptions"
@@ -258,6 +260,7 @@ function App() {
                   </div>
                   <div className="form-check">
                     <input
+                      data-testid={"systemThemeSelector"}
                       className="form-check-input"
                       type="radio"
                       name="themeOptions"
@@ -275,6 +278,7 @@ function App() {
                 <div className="form-group">
                   <label htmlFor="uriInput">URI</label>
                   <input
+                    data-testid={"URI"}
                     type="text"
                     id="uriInput"
                     className="form-control mb-2"
@@ -283,6 +287,7 @@ function App() {
                   />
                   <label htmlFor="dbNameInput">Database Name</label>
                   <input
+                    data-testid={"databaseName"}
                     type="text"
                     id="dbNameInput"
                     className="form-control mb-2"
@@ -291,6 +296,7 @@ function App() {
                   />
                   <label htmlFor="collectionNameInput">Collection Name</label>
                   <input
+                    data-testid={"collectionName"}
                     type="text"
                     id="collectionNameInput"
                     className="form-control mb-2"
@@ -333,6 +339,7 @@ function App() {
           <div className="col-md-8">
             <div className="form-check form-switch">
               <input
+                data-testid={"advancedViewToggle"}
                 className="form-check-input"
                 type="checkbox"
                 role="switch"
@@ -357,6 +364,7 @@ function App() {
               <div className="card-body">
                 <h5 className="card-title">Enter MongoDB Query</h5>
                 <textarea
+                  data-testid={"query"}
                   className={`form-control mb-3 ${
                     theme === "dark" ? "dark-textarea" : ""
                   }`}
@@ -366,6 +374,7 @@ function App() {
                   onChange={(e) => setQuery(e.target.value)}
                 />
                 <button
+                  data-testid={"runQueryButton"}
                   className="btn btn-primary btn-block"
                   onClick={handleQuerySubmit}
                 >
@@ -388,7 +397,9 @@ function App() {
                 <div className={`card shadow-sm`}>
                   <div className="card-body">
                     <h5>Query Result</h5>
-                    <pre>{JSON.stringify(result, null, 2)}</pre>
+                    <pre data-testid={"queryResult"}>
+                      {JSON.stringify(result, null, 2)}
+                    </pre>
                   </div>
                 </div>
               </div>
@@ -398,10 +409,11 @@ function App() {
                 <div className={`card shadow-sm`}>
                   <div className="card-body">
                     <h5>Query History</h5>
-                    <div className="list-group">
+                    <div className="list-group" data-testid={"queryHistory"}>
                       {history.map(
                         (item: { query: string; output: string }, index) => (
                           <div
+                            data-testid={"queryHistorySingleElement"}
                             key={index}
                             className={`list-group-item list-group-item-action text-truncate ${
                               theme === "dark" ? "dark-list-group-item" : ""
