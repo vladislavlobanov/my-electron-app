@@ -53,24 +53,25 @@ This project serves as a Test Driven Development (TDD) Sandbox, created as part 
 
 **OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode.
 
-
 # System Architecture Style
 
 The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style**, combining both frontend and backend functionalities within a single application. This approach simplifies development and deployment, enabling users to execute MongoDB queries directly from the Electron interface without requiring a separate server.
 
 # Architecture Diagram
 
- ```mermaid
+```mermaid
 flowchart LR
-    E["OS_Graphical_System"] -- "System_Changing_Theme" --> A["Electron_Frontend"]
-    A["Electron_Frontend"] -- "User_Queries" --> B{"Monolithic Backend"}
-    B -- "Execute_Queries" --> C{"MongoDB Database"}
-    C -- "Return_Data" --> B
-    B -- "JSON_Results" --> A
-    A <-- "Settings" --> B
-    A <-- "Query_History" --> B
-    B -- "Persistent Storage for Settings & History" --> D["Local_Storage"]
-   ```
+   E["OS_Graphical_System"] -- "System_Changing_Theme" --> A["Electron_Frontend"]
+   A["Electron_Frontend"] -- "User_Queries" --> B{"Monolithic Backend"}
+   B -- "Execute_Queries" --> C{"MongoDB Database"}
+   C -- "Return_Data" --> B
+   B -- "JSON_Results" --> A
+   A <-- "Settings" --> B
+   A <-- "Query_History" --> B
+   B -- "Persistent Storage for Settings & History" --> D["Local_Storage"]
+   B -- "Version check request" --> F{"Github API"}
+   F -- "Version response" --> B
+```
 
 # Repository and Branching Strategy
 
@@ -106,6 +107,7 @@ To provide hands-on experience with:
 - CI/CD automation with GitHub Actions
 
 ---
+
 ## How to Install the Application from .dmg installer
 
 1. **Download** the `.dmg` from the [GitHub releases page](https://github.com/vaisakhsasikumar/my-electron-app/releases/latest).
@@ -124,7 +126,6 @@ To provide hands-on experience with:
 ### **Important Note**
 
 - **Installer Signing:** Currently, the installer is **not signed**, which is why it is needed to run the `xattr -c` command.
-
 
 ## Steps to Run the Application (from source code)
 
@@ -153,14 +154,12 @@ To provide hands-on experience with:
 
 [Link to System Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)
 
-
 ## Environments
 
-
-| **Environment Name**     | **Purpose**                        | **Location**                                                                 | **Implementation**                             |
-|--------------------------|------------------------------------|------------------------------------------------------------------------------|-------------------------------------------------|
-| **Commit Environment**   | Executes tests upon commit         | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)      | Automated test pipelines via GitHub Actions     |
-| **Acceptance Environment** | Runs Automated Acceptance Tests  | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)   | Automated test pipelines                       |
-| **E2E Environment**         | Executes E2E and Contract Tests    | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests)   | Automated test suites in pipeline              |
-| **UAT Environment**         | Runs Deployment and User Acceptance Testing | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/) | Manual trigger workflows via GitHub Actions    |
-| **Production Environment**  | Hosts live system for end users    | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)      | Automated deployments via GitHub Actions        |
+| **Environment Name**       | **Purpose**                                 | **Location**                                                               | **Implementation**                          |
+| -------------------------- | ------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------- |
+| **Commit Environment**     | Executes tests upon commit                  | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)    | Automated test pipelines via GitHub Actions |
+| **Acceptance Environment** | Runs Automated Acceptance Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) | Automated test pipelines                    |
+| **E2E Environment**        | Executes E2E and Contract Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) | Automated test suites in pipeline           |
+| **UAT Environment**        | Runs Deployment and User Acceptance Testing | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)    | Manual trigger workflows via GitHub Actions |
+| **Production Environment** | Hosts live system for end users             | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)    | Automated deployments via GitHub Actions    |

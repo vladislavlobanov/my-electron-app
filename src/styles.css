@@ -189,17 +189,24 @@ body {
   text-overflow: ellipsis;
 }
 
-.titlebar {
+.bar {
   height: 30px;
-  background: #17af66;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  -webkit-app-region: drag;
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.titlebar {
+  background: #17af66;
+  -webkit-app-region: drag;
+}
+
+.version {
+  background: linear-gradient(180deg, #208B85 0%, #355882 100%);
 }
 
 .app-content {
