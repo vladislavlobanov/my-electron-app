@@ -1,3 +1,14 @@
+# This GitHub Actions workflow is designed to facilitate the User Acceptance Testing (UAT) stage for an Electron app.
+# It allows for manual triggering of the workflow, which enables the extraction of artifacts from a specific workflow run,
+# and the creation of a draft release with a tag that is specified by the user.
+#
+# Input Parameters:
+# - tag_name: This parameter represents the tag name for the release, often following a semantic versioning format
+#   such as 'v1.0.0'. This tag is used to label the release in GitHub.
+# - run_id: This parameter specifies the ID of the workflow run that generated the artifact to be downloaded.
+#   The run ID allows the workflow to locate and retrieve the precise artifacts associated with a specific prior run,
+#   ensuring accuracy in testing and deployment.
+#
 #### Where to take run_id:
 #
 #  Example of URL: https://github.com/MartynovIvan/my-electron-app/actions/runs/12813175513/artifacts/2441968314
@@ -5,13 +16,14 @@
 #     From this URL, `12813175513` is the `run_id` that you can supply to the workflow.
 #
 
+
 name: UAT Stage
 
 on:
   workflow_dispatch:
     inputs:
-      release_name:
-        description: "Name of the release"
+      tag_name:
+        description: "Tag name for the release (e.g., v1.0.0)"
         required: true
         type: string
       run_id:
@@ -32,66 +44,32 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: "vaisakhsasikumar/electron-app-tests"
+      - run: echo "Checked out Test Repository"
 
-      #   - name: Use Node.js
-      #     uses: actions/setup-node@v4
-      #     with:
-      #       node-version: 20
+      # Optionally use Node.js, install dependencies, etc.
 
-      #   - name: Install dependencies
-      #     run: npm ci
-
-      - uses: actions/download-artifact@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: vaisakhsasikumar/my-electron-app
           run-id: ${{ github.event.inputs.run_id }}
+      - run: echo "Artifact downloaded"
 
-      #   - name: Install MongoDB
-      #     run: |
-      #       echo "Installing MongoDB..."
-      #       brew tap mongodb/brew
-      #       brew install mongodb-community@6.0
+      # Optionally install MongoDB, start services, run scripts, and tests
 
-      #   - name: Start MongoDB
-      #     run: |
-      #       echo "Starting MongoDB..."
-      #       brew services start mongodb/brew/mongodb-community@6.0
-      #       echo "Waiting for MongoDB to be ready..."
-      #       until nc -z localhost 27017; do
-      #         echo "MongoDB is not ready yet, retrying in 5 seconds..."
-      #         sleep 5
-      #       done
-
-      #   - name: Create test database and collection
-      #     run: |
-      #       echo "Creating test database and collection..."
-      #       mongosh <<EOF
-      #       use test
-      #       db.test.insertMany([
-      #         { name: "test1", value: 1 },
-      #         { name: "test2", value: 2 },
-      #         { name: "test3", value: 3 }
-      #       ])
-      #       EOF
-
-      #   - name: Set Permissions
-      #     run: chmod 755 pipeline.sh
-
-      #   - name: Run pipeline.sh
-      #     run: ./pipeline.sh
-
-      #   - name: Run Smoke Tests
-      #     run: npm run test:smoke
-
-      #   - name: Stop MongoDB
-      #     run: |
-      #       echo "Stop MongoDB..."
-      #       brew services stop mongodb-community@6.0
+      - name: Create Git Tag
+        run: git tag ${{ github.event.inputs.tag_name }}
+      - run: echo "Git tag created: ${{ github.event.inputs.tag_name }}"
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          name: ${{ github.event.inputs.release_name}}
+          name: "Release ${{ github.event.inputs.tag_name }}"
           files: "**/*.dmg"
+      - run: echo "Draft release created with tag: Release ${{ github.event.inputs.tag_name }}"
+
+      - name: Confirm Upload
+        if: success()
+        run: echo "Release created and .dmg uploaded successfully."
