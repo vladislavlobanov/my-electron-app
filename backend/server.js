@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 import fs from "fs";
 import sqlite3 from "sqlite3";
+
 import { executeQuery } from "./db.js";
 import { fileURLToPath } from "url";
 
@@ -169,6 +170,16 @@ app.post("/api/settings", (req, res) => {
       res.json({ message: "Settings updated successfully" });
     }
   );
+});
+
+// GET /api/check-version - Check version
+app.get("/api/check-version", async (req, res) => {
+  const request = await fetch(
+    "https://api.github.com/repos/vaisakhsasikumar/my-electron-app/releases/latest"
+  );
+  const response = await request.json();
+
+  res.status(200).json({ success: true, isLatestVersion: response?.tag_name === process.version });
 });
 
 app.listen(5001, () => {
