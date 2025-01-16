@@ -97,6 +97,15 @@ function createWindow() {
   } else {
     mainWindow.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
+
+  mainWindow.webContents.once("did-finish-load", () => {
+    mainWindow?.webContents.send(
+      "isDarkMode-onInitialOpen",
+      process.env.WDIO_THEME
+        ? process.env.WDIO_THEME === "dark"
+        : nativeTheme.shouldUseDarkColors
+    );
+  });
 }
 
 function startBackendDev() {
