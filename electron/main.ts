@@ -116,7 +116,7 @@ function startBackendDev() {
     stdio: "pipe",
     env: {
       ...process.env,
-      VITE_VERSION_API: import.meta.env.VITE_VERSION_API
+      ...import.meta.env
     }
   });
 
@@ -142,7 +142,7 @@ function startBackendProd(): Promise<void> {
         stdio: "pipe",
         env: {
           ...process.env,
-          VITE_VERSION_API: import.meta.env.VITE_VERSION_API
+          ...import.meta.env
         }
       });
 
