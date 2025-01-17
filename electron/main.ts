@@ -114,10 +114,6 @@ function startBackendDev() {
   const forked = utilityProcess.fork(serverPath, [], {
     cwd: __dirname,
     stdio: "pipe",
-    env: {
-      ...process.env,
-      ...import.meta.env
-    }
   });
 
   forked.stdout?.on("data", (data) => {
@@ -140,10 +136,6 @@ function startBackendProd(): Promise<void> {
       const forked = utilityProcess.fork(serverPath, [], {
         cwd: __dirname,
         stdio: "pipe",
-        env: {
-          ...process.env,
-          ...import.meta.env
-        }
       });
 
       forked.stdout?.on("data", (data) => {
