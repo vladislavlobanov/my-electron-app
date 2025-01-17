@@ -26,7 +26,7 @@ function App() {
   const [collectionName, setCollectionName] = useState<string>();
   const [initialSystemTheme, setInitialSystemTheme] = useState<string>();
 
-  const [newVersion, setNewVersion] = useState(false);
+  const [newVersion, setNewVersion] = useState(true);
 
   useEffect(() => {
     const checkNewVersion = async () => {
