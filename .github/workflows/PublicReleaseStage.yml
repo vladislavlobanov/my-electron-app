@@ -1,4 +1,33 @@
-name: Publish Release Stage
+# Public Release Stage Workflow
+#
+# - **Triggers:** Initiates manually via workflow dispatch with inputs for tag name and run ID.
+#
+# - **Inputs:**
+#   - `tag_name`: The tag name for the release (e.g., v1.0.0).
+#   - `run_id`: The ID of the workflow run where the desired download artifact was uploaded from.
+#
+# - **Permissions:** Requires write-all permission for executing tasks.
+#
+# - **Jobs:**
+#   - **Public Release Stage:**
+#     - **Environment:** Uses `macos-latest` and requires a GitHub token.
+#     - **Key Steps:**
+#       - **Checkout Test Repository:** Retrieves code from the test repository.
+#       - **Download Artifact:** Downloads the build artifact from a specified run ID.
+#       - **Set Permissions:** Adjusts permissions for scripts to ensure executability.
+#       - **Run Automated Installation:** Executes installation scripts.
+#       - **Dependency Handling:** Installs necessary node modules.
+#       - **Smoke Tests Execution:** Runs basic tests to ensure application stability.
+#       - **Git Tag Verification:** Confirms the non-existence of the Git tag to prevent duplicates.
+#       - **Release Management:** Creates or updates a release based on tag existence.
+#       - **Artifact Handling:**
+#         - Finds `.dmg` file for the release.
+#         - Uploads `.dmg` to the GitHub release using the `gh` CLI.
+#       - **Confirmation:** Prints a message confirming successful release creation and upload.
+#
+# This workflow facilitates the creation and publication of software releases, ensuring that the release process is automated, reliable, and easy to execute.
+
+name: Public Release Stage
 
 on:
   workflow_dispatch:
@@ -16,7 +45,7 @@ permissions: write-all
 
 jobs:
   uat:
-    name: UAT Stage
+    name: Public Release Stage
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
