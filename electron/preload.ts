@@ -1,5 +1,9 @@
 import { ipcRenderer, contextBridge } from "electron";
 
+if (process.env.E2ETESTS === "true") {
+  import("wdio-electron-service/preload");
+}
+
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", {
   on(...args: Parameters<typeof ipcRenderer.on>) {
