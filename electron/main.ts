@@ -118,6 +118,10 @@ function startBackendDev() {
   const forked = utilityProcess.fork(serverPath, [app.getVersion()], {
     cwd: __dirname,
     stdio: "pipe",
+    env: {
+      ...process.env,
+      VITE_VERSION_API: process.env.VITE_VERSION_API || import.meta.env.VITE_VERSION_API,
+    }
   });
 
   forked.stdout?.on("data", (data) => {
@@ -140,6 +144,10 @@ function startBackendProd(): Promise<void> {
       const forked = utilityProcess.fork(serverPath, [app.getVersion()], {
         cwd: __dirname,
         stdio: "pipe",
+        env: {
+          ...process.env,
+          VITE_VERSION_API: process.env.VITE_VERSION_API || import.meta.env.VITE_VERSION_API,
+        }
       });
 
       forked.stdout?.on("data", (data) => {
