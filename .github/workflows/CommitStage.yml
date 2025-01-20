@@ -1,7 +1,5 @@
-# The "Commit Stage" GitHub Actions workflow is configured to run on pushes and pull requests targeting the main branch. Its primary function is to ensure code integrity and readiness for further stages of development by performing a series of automated checks and tasks. Here's a brief description:
-
-# ### Commit Stage Workflow
-
+# Commit Stage Workflow
+#
 # - **Triggers:** Executes on push and pull request events for the main branch.
 # - **Environment:** Utilizes `macos-latest` for running tasks, ensuring compatibility with macOS.
 # - **Key Tasks:**
@@ -13,10 +11,13 @@
 #   - **Linting:** Runs ESLint to enforce code style and catch potential issues.
 #   - **Build:** Builds the project using `npm run build`.
 #   - **Artifact Upload:** Uploads the generated `.dmg` file as an artifact, with a retention period of 5 days.
+#
+# - **Commit Stage Badge:** Generates a visual status badge indicating the success or failure of the commit stage,
+#   using green for success and red for failure. The badge is updated based on the outcome of the commit jobs.
+#
+# This workflow ensures that every commit meets quality standards before it is integrated into the main branch, 
+# thus maintaining code reliability and readiness for deployment.
 
-# - **Commit Stage Badge:** Generates a visual status badge indicating the success or failure of the commit stage, using green for success and red for failure. The badge is updated based on the outcome of the commit jobs.
-
-# This workflow ensures that every commit meets quality standards before it is integrated into the main branch, thus maintaining code reliability and readiness for deployment.
 
 name: Commit Stage
 
