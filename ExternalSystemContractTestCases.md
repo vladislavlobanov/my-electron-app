@@ -38,3 +38,24 @@
 **And** the OS theme is set {"theme": "Dark"}       
 **When** the user launches the app         
 **Then** the user should see the app theme as Light       
+
+
+# Feature:  GitHub Releases API for Update Checks
+
+## Scenario: Current version up to date
+**Given** the application has a `package.json` file with the version "1.0.0."
+**And**  the latest available version is "1.0.0"
+**When** make a GET request to the endpoint "/repos/vaisakhsasikumar/my-electron-app/releases/latest"           
+**Then**  the response status code should be 200
+**And** the app should notify the user with "Your current version is up to date."
+**And** the returned version should be "1.0.0"
+
+
+
+## Scenario: Latest version available
+**Given** the application has a `package.json` file with the version "1.0.0."
+**And**   And the latest available version is "1.1.0"
+**When** make a GET request to the endpoint "/repos/vaisakhsasikumar/my-electron-app/releases/latest"           
+**Then**  the response status code should be 200
+**And** the app should notify the user with  "Latest version is available"
+**And** the returned version should be "1.1.0"
