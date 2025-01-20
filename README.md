@@ -44,6 +44,7 @@ This project serves as a Test Driven Development (TDD) Sandbox, created as part 
 5. **Persisting Query History**: Users can have their previous queries saved in local storage, allowing them to easily access and rerun past queries without retyping.
 
 6. **Managing Settings and Theme**: The application includes a settings menu that allows users to switch themes and MongoDB URI/Database/Collection. Settings are persisted in local storage in order to facilitate users not to enter them each time after the app has been restarted. Settings have default values, which are used when the app starts for the first time, and lately can be replaced anytime.
+7. **Checking for Application Updates**: The tool incorporates functionality to check for the latest application version through the GitHub API, ensuring that users can easily stay updated with the newest features and improvements.
 
 # External System(s)
 
