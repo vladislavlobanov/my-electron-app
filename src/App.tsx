@@ -26,7 +26,15 @@ function App() {
   const [collectionName, setCollectionName] = useState<string>();
   const [initialSystemTheme, setInitialSystemTheme] = useState<string>();
 
+  const [newVersion, setNewVersion] = useState(true);
+
   useEffect(() => {
+    const checkNewVersion = async () => {
+      const response = await fetch("http://localhost:5001/api/check-version");
+      const data = await response.json();
+      setNewVersion(data.isLatestVersion);
+    };
+
     window.ipcRenderer.on("open-settings", () => {
       setShowSettings(true);
     });
@@ -40,6 +48,7 @@ function App() {
 
     fetchSettings();
     fetchHistory();
+    checkNewVersion();
   }, []);
 
   useEffect(() => {
@@ -334,7 +343,10 @@ function App() {
           </div>
         </div>
       )}
-      <div className="titlebar">MongoDB Query Executor</div>
+      <div className="bar titlebar">MongoDB Query Executor</div>
+
+      {!newVersion && <div className="bar version">New version is available!</div>}
+
       <div className="app-body">
         <div className="app-top">
           <div className="col-md-8">

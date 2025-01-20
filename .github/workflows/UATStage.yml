@@ -1,0 +1,68 @@
+
+name: UAT Stage
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag name for the UAT Stage pre-release (e.g., v1.0.0)"
+        required: true
+        type: string
+      run_id:
+        description: "The id of the workflow run where the desired download artifact was uploaded from."
+        required: true
+        type: number
+
+permissions: write-all
+
+jobs:
+  uat:
+    name: UAT Stage
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Test Repository
+        uses: actions/checkout@v4
+        with:
+          repository: "vaisakhsasikumar/electron-app-tests"
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: vaisakhsasikumar/my-electron-app
+          run-id: ${{ github.event.inputs.run_id }}
+
+      - name: Set Permissions
+        run: chmod 755 automated_testing/install.sh
+
+      - name: Run automated_testing/install.sh
+        run: automated_testing/install.sh
+
+      - name: Run npm install
+        run: npm install
+
+      - name: Run Smoke Tests
+        run: npm run test:smoke
+
+      - name: Check if Git Tag Exists
+        run: |
+          if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
+          then
+            echo "Tag '${{ github.event.inputs.tag_name }}' already exists."
+            exit 1
+          else
+            echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
+          fi
+      - name: Create Draft Pre-Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          name: "Pre-Release ${{ github.event.inputs.tag_name }} for UAT"
+          files: "**/*.dmg"
+
+
+      - name: Confirm Upload
+        if: success()
+        run: echo "Pre-Release for UAT created and .dmg uploaded successfully."

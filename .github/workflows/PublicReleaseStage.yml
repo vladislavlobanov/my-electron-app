@@ -1,0 +1,108 @@
+name: Publish Release Stage
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag name for the release (e.g., v1.0.0)"
+        required: true
+        type: string
+      run_id:
+        description: "The id of the workflow run where the desired download artifact was uploaded from."
+        required: true
+        type: number
+
+permissions: write-all
+
+jobs:
+  uat:
+    name: UAT Stage
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: macos-latest
+    steps:
+
+      - name: Checkout Test Repository
+        uses: actions/checkout@v4
+        with:
+          repository: "vaisakhsasikumar/electron-app-tests"
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: vaisakhsasikumar/my-electron-app
+          run-id: ${{ github.event.inputs.run_id }}
+
+      - name: Set Permissions
+        run: chmod 755 automated_testing/install.sh
+
+      - name: Run automated_testing/install.sh
+        run: automated_testing/install.sh
+
+      - name: Run npm install
+        run: npm install
+
+      - name: Run Smoke Tests
+        run: npm run test:smoke
+
+      - name: Check if Git Tag Exists
+        run: |
+          if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
+          then
+            echo "Tag '${{ github.event.inputs.tag_name }}' already exists."
+            exit 1
+          else
+            echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
+          fi
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create or Update Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="${{ github.event.inputs.tag_name }}"
+          RELEASE_NAME="Release ${TAG_NAME}"
+          BODY="Automatic release for tag ${TAG_NAME}"
+
+          # Check if release exists for the tag
+          if gh release view "$TAG_NAME" > /dev/null 2>&1; then
+            echo "Release $TAG_NAME exists. Updating..."
+            gh release edit "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          else
+            echo "Creating release $TAG_NAME"
+            gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
+          fi
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: vaisakhsasikumar/my-electron-app
+          run-id: ${{ github.event.inputs.run_id }}
+
+      - name: Find .dmg File
+        id: find_dmg
+        run: |
+          DMG_PATH=$(find . -type f -name "*.dmg" | head -n 1)
+          if [ -z "$DMG_PATH" ]; then
+            echo "Error: .dmg file not found!"
+            exit 1
+          fi
+          echo "dmg_path=$DMG_PATH" >> $GITHUB_OUTPUT
+
+      - name: Upload .dmg to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="${{ github.event.inputs.tag_name }}"
+          DMG_PATH="${{ steps.find_dmg.outputs.dmg_path }}"
+          
+          echo "Uploading $DMG_PATH to release $TAG_NAME"
+          gh release upload "$TAG_NAME" "$DMG_PATH" --clobber
+
+      - name: Confirm Upload
+        if: success()
+        run: echo "Release created and .dmg uploaded successfully."
