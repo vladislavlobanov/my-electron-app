@@ -53,6 +53,8 @@ This project serves as a Test Driven Development (TDD) Sandbox, created as part 
 
 **OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode.
 
+**GitHub API**: Employed to manage and access version release information via the GitHub REST API, enabling the application to check for the latest available updates and ensure users are running the most recent version.
+
 # System Architecture Style
 
 The Simple Electron MongoDB Query Tool employs a **Monolithic Architecture Style**, combining both frontend and backend functionalities within a single application. This approach simplifies development and deployment, enabling users to execute MongoDB queries directly from the Electron interface without requiring a separate server.
