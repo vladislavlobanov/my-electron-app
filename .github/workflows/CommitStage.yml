@@ -30,19 +30,7 @@ jobs:
       - name: Compile Code
         run: npx tsc
 
-      - name: Run Unit Tests
-        run: npm run test
-
-      - name: Run Narrow Integration Tests
-        # TODO: replace with command for Narrow Integration Tests
-        run: npm run test
-
-      - name: Run Component Tests
-        # TODO: replace with command for Component Tests
-        run: npm run test
-
-      - name: Run Component Tests
-        # TODO: replace with command for Contract Provider Verification Tests
+      - name: Run All Tests in ./tests
         run: npm run test
 
       - name: Run ESLint
