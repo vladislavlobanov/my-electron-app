@@ -71,7 +71,7 @@ flowchart LR
    A <-- "Settings" --> B
    A <-- "Query_History" --> B
    B -- "Persistent Storage for Settings & History" --> D["Local_Storage"]
-   B -- "Version check request" --> F{"Github API"}
+   B -- "Version check request" --> F("GitHub API")
    F -- "Version response" --> B
 ```
 
