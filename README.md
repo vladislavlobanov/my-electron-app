@@ -48,13 +48,15 @@ This project serves as a Test Driven Development (TDD) Sandbox, created as part 
 
 # External System(s)
 
-**MongoDB**: The primary database system used for managing and querying data. MongoDB facilitates the storage of JSON-like documents with dynamic schemas, which is integral to the query tool's operation. [MongoDB Documentation](https://mongodb.com/docs/)
-
-**SQLite**: Local database for local storage
-
 **OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode.
 
 **GitHub API**: Employed to manage and access version release information via the GitHub REST API, enabling the application to check for the latest available updates and ensure users are running the most recent version.
+
+# System which App interacts with
+
+**MongoDB**: The primary database system used for managing and querying data. MongoDB facilitates the storage of JSON-like documents with dynamic schemas, which is integral to the query tool's operation. [MongoDB Documentation](https://mongodb.com/docs/)
+
+**SQLite**: Local database for local storage
 
 # System Architecture Style
 
