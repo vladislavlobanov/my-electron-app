@@ -111,7 +111,7 @@ function createWindow() {
 function startBackendDev() {
   const serverPath = path.join(__dirname, "..", "backend", "server.js");
 
-  const forked = utilityProcess.fork(serverPath, [], {
+  const forked = utilityProcess.fork(serverPath, [app.getVersion()], {
     cwd: __dirname,
     stdio: "pipe",
   });
@@ -133,7 +133,7 @@ function startBackendProd(): Promise<void> {
 
   return new Promise((resolve, reject) => {
     try {
-      const forked = utilityProcess.fork(serverPath, [], {
+      const forked = utilityProcess.fork(serverPath, [app.getVersion()], {
         cwd: __dirname,
         stdio: "pipe",
       });

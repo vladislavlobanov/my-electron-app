@@ -15,6 +15,8 @@ const __dirname = path.dirname(__filename);
 // eslint-disable-next-line no-undef
 const isDev = process.env.DEV != undefined;
 
+const [_execPath, _jsPath, buildVersion] = process.argv;
+
 const app = express();
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
@@ -175,12 +177,19 @@ app.post("/api/settings", (req, res) => {
 
 // GET /api/check-version - Check version
 app.get("/api/check-version", async (req, res) => {
-  const request = await fetch("https://api.github.com/repos/vaisakhsasikumar/my-electron-app/releases/latest");
-  const response = await request.json();
-  res.status(200).json({
-    success: true,
-    isLatestVersion: isCurrentVersionHigher(response?.tag_name, process.env.npm_package_version),
-  });
+  try {
+    const request = await fetch("https://api.github.com/repos/vaisakhsasikumar/my-electron-app/releases/latest");
+    const response = await request.json();
+    res.status(200).json({
+      success: true,
+      isLatestVersion: isCurrentVersionHigher(response?.tag_name, buildVersion),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
 });
 
 app.listen(5001, () => {
