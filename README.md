@@ -6,15 +6,16 @@ Simple Electron MongoDB Query Tool
 
 ### Component Stages
 
-| Component          | Commit Stage                                                                                                                                                                 | Acceptance Stage | Production Release Stage |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------ |
-| MongoDB Query Tool | [![Commit Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/commit_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/CommitStage.yml) | -                | -                        |
+| Component          | Commit Stage                                                                                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MongoDB Query Tool | [![Commit Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/commit_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/CommitStage.yml) |
 
 ### System Stages
 
-|        | Acceptance Stage                                                                                                                                                                               | Production Stage |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | -                |
+|        | Acceptance Stage                                                                                                                                                                               |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | 
+
 
 ## Description
 
@@ -100,8 +101,9 @@ The Simple Electron MongoDB Query Tool can be deployed as a native desktop appli
 - **Electron** for desktop application development
 - **MongoDB** for the database backend
 - **Vite** for bundling JavaScript files
-- **GitHub Actions** for continuous integration and deployment automation
-- **Local Storage** Sqlite database
+- **Pipeline Tool**: GitHub Actions for continuous integration and deployment automation
+- **Artifact Registry**: GitHub Artifact Registry
+- **Local Storage**: SQLite database
 
 ## Purpose
 
