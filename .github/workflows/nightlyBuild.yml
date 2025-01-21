@@ -34,3 +34,11 @@ jobs:
         with:
           name: MongoDB Query Executor
           path: ./release/**/*.dmg
+
+      - name: Trigger Acceptance Stage
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{github.repository_owner}}/electron-app-tests
+          event-type: fresh-artifact
+          client-payload: '{"run_id": ${{ github.run_id }}}'
