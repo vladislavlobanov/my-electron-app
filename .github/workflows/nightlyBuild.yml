@@ -36,4 +36,8 @@ jobs:
           path: ./release/**/*.dmg
 
       - name: Trigger Acceptance Stage
-        run: gh workflow run AcceptanceStage.yml --field run_id=${{ github.run_id }} --repo vaisakhsasikumar/electron-app-tests
+        run: |
+          gh workflow run AcceptanceStage.yml \
+          --repo owner/repo \
+          --field event_type=fresh-artifact \
+          --field run_id=${{ github.run_id }}
