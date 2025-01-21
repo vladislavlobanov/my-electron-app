@@ -34,3 +34,6 @@ jobs:
         with:
           name: MongoDB Query Executor
           path: ./release/**/*.dmg
+
+      - name: Trigger Acceptance Stage
+        run: gh workflow run AcceptanceStage.yml --field run_id=${{ github.run_id }} --repo vaisakhsasikumar/electron-app-tests
