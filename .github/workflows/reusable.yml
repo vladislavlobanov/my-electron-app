@@ -15,4 +15,4 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: test
-        run: echo ${{ inputs.tag_name }} ${{ run_id }}
+        run: echo ${{ inputs.tag_name }} ${{ inputs.run_id }}
