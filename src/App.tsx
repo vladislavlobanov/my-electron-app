@@ -24,7 +24,7 @@ function App() {
   const [uri, setUri] = useState<string>();
   const [dbName, setDbName] = useState<string>();
   const [collectionName, setCollectionName] = useState<string>();
-  const [initialSystemTheme, setInitialSystemTheme] = useState<string>();
+  const [systemTheme, setSystemTheme] = useState<string>();
 
   const [newVersion, setNewVersion] = useState(true);
 
@@ -35,56 +35,42 @@ function App() {
       setNewVersion(data.isLatestVersion);
     };
 
-    window.ipcRenderer.on("open-settings", () => {
-      setShowSettings(true);
-    });
-
-    window.ipcRenderer.on(
-      "isDarkMode-onInitialOpen",
-      (_channel, prefersDark) => {
-        setInitialSystemTheme(prefersDark ? "dark" : "light");
-      }
-    );
-
     fetchSettings();
     fetchHistory();
     checkNewVersion();
   }, []);
 
+  window.ipcRenderer.on("open-settings", () => {
+    setShowSettings(true);
+  });
+
+  window.ipcRenderer.on("isDarkMode-onInitialOpen", (_channel, prefersDark) => {
+    setSystemTheme(prefersDark ? "dark" : "light");
+  });
+
+  window.ipcRenderer.on("set-dark-theme", (_channel, prefersDark) => {
+    setSystemTheme(prefersDark ? "dark" : "light");
+  });
+
   useEffect(() => {
-    if (!initialSystemTheme || !theme) return;
+    if (!systemTheme || !theme) return;
 
     if (theme !== "system") {
       applyTheme(theme);
     } else {
       const root = document.documentElement;
 
-      if (
-        !root.classList.contains("light-theme") &&
-        !root.classList.contains("dark-theme")
-      ) {
-        const prefersDark = initialSystemTheme === "dark";
+      const prefersDark = systemTheme === "dark";
 
-        if (prefersDark) {
-          root.classList.remove("light-theme");
-          root.classList.add("dark-theme");
-        } else {
-          root.classList.remove("dark-theme");
-          root.classList.add("light-theme");
-        }
+      if (prefersDark) {
+        root.classList.remove("light-theme");
+        root.classList.add("dark-theme");
+      } else {
+        root.classList.remove("dark-theme");
+        root.classList.add("light-theme");
       }
-
-      window.ipcRenderer.on("set-dark-theme", (_channel, prefersDark) => {
-        if (prefersDark) {
-          root.classList.remove("light-theme");
-          root.classList.add("dark-theme");
-        } else {
-          root.classList.remove("dark-theme");
-          root.classList.add("light-theme");
-        }
-      });
     }
-  }, [theme, initialSystemTheme]);
+  }, [theme, systemTheme]);
 
   useEffect(() => {
     setTheme(settings?.theme);
@@ -345,7 +331,9 @@ function App() {
       )}
       <div className="bar titlebar">MongoDB Query Executor</div>
 
-      {!newVersion && <div className="bar version">New version is available!</div>}
+      {!newVersion && (
+        <div className="bar version">New version is available!</div>
+      )}
 
       <div className="app-body">
         <div className="app-top">
