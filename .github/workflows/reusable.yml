@@ -12,7 +12,7 @@ on:
 
 jobs:
   check-tag:
-    name: Cache Artifact
+    name: Check Tag Name
     runs-on: ubuntu-latest
     steps:
       - name: Check if Git Tag Exists
@@ -35,13 +35,13 @@ jobs:
         id: cache-artifact-restore
         with:
           path: ./MongoDB Query Executor
-          key: ${{ runner.os }}-cache-artifact-${{inputs.run_id}}
+          key: ${{ runner.os }}-cache-artifact-${{ inputs.run_id }}
       - name: Download Artifacts
         if: steps.cache-artifact-restore.outputs.cache-hit != 'true'
         uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{github.repository_owner}}/my-electron-app
+          repository: ${{ github.repository_owner }}/my-electron-app
           run-id: ${{inputs.run_id}}
       - name: Save Cache
         id: cache-artifact-save
@@ -49,4 +49,32 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ./MongoDB Query Executor
-          key: ${{ runner.os }}-cache-artifact-${{inputs.run_id}}
+          key: ${{ runner.os }}-cache-artifact-${{ inputs.run_id }}
+
+  smoke-tests:
+    name: Run Smoke Tests
+    runs-on: macos-latest
+    needs: [cache-artifact]
+    steps:
+      - name: Checkout Test Repository
+        uses: actions/checkout@v4
+        with:
+          repository: "${{github.repository_owner}}/electron-app-tests"
+
+      - name: Trying restore artifact cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ inputs.run_id }}
+
+      - name: Set Permissions
+        run: chmod 755 automated_testing/install.sh
+
+      - name: Run automated_testing/install.sh
+        run: automated_testing/install.sh
+
+      - name: Run npm install
+        run: npm ci
+
+      - name: Run Smoke Tests
+        run: npm run test:smoke
