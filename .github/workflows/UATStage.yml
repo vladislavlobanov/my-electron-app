@@ -34,6 +34,12 @@ jobs:
         with:
           repository: "${{github.repository_owner}}/electron-app-tests"
 
+      - name: Trying restore artifact cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ github.event.inputs.run_id }}
+
       - name: Set Permissions
         run: chmod 755 automated_testing/install.sh
 
