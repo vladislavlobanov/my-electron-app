@@ -5,7 +5,7 @@
     "url": "https://github.com/vaisakhsasikumar/my-electron-app"
   },
   "productName": "MongoDB Query Executor",
-  "version": "1.0.0",
+  "version": "1.0.30",
   "type": "module",
   "main": "dist-electron/main.js",
   "description": "Sandbox project for TDD training",
@@ -25,7 +25,10 @@
     "copy-backend": "copyfiles -f backend/**/* dist-electron/",
     "rebuildDB": "electron-rebuild -f -w sqlite3",
     "release": "electron-builder",
-    "test": "jest",
+    "test:unit": "jest tests/unit-tests/",
+    "test:integration": "jest tests/narrow-integration-tests/",
+    "test:component": "jest tests/component-tests/",
+    "test:contract": "jest tests/contract-provider-tests/",
     "postinstall": "electron-builder install-app-deps",
     "test:e2e": "wdio run ./wdio.conf.js"
   },
