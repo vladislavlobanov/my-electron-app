@@ -53,13 +53,13 @@ jobs:
       - name: Checkout Test Repository
         uses: actions/checkout@v4
         with:
-          repository: "vaisakhsasikumar/electron-app-tests"
+          repository: "${{github.repository_owner}}/electron-app-tests"
 
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: vaisakhsasikumar/my-electron-app
+          repository: ${{github.repository_owner}}/my-electron-app
           run-id: ${{ github.event.inputs.run_id }}
 
       - name: Set Permissions
@@ -108,7 +108,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: vaisakhsasikumar/my-electron-app
+          repository: ${{github.repository_owner}}/my-electron-app
           run-id: ${{ github.event.inputs.run_id }}
 
       - name: Find .dmg File
