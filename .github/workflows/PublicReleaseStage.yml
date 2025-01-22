@@ -44,13 +44,12 @@ on:
 permissions: write-all
 
 jobs:
-  uat:
+  production:
     name: Public Release Stage
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
     steps:
-
       - name: Checkout Test Repository
         uses: actions/checkout@v4
         with:
@@ -128,10 +127,36 @@ jobs:
         run: |
           TAG_NAME="${{ github.event.inputs.tag_name }}"
           DMG_PATH="${{ steps.find_dmg.outputs.dmg_path }}"
-          
+
           echo "Uploading $DMG_PATH to release $TAG_NAME"
           gh release upload "$TAG_NAME" "$DMG_PATH" --clobber
 
       - name: Confirm Upload
         if: success()
         run: echo "Release created and .dmg uploaded successfully."
+
+  production_stage_badge:
+    name: Create status badge for workflow
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [production]
+    steps:
+      - name: Production Stage badge (Success)
+        if: ${{ !contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: production_stage
+          LABEL: "Production Stage"
+          STATUS: "Success"
+          COLOR: green
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Production Stage badge (Failure)
+        if: ${{ contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: production_stage
+          LABEL: "Production Stage"
+          STATUS: "Failure"
+          COLOR: red
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
