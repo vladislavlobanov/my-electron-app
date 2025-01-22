@@ -11,9 +11,24 @@ on:
         type: string
 
 jobs:
+  check-tag:
+    name: Cache Artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if Git Tag Exists
+        run: |
+          if git rev-parse "${{ inputs.tag_name }}" >/dev/null 2>&1
+          then
+            echo "Tag '${{ inputs.tag_name }}' already exists."
+            exit 1
+          else
+            echo "Tag '${{ inputs.tag_name }}' does not exist. Proceeding."
+          fi
+
   cache-artifact:
     name: Cache Artifact
     runs-on: macos-latest
+    needs: [check-tag]
     steps:
       - name: Trying restore artifact cache
         uses: actions/cache/restore@v4

@@ -47,20 +47,10 @@ jobs:
         run: automated_testing/install.sh
 
       - name: Run npm install
-        run: npm install
+        run: npm ci
 
       - name: Run Smoke Tests
         run: npm run test:smoke
-
-      - name: Check if Git Tag Exists
-        run: |
-          if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
-          then
-            echo "Tag '${{ github.event.inputs.tag_name }}' already exists."
-            exit 1
-          else
-            echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
-          fi
 
       - name: Create Draft Pre-Release
         uses: softprops/action-gh-release@v2
