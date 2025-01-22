@@ -15,6 +15,13 @@ on:
 permissions: write-all
 
 jobs:
+  call-reusable-job:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      tag_name: ${{ github.event.inputs.tag_name }}
+      run_id: ${{ github.event.inputs.run_id }}
+    secrets: inherit
+
   uat:
     name: UAT Stage
     env:
@@ -54,6 +61,7 @@ jobs:
           else
             echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
           fi
+
       - name: Create Draft Pre-Release
         uses: softprops/action-gh-release@v2
         with:
