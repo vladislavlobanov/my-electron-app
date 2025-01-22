@@ -15,9 +15,8 @@
 # - **Commit Stage Badge:** Generates a visual status badge indicating the success or failure of the commit stage,
 #   using green for success and red for failure. The badge is updated based on the outcome of the commit jobs.
 #
-# This workflow ensures that every commit meets quality standards before it is integrated into the main branch, 
+# This workflow ensures that every commit meets quality standards before it is integrated into the main branch,
 # thus maintaining code reliability and readiness for deployment.
-
 
 name: Commit Stage
 
@@ -51,8 +50,17 @@ jobs:
       - name: Compile Code
         run: npx tsc
 
-      - name: Run All Tests in ./tests
-        run: npm run test
+      - name: Run Unit Tests
+        run: npm run test:unit
+
+      - name: Run Narrow Integration Tests
+        run: npm run test:integration
+
+      - name: Run Component Tests
+        run: npm run test:component
+
+      - name: Run Contract Provider Verification Tests
+        run: npm run test:contract
 
       - name: Run ESLint
         run: npm run lint
