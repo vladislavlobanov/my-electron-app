@@ -6,15 +6,15 @@ Simple Electron MongoDB Query Tool
 
 ### Component Stages
 
-| Component          | Commit Stage                                                                                                                                                                 | Acceptance Stage | Production Release Stage |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------ |
-| MongoDB Query Tool | [![Commit Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/commit_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/CommitStage.yml) | -                | -                        |
+| Component          | Commit Stage                                                                                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MongoDB Query Tool | [![Commit Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/commit_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/CommitStage.yml) |
 
 ### System Stages
 
-|        | Acceptance Stage                                                                                                                                                                               | Production Stage |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | -                |
+|        | Acceptance Stage                                                                                                                                                                               | UAT Stage                                                                                                                                                           | Production Stage                                                                                                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | [![UAT Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/uat_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/UATStage.yml) | [![Production Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/production_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/ProductionReleaseStage.yml) |
 
 ## Description
 
@@ -100,8 +100,9 @@ The Simple Electron MongoDB Query Tool can be deployed as a native desktop appli
 - **Electron** for desktop application development
 - **MongoDB** for the database backend
 - **Vite** for bundling JavaScript files
-- **GitHub Actions** for continuous integration and deployment automation
-- **Local Storage** Sqlite database
+- **Pipeline Tool**: GitHub Actions for continuous integration and deployment automation
+- **Artifact Registry**: GitHub Artifact Registry
+- **Local Storage**: SQLite database
 
 ## Purpose
 
@@ -161,10 +162,10 @@ To provide hands-on experience with:
 
 ## Environments
 
-| **Environment Name**       | **Purpose**                                 | **Location**                                                               | **Implementation**                          |
-| -------------------------- | ------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------- |
-| **Commit Environment**     | Executes tests upon commit                  | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/); [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/CommitStage.yml)   | Automated test pipelines via GitHub Actions |
-| **Acceptance Environment** | Runs Automated Acceptance Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) | Automated test pipelines                    |
-| **E2E Environment**        | Executes E2E and Contract Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) | Automated test suites in pipeline           |
-| **UAT Environment**        | Runs Deployment and User Acceptance Testing | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/)    | Manual trigger workflows via GitHub Actions |
-| **Production Environment** | Publish installer for end users             | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/); [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/PublicReleaseStage.yml)   | Automated deployments via GitHub Actions    |
+| **Environment Name**       | **Purpose**                                 | **Location**                                                                                                                                                                                         | **Implementation**                          |
+| -------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **Commit Environment**     | Executes tests upon commit                  | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/); [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/CommitStage.yml)            | Automated test pipelines via GitHub Actions |
+| **Acceptance Environment** | Runs Automated Acceptance Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) ; [GitHub Action](https://github.com/vaisakhsasikumar/electron-app-tests/blob/main/.github/workflows/AcceptanceStage.yml) | Automated test pipelines                    |
+| **E2E Environment**        | Executes E2E and Contract Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) ; [GitHub Action](https://github.com/vaisakhsasikumar/electron-app-tests/blob/main/.github/workflows/AcceptanceStage.yml) | Automated test suites in pipeline           |
+| **UAT Environment**        | Runs Deployment and User Acceptance Testing | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/) ; [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/UATStage.yml)              | Manual trigger workflows via GitHub Actions |
+| **Production Environment** | Publish installer for end users             | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/); [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/ProductionReleaseStage.yml) | Automated deployments via GitHub Actions    |
