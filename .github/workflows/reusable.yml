@@ -55,6 +55,7 @@ jobs:
     name: Run Smoke Tests
     runs-on: macos-latest
     needs: [cache-artifact]
+    environment: production
     steps:
       - name: Checkout Test Repository
         uses: actions/checkout@v4
@@ -90,6 +91,11 @@ jobs:
             echo "MongoDB is not ready yet, retrying in 5 seconds..."
             sleep 5
           done
+
+      - name: Install WireMock
+        run: |
+          echo "Installing WireMock..."
+          brew install wiremock-standalone
 
       - name: Start WireMock
         run: |
