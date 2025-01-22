@@ -27,18 +27,12 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
+    needs: [call-reusable-job]
     steps:
       - name: Checkout Test Repository
         uses: actions/checkout@v4
         with:
           repository: "${{github.repository_owner}}/electron-app-tests"
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{github.repository_owner}}/my-electron-app
-          run-id: ${{ github.event.inputs.run_id }}
 
       - name: Set Permissions
         run: chmod 755 automated_testing/install.sh

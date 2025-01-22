@@ -11,8 +11,27 @@ on:
         type: string
 
 jobs:
-  triage:
+  cache-artifact:
+    name: Cache Artifact
     runs-on: macos-latest
     steps:
-      - name: test
-        run: echo ${{ inputs.tag_name }} ${{ inputs.run_id }}
+      - name: Trying restore artifact cache
+        uses: actions/cache/restore@v4
+        id: cache-artifact-restore
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{inputs.run_id}}
+      - name: Download Artifacts
+        if: steps.cache-artifact-restore.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{github.repository_owner}}/my-electron-app
+          run-id: ${{inputs.run_id}}
+      - name: Save Cache
+        id: cache-artifact-save
+        if: steps.cache-artifact-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{inputs.run_id}}
