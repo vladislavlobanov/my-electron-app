@@ -100,8 +100,9 @@ The Simple Electron MongoDB Query Tool can be deployed as a native desktop appli
 - **Electron** for desktop application development
 - **MongoDB** for the database backend
 - **Vite** for bundling JavaScript files
-- **GitHub Actions** for continuous integration and deployment automation
-- **Local Storage** Sqlite database
+- **Pipeline Tool**: GitHub Actions for continuous integration and deployment automation
+- **Artifact Registry**: GitHub Artifact Registry
+- **Local Storage**: SQLite database
 
 ## Purpose
 
