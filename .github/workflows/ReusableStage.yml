@@ -1,0 +1,91 @@
+name: Reusable workflow example
+
+on:
+  workflow_call:
+    inputs:
+      tag_name:
+        required: true
+        type: string
+      run_id:
+        required: true
+        type: string
+
+jobs:
+  check-tag:
+    name: Check Tag Name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if Git Tag Exists
+        run: |
+          if git rev-parse "${{ inputs.tag_name }}" >/dev/null 2>&1
+          then
+            echo "Tag '${{ inputs.tag_name }}' already exists."
+            exit 1
+          else
+            echo "Tag '${{ inputs.tag_name }}' does not exist. Proceeding."
+          fi
+
+  cache-artifact:
+    name: Cache Artifact
+    runs-on: macos-latest
+    needs: [check-tag]
+    steps:
+      - name: Trying restore artifact cache
+        uses: actions/cache/restore@v4
+        id: cache-artifact-restore
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ inputs.run_id }}
+      - name: Download Artifacts
+        if: steps.cache-artifact-restore.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository_owner }}/my-electron-app
+          run-id: ${{inputs.run_id}}
+      - name: Save Cache
+        id: cache-artifact-save
+        if: steps.cache-artifact-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ inputs.run_id }}
+
+  smoke-tests:
+    name: Run Smoke Tests
+    runs-on: macos-latest
+    needs: [cache-artifact]
+    steps:
+      - name: Checkout Test Repository
+        uses: actions/checkout@v4
+        with:
+          repository: "${{github.repository_owner}}/electron-app-tests"
+
+      - name: Trying restore artifact cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ inputs.run_id }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run npm install
+        run: npm ci
+
+      - name: Set Permissions to bash scripts
+        run: chmod 755 ./automated_testing/*.sh
+
+      - name: Run application installation
+        run: ./automated_testing/install.sh
+
+      - name: Start Mock services
+        run: ./automated_testing/mock-start.sh
+
+      - name: Run Smoke Tests and Health Checks
+        run: npm run test:smoke
+
+      - name: Stop Mock services
+        run: ./automated_testing/mock-end.sh
