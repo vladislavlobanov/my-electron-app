@@ -28,6 +28,10 @@ on:
 
 permissions: write-all
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   commit:
     name: Commit Stage
@@ -69,34 +73,29 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
+        if: ${{ !github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v4
         with:
           retention-days: 5
           name: MongoDB Query Executor
           path: ./release/**/*.dmg
 
+      - name: Trigger Acceptance Stage
+        if: ${{ !github.event_name == 'pull_request' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{github.repository_owner}}/electron-app-tests
+          event-type: fresh-artifact
+          client-payload: '{"run_id": ${{ github.run_id }}}'
+
   commit_stage_badge:
     name: Create status badge for workflow
-    runs-on: ubuntu-latest
     if: ${{ always() }}
     needs: [commit]
-    steps:
-      - name: Commit Stage badge (Success)
-        if: ${{ !contains(needs.*.result, 'failure') }}
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: commit_stage
-          LABEL: "Commit Stage"
-          STATUS: "Success"
-          COLOR: green
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Commit Stage badge (Failure)
-        if: ${{ contains(needs.*.result, 'failure') }}
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: commit_stage
-          LABEL: "Commit Stage"
-          STATUS: "Failure"
-          COLOR: red
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: ./.github/workflows/badge.yml
+    with:
+      stage_label: commit_stage
+      stage_name: "Commit Stage"
+      passed: ${{ contains(needs.*.result, 'success') }}
+    secrets: inherit

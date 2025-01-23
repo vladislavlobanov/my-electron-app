@@ -100,26 +100,11 @@ jobs:
 
   production_stage_badge:
     name: Create status badge for workflow
-    runs-on: ubuntu-latest
     if: ${{ always() }}
     needs: [production]
-    steps:
-      - name: Production Stage badge (Success)
-        if: ${{ !contains(needs.*.result, 'failure') }}
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: production_stage
-          LABEL: "Production Stage"
-          STATUS: "Success"
-          COLOR: green
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Production Stage badge (Failure)
-        if: ${{ contains(needs.*.result, 'failure') }}
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: production_stage
-          LABEL: "Production Stage"
-          STATUS: "Failure"
-          COLOR: red
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: ./.github/workflows/badge.yml
+    with:
+      stage_label: production_stage
+      stage_name: "Production Stage"
+      passed: ${{ contains(needs.*.result, 'success') }}
+    secrets: inherit

@@ -1,0 +1,41 @@
+name: Commit Stage
+
+on:
+  workflow_call:
+    inputs:
+      stage_label:
+        required: true
+        type: string
+      stage_name:
+        required: true
+        type: string
+      passed:
+        required: true
+        type: boolean
+
+permissions: write-all
+
+jobs:
+  create_badge:
+    name: Create status badge for workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success badge
+        if: ${{ inputs.passed }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: ${{ inputs.stage_name }}
+          LABEL: ${{ inputs.stage_label }}
+          STATUS: "Success"
+          COLOR: green
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Failure badge
+        if: ${{ !inputs.passed }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: ${{ inputs.stage_name }}
+          LABEL: ${{ inputs.stage_label }}
+          STATUS: "Failure"
+          COLOR: red
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
