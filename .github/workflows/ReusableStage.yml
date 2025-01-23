@@ -76,47 +76,17 @@ jobs:
       - name: Run npm install
         run: npm ci
 
-      - name: Install MongoDB
-        run: |
-          echo "Installing MongoDB..."
-          brew tap mongodb/brew
-          brew install mongodb-community@6.0
+      - name: Set Permissions to bash scripts
+        run: chmod 755 ./automated_testing/*.sh
 
-      - name: Start MongoDB
-        run: |
-          echo "Starting MongoDB..."
-          brew services start mongodb/brew/mongodb-community@6.0
-          echo "Waiting for MongoDB to be ready..."
-          until nc -z localhost 27017; do
-            echo "MongoDB is not ready yet, retrying in 5 seconds..."
-            sleep 5
-          done
+      - name: Run application installation
+        run: ./automated_testing/install.sh
 
-      - name: Install WireMock
-        run: |
-          echo "Installing WireMock..."
-          brew install wiremock-standalone
-
-      - name: Start WireMock
-        run: |
-          wiremock --local-response-templating --port 8080 &
-          sleep 5
-
-      - name: Set Permissions
-        run: chmod 755 pipeline.sh
-
-      - name: Run automated_testing/install.sh
-        run: ./pipeline.sh
+      - name: Start Mock services
+        run: ./automated_testing/mock-start.sh
 
       - name: Run Smoke Tests and Health Checks
         run: npm run test:smoke
 
-      - name: Stop MongoDB
-        run: |
-          echo "Stop MongoDB..."
-          brew services stop mongodb-community@6.0
-
-      - name: Stop WireMock
-        run: |
-          echo "Stop WireMock..."
-          pkill -f wiremock
+      - name: Stop Mock services
+        run: ./automated_testing/mock-end.sh

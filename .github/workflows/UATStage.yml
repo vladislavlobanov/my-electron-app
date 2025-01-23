@@ -15,8 +15,9 @@ on:
 permissions: write-all
 
 jobs:
-  call-reusable-job:
-    uses: ./.github/workflows/reusable.yml
+  checks:
+    name: Checks before pre-release
+    uses: ./.github/workflows/ReusableStage.yml
     with:
       tag_name: ${{ github.event.inputs.tag_name }}
       run_id: ${{ github.event.inputs.run_id }}
@@ -27,8 +28,14 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
-    needs: [call-reusable-job]
+    needs: [checks]
     steps:
+      - name: Restore Artifacts
+        uses: actions/cache/restore@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ github.event.inputs.run_id }}
+
       - name: Create Draft Pre-Release
         uses: softprops/action-gh-release@v2
         with:
