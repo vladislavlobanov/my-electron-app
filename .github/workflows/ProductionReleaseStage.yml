@@ -58,6 +58,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
     needs: [checks]
+    environment: production
     steps:
       - name: Restore Artifacts
         uses: actions/cache/restore@v4
