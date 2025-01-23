@@ -1,4 +1,4 @@
-name: Commit Stage
+name: Badge Job
 
 on:
   workflow_call:
