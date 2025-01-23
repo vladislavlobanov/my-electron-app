@@ -49,7 +49,7 @@ jobs:
         run: echo "Pre-Release for UAT created and .dmg uploaded successfully."
 
   uat_stage_badge:
-    name: Create status badge for workflow
+    name: UAT badge
     if: ${{ always() }}
     needs: [uat]
     uses: ./.github/workflows/badge.yml

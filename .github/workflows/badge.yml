@@ -17,7 +17,7 @@ permissions: write-all
 
 jobs:
   create_badge:
-    name: Create status badge for workflow
+    name: Create status badge
     runs-on: ubuntu-latest
     steps:
       - name: Success badge
