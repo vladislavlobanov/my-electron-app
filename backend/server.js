@@ -192,6 +192,22 @@ app.get("/api/check-version", async (req, res) => {
   }
 });
 
+// GET /api/health - Health check
+app.get("/api/health", async (req, res) => {
+  const healthcheck = {
+    uptime: process.uptime(),
+    message: "OK",
+    timestamp: Date.now(),
+    processtime: process.hrtime(),
+  };
+  try {
+    res.send(healthcheck);
+  } catch (error) {
+    healthcheck.message = error;
+    res.status(503).send();
+  }
+});
+
 app.listen(5001, () => {
   console.log("ready");
   console.log("Server running on port 5001");

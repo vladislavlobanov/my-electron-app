@@ -1,4 +1,4 @@
-# Public Release Stage Workflow
+# Production Release Stage Workflow
 #
 # - **Triggers:** Initiates manually via workflow dispatch with inputs for tag name and run ID.
 #
@@ -9,7 +9,7 @@
 # - **Permissions:** Requires write-all permission for executing tasks.
 #
 # - **Jobs:**
-#   - **Public Release Stage:**
+#   - **Production Release Stage:**
 #     - **Environment:** Uses `macos-latest` and requires a GitHub token.
 #     - **Key Steps:**
 #       - **Checkout Test Repository:** Retrieves code from the test repository.
@@ -27,7 +27,7 @@
 #
 # This workflow facilitates the creation and publication of software releases, ensuring that the release process is automated, reliable, and easy to execute.
 
-name: Public Release Stage
+name: Production Release Stage
 
 on:
   workflow_dispatch:
@@ -44,48 +44,30 @@ on:
 permissions: write-all
 
 jobs:
+  checks:
+    name: Checks before release
+    uses: ./.github/workflows/ReusableStage.yml
+    with:
+      tag_name: ${{ github.event.inputs.tag_name }}
+      run_id: ${{ github.event.inputs.run_id }}
+    secrets: inherit
+
   production:
-    name: Public Release Stage
+    name: Production Release Stage
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
+    needs: [checks]
+    environment: production
     steps:
-      - name: Checkout Test Repository
-        uses: actions/checkout@v4
-        with:
-          repository: "vaisakhsasikumar/electron-app-tests"
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: vaisakhsasikumar/my-electron-app
-          run-id: ${{ github.event.inputs.run_id }}
-
-      - name: Set Permissions
-        run: chmod 755 automated_testing/install.sh
-
-      - name: Run automated_testing/install.sh
-        run: automated_testing/install.sh
-
-      - name: Run npm install
-        run: npm install
-
-      - name: Run Smoke Tests
-        run: npm run test:smoke
-
-      - name: Check if Git Tag Exists
-        run: |
-          if git rev-parse "${{ github.event.inputs.tag_name }}" >/dev/null 2>&1
-          then
-            echo "Tag '${{ github.event.inputs.tag_name }}' already exists."
-            exit 1
-          else
-            echo "Tag '${{ github.event.inputs.tag_name }}' does not exist. Proceeding."
-          fi
-
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Restore Artifacts
+        uses: actions/cache/restore@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ github.event.inputs.run_id }}
 
       - name: Create or Update Release
         env:
@@ -104,32 +86,13 @@ jobs:
             gh release create "$TAG_NAME" --title "$RELEASE_NAME" --notes "$BODY"
           fi
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: vaisakhsasikumar/my-electron-app
-          run-id: ${{ github.event.inputs.run_id }}
-
-      - name: Find .dmg File
-        id: find_dmg
-        run: |
-          DMG_PATH=$(find . -type f -name "*.dmg" | head -n 1)
-          if [ -z "$DMG_PATH" ]; then
-            echo "Error: .dmg file not found!"
-            exit 1
-          fi
-          echo "dmg_path=$DMG_PATH" >> $GITHUB_OUTPUT
-
-      - name: Upload .dmg to Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TAG_NAME="${{ github.event.inputs.tag_name }}"
-          DMG_PATH="${{ steps.find_dmg.outputs.dmg_path }}"
-
-          echo "Uploading $DMG_PATH to release $TAG_NAME"
-          gh release upload "$TAG_NAME" "$DMG_PATH" --clobber
+          fail_on_unmatched_files: true
+          files: "**/*.dmg"
+          tag_name: ${{ github.event.inputs.tag_name }}
+          body: "Automatic release for tag ${{ github.event.inputs.tag_name }}"
 
       - name: Confirm Upload
         if: success()

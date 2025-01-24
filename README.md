@@ -12,9 +12,9 @@ Simple Electron MongoDB Query Tool
 
 ### System Stages
 
-|        | Acceptance Stage                                                                                                                                                                               | UAT Stage                                                                                                                                                           | Production Stage                                                                                                                                                                            |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | [![UAT Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/uat_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/UATStage.yml) | [![Production Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/production_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/PublicReleaseStage.yml) |
+|        | Acceptance Stage                                                                                                                                                                               | UAT Stage                                                                                                                                                           | Production Stage                                                                                                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| System | [![Acceptance Stage](https://byob.yarr.is/vaisakhsasikumar/electron-app-tests/acceptance_stage)](https://github.com/vaisakhsasikumar/electron-app-tests/actions/workflows/AcceptanceStage.yml) | [![UAT Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/uat_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/UATStage.yml) | [![Production Stage](https://byob.yarr.is/vaisakhsasikumar/my-electron-app/production_stage)](https://github.com/vaisakhsasikumar/my-electron-app/actions/workflows/ProductionReleaseStage.yml) |
 
 ## Description
 
@@ -48,9 +48,16 @@ This project serves as a Test Driven Development (TDD) Sandbox, created as part 
 
 # External System(s)
 
-**OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode.
+**OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode. 
+
+- **OS System Theme stubs:** 
+We set up test instances using OS System Theme stubs that randomly return "light" or "dark" modes. This approach allows the application to dynamically adapt its theme during testing without relying on actual OS settings, ensuring both themes are effectively evaluated.
 
 **GitHub API**: Employed to manage and access version release information via the GitHub REST API, enabling the application to check for the latest available updates and ensure users are running the most recent version.
+
+- **GitHub Releases API stubs:** 
+We use WireMock stubs to mimic the GitHub Releases API, providing predefined version responses. This allows the application to perform version checks during tests without making real API requests, ensuring reliable and isolated testing.
+
 
 # Systems which App interacts with
 
@@ -168,4 +175,4 @@ To provide hands-on experience with:
 | **Acceptance Environment** | Runs Automated Acceptance Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) ; [GitHub Action](https://github.com/vaisakhsasikumar/electron-app-tests/blob/main/.github/workflows/AcceptanceStage.yml) | Automated test pipelines                    |
 | **E2E Environment**        | Executes E2E and Contract Tests             | [Tests Repository](https://github.com/vaisakhsasikumar/electron-app-tests) ; [GitHub Action](https://github.com/vaisakhsasikumar/electron-app-tests/blob/main/.github/workflows/AcceptanceStage.yml) | Automated test suites in pipeline           |
 | **UAT Environment**        | Runs Deployment and User Acceptance Testing | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/) ; [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/UATStage.yml)              | Manual trigger workflows via GitHub Actions |
-| **Production Environment** | Publish installer for end users             | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/); [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/PublicReleaseStage.yml)     | Automated deployments via GitHub Actions    |
+| **Production Environment** | Publish installer for end users             | [Code Repository](https://github.com/vaisakhsasikumar/my-electron-app/); [GitHub Action](https://github.com/vaisakhsasikumar/my-electron-app/blob/main/.github/workflows/ProductionReleaseStage.yml) | Automated deployments via GitHub Actions    |
