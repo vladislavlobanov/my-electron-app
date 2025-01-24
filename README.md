@@ -151,7 +151,6 @@ To provide hands-on experience with:
 ## Test Instances
 
 - **OS System Theme stubs:** 
-
 We set up test instances using OS System Theme stubs that randomly return "light" or "dark" modes. This approach allows the application to dynamically adapt its theme during testing without relying on actual OS settings, ensuring both themes are effectively evaluated.
 
 - **GitHub Releases API stubs:** 
