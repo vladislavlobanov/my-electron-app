@@ -47,10 +47,12 @@ function createWindow() {
     // { role: 'appMenu' }
     {
       label: app.name,
+      id: "appName",
       submenu: [
-        { role: "about" },
+        { role: "about", id: "about" },
         { type: "separator" }, // Separator added here
         {
+          id: "settings",
           label: "Settings",
           click: () => {
             // Send IPC message to renderer to open Settings modal
@@ -60,12 +62,13 @@ function createWindow() {
           },
         },
         { type: "separator" },
-        { role: "quit" },
+        { role: "quit", id: "quit" },
       ],
     },
     // { role: 'editMenu' }
     {
       label: "Edit",
+      id: "edit",
       submenu: [
         { role: "undo" },
         { role: "redo" },
@@ -120,8 +123,9 @@ function startBackendDev() {
     stdio: "pipe",
     env: {
       ...process.env,
-      VITE_VERSION_API: process.env.VITE_VERSION_API || import.meta.env.VITE_VERSION_API,
-    }
+      VITE_VERSION_API:
+        process.env.VITE_VERSION_API || import.meta.env.VITE_VERSION_API,
+    },
   });
 
   forked.stdout?.on("data", (data) => {
@@ -146,8 +150,9 @@ function startBackendProd(): Promise<void> {
         stdio: "pipe",
         env: {
           ...process.env,
-          VITE_VERSION_API: process.env.VITE_VERSION_API || import.meta.env.VITE_VERSION_API,
-        }
+          VITE_VERSION_API:
+            process.env.VITE_VERSION_API || import.meta.env.VITE_VERSION_API,
+        },
       });
 
       forked.stdout?.on("data", (data) => {

@@ -25,6 +25,7 @@ function App() {
   const [dbName, setDbName] = useState<string>();
   const [collectionName, setCollectionName] = useState<string>();
   const [systemTheme, setSystemTheme] = useState<string>();
+  const [isExecutingQuery, setIsExecutingQuery] = useState<boolean>();
 
   const [newVersion, setNewVersion] = useState(true);
 
@@ -143,6 +144,7 @@ function App() {
   }
 
   const handleQuerySubmit = async () => {
+    setIsExecutingQuery(true);
     try {
       const parsedQuery = JSON.parse(query); // Parse the query from the text input
       // Make a POST request to the backend
@@ -167,6 +169,7 @@ function App() {
       setResult(errorResult);
       addQueryToHistory(query, "Invalid query or server error.");
     }
+    setIsExecutingQuery(false);
   };
 
   const handleHistoryItemClick = (item: { query: string; output: string }) => {
@@ -208,7 +211,7 @@ function App() {
     <div className="app-content">
       {showSettings && (
         <div className="modal-overlay">
-          <div className="modal-dialog">
+          <div className="modal-dialog" data-testid={"settingsModal"}>
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Settings</h5>
@@ -304,6 +307,7 @@ function App() {
                 <button
                   type="button"
                   className="btn btn-secondary"
+                  data-testid={"cancelSeetingsModalButton"}
                   onClick={handleSettingsClose}
                 >
                   Cancel
@@ -378,6 +382,7 @@ function App() {
                   data-testid={"runQueryButton"}
                   className="btn btn-primary btn-block"
                   onClick={handleQuerySubmit}
+                  disabled={isExecutingQuery}
                 >
                   Run Query
                 </button>
