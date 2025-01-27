@@ -8,7 +8,7 @@ import {
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-if (process.env.E2ETESTS === "true") {
+if (process.env.TESTS === "true") {
   import("wdio-electron-service/main");
 }
 
