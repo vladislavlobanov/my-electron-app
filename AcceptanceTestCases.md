@@ -43,7 +43,7 @@
 ## Scenario: User successfully runs a `find` query and sees a Query Result in JSON format
 **Given** the user runs `{ "name": "John Doe" }`  
 **When** the user clicks the **Run Query** button  
-**Then** the user should see the **Query Result** in JSON format  
+**Then** the user should not see the `"Invalid query or server error."` message in **Query Result**     
 
 
 
@@ -66,7 +66,8 @@
 
 # Feature: Seeing Persisting Query History
 
- ## Scenario 1: User sees no saved queries under Query History
+ ## Scenario 1: User sees no saved queries under Query History    
+ **Precondition** This test case should run first in the acceptance tests.      
  **Given**  the user opens the Electron tool for the first time   
  **When** the user toggles the Advanced view: on  
  **But** the user doesn’t click the Run Query button   
@@ -81,8 +82,8 @@
  ## Scenario 3: User successfully uses their previous saved query and the result
  **Given** the user has already toggled the Advanced view: on  
  **And** the user has already run a few queries  
- **When** the user clicks one of the queries in the history 
- **Then** the user should see the query filled in the Enter MongoDB Query field 
+ **When** the user clicks one of the queries in the history      
+ **Then** the user should see the query filled in the Enter MongoDB Query field     
 
  ## Scenario 4: User sees their previous saved queries when changing the Advanced view from off to on
  **Given** the user has already toggled the Advanced view: on  
@@ -127,7 +128,7 @@
 **Given** the user opens the Settings menu  
 **When** the user should see Select Theme with the Light, Dark and As in System options   
 **And** the user should see Database settings with URI, Database Name and Collection Name fields  
-**And** the user should see the Cancel and Apply buttons  
+**And** the user should see the Cancel and Apply buttons     
 
  ## Scenario 4: User can see the default options in the Settings menu
  **Given** the user opens the Settings menu  

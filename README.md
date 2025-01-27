@@ -48,9 +48,18 @@ This project serves as a Test Driven Development (TDD) Sandbox, created as part 
 
 # External System(s)
 
-**OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode.
+**OS System theme**: The application retrieves the system theme setting from the operating system (OS) to apply the appropriate theme based on the user's preferred color scheme, which is determined by whether the OS is set to light or dark mode. 
+
+- **OS System Theme stubs:** 
+We set up test instances using OS System Theme stubs that randomly return "light" or "dark" modes. This approach allows the application to dynamically adapt its theme during testing without relying on actual OS settings, ensuring both themes are effectively evaluated.
+- **Configure connection:** System theme connections are configured by mocking the `/api/theme` API with WireMock and setting the retrieved theme through the `WDIO_THEME` environment variable for tests.
 
 **GitHub API**: Employed to manage and access version release information via the GitHub REST API, enabling the application to check for the latest available updates and ensure users are running the most recent version.
+
+- **GitHub Releases API stubs:** 
+We use WireMock stubs to mimic the GitHub Releases API, providing predefined version responses. This allows the application to perform version checks during tests without making real API requests, ensuring reliable and isolated testing.
+- **Configure connection:** We use VITE_VERSION_API environment variable to configure connection to the External I/O System (GitHub API).
+
 
 # Systems which App interacts with
 
