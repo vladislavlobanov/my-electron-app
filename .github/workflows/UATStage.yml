@@ -49,27 +49,12 @@ jobs:
         run: echo "Pre-Release for UAT created and .dmg uploaded successfully."
 
   uat_stage_badge:
-    name: Create status badge for workflow
-    runs-on: ubuntu-latest
+    name: UAT badge
     if: ${{ always() }}
     needs: [uat]
-    steps:
-      - name: UAT Stage badge (Success)
-        if: ${{ !contains(needs.*.result, 'failure') }}
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: uat_stage
-          LABEL: "UAT Stage"
-          STATUS: "Success"
-          COLOR: green
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: UAT Stage badge (Failure)
-        if: ${{ contains(needs.*.result, 'failure') }}
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: uat_stage
-          LABEL: "UAT Stage"
-          STATUS: "Failure"
-          COLOR: red
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: ./.github/workflows/badge.yml
+    with:
+      stage_label: uat_stage
+      stage_name: "UAT Stage"
+      passed: ${{ contains(needs.*.result, 'success') }}
+    secrets: inherit
