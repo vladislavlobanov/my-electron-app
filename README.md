@@ -22,11 +22,16 @@ A desktop application built with Electron that allows users to run a given Mongo
 
 # Contributors
 
+## Developers
 - [Vaisakh Sasikumar](https://github.com/vaisakhsasikumar)
 - [Andrei Kim](https://github.com/andrei-kim-3tsoftwarelabs)
 - [Vlad Lobanov](https://github.com/vladislavlobanov)
-- [Hazel Ozmel](https://github.com/Hazel3t)
 - [Ivan Martynov](https://github.com/MartynovIvan)
+#### Roles: Develop App's code, pipelines and own tests. Implement tests, provided by QA Engineer in test Scenarios. 
+
+## QA Engineer
+- [Hazel Ozmel](https://github.com/Hazel3t)
+#### Roles: Write test Scenarios and do Exploratory Testing, identify additional scenarios to add to Tests Scenarios.
 
 # Background Context
 

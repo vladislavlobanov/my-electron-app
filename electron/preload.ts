@@ -1,6 +1,6 @@
 import { ipcRenderer, contextBridge } from "electron";
 
-if (process.env.E2ETESTS === "true") {
+if (process.env.TESTS === "true") {
   import("wdio-electron-service/preload");
 }
 
