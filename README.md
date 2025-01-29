@@ -27,11 +27,18 @@ A desktop application built with Electron that allows users to run a given Mongo
 - [Andrei Kim](https://github.com/andrei-kim-3tsoftwarelabs)
 - [Vlad Lobanov](https://github.com/vladislavlobanov)
 - [Ivan Martynov](https://github.com/MartynovIvan)
-#### Roles: Develop App's code, pipelines and own tests. Implement tests, provided by QA Engineer in test Scenarios. 
 
 ## QA Engineer
 - [Hazel Ozmel](https://github.com/Hazel3t)
-#### Roles: Write test Scenarios and do Exploratory Testing, identify additional scenarios to add to Tests Scenarios.
+
+## Team Roles
+### Developers
+- Develop App's code, pipelines and own tests.
+- Implement tests provided by QA Engineer in test scenarios.
+
+### QA Engineer
+- Create comprehensive test scenarios for various testing types, including those for new features and bug fixes, as well as perform exploratory testing.
+- Determine and suggest additional scenarios to enhance the existing test coverage.
 
 # Background Context
 
