@@ -336,7 +336,9 @@ function App() {
       <div className="bar titlebar">MongoDB Query Executor</div>
 
       {!newVersion && (
-        <div className="bar version">New version is available!</div>
+        <div className="bar version" data-testid={"versionBanner"}>
+          New version is available!
+        </div>
       )}
 
       <div className="app-body">
