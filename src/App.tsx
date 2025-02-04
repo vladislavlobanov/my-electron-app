@@ -24,7 +24,7 @@ function App() {
   const [uri, setUri] = useState<string>();
   const [dbName, setDbName] = useState<string>();
   const [collectionName, setCollectionName] = useState<string>();
-  const [systemTheme, setSystemTheme] = useState<string>();
+  const [systemTheme, setSystemTheme] = useState<string>("light");
   const [isExecutingQuery, setIsExecutingQuery] = useState<boolean>();
 
   const [newVersion, setNewVersion] = useState(true);
@@ -60,9 +60,7 @@ function App() {
       applyTheme(theme);
     } else {
       const root = document.documentElement;
-
       const prefersDark = systemTheme === "dark";
-
       if (prefersDark) {
         root.classList.remove("light-theme");
         root.classList.add("dark-theme");
@@ -162,12 +160,12 @@ function App() {
 
       const data = await response.json(); // Parse the response data
       setResult(data); // Set the result to the state for display
-      addQueryToHistory(parsedQuery, data);
+      await addQueryToHistory(parsedQuery, data);
     } catch (error) {
       const errorResult = { error: "Invalid query or server error." };
       console.log({ error });
       setResult(errorResult);
-      addQueryToHistory(query, "Invalid query or server error.");
+      await addQueryToHistory(query, "Invalid query or server error.");
     }
     setIsExecutingQuery(false);
   };
@@ -205,7 +203,7 @@ function App() {
     }
   };
 
-  if (!settings) return;
+  if (!settings) return null;
 
   return (
     <div className="app-content">
@@ -424,7 +422,10 @@ function App() {
                             data-testid={"queryHistorySingleElement"}
                             key={index}
                             className={`list-group-item list-group-item-action text-truncate ${
-                              theme === "dark" ? "dark-list-group-item" : ""
+                              (theme === "dark" ||
+                                (theme === "system" && systemTheme === "dark"))
+                                ? "dark-list-group-item"
+                                : ""
                             }`}
                             onClick={() => handleHistoryItemClick(item)}
                           >
