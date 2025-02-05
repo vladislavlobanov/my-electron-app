@@ -178,8 +178,14 @@ app.post("/api/settings", (req, res) => {
 // GET /api/check-version - Check version
 app.get("/api/check-version", async (req, res) => {
   try {
-    const request = await fetch(process.env.VITE_VERSION_API);
+    const request = await fetch(process.env.VITE_VERSION_API, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.GITHUB_TOKEN ? {Authorization: `Bearer ${process.env.GITHUB_TOKEN}`} : {}),
+      },
+    });
     const response = await request.json();
+    console.log(response);
     res.status(200).json({
       success: true,
       isLatestVersion: isCurrentVersionHigher(response?.tag_name, buildVersion),
