@@ -7,6 +7,7 @@ enum ThemeEnum {
 }
 interface Settings {
   theme: ThemeEnum;
+  advancedSettings: boolean;
   uri: string;
   dbName: string;
   collectionName: string;
@@ -15,12 +16,13 @@ interface Settings {
 function App() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<object | string>();
-  const [isAdvanced, setIsAdvanced] = useState(false);
+  const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
   const [history, setHistory] = useState([]);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [showSettings, setShowSettings] = useState(false);
 
   const [theme, setTheme] = useState<ThemeEnum>();
+  const [advancedSettings, setAdvancedSettings] = useState<boolean>();
   const [uri, setUri] = useState<string>();
   const [dbName, setDbName] = useState<string>();
   const [collectionName, setCollectionName] = useState<string>();
@@ -73,6 +75,10 @@ function App() {
 
   useEffect(() => {
     setTheme(settings?.theme);
+    setAdvancedSettings(settings?.advancedSettings);
+
+    if (settings?.advancedSettings) setIsAdvanced(true);
+
     setUri(settings?.uri);
     setDbName(settings?.dbName);
     setCollectionName(settings?.collectionName);
@@ -110,6 +116,7 @@ function App() {
 
   const handleSettingsClose = () => {
     setTheme(settings?.theme);
+    setAdvancedSettings(settings?.advancedSettings);
     setUri(settings?.uri);
     setDbName(settings?.dbName);
     setCollectionName(settings?.collectionName);
@@ -123,7 +130,10 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(settingsData),
+        body: JSON.stringify({
+          ...settingsData,
+          advancedSettings: advancedSettings ? 1 : 0,
+        }),
       });
 
       setSettings(settingsData);
@@ -222,52 +232,81 @@ function App() {
                 </button>
               </div>
               <div className="modal-body">
-                <h5>Select Theme</h5>
-                <div className="form-group">
-                  <div className="form-check">
-                    <input
-                      data-testid={"lightThemeSelector"}
-                      className="form-check-input"
-                      type="radio"
-                      name="themeOptions"
-                      id="lightTheme"
-                      value="light"
-                      defaultChecked={settings.theme === "light"}
-                      onChange={handleThemeChange}
-                    />
-                    <label className="form-check-label" htmlFor="lightTheme">
-                      Light
-                    </label>
+                <div className="app-settings">
+                  <div>
+                    <h5>Select Theme</h5>
+                    <div className="form-group">
+                      <div className="form-check">
+                        <input
+                          data-testid={"lightThemeSelector"}
+                          className="form-check-input"
+                          type="radio"
+                          name="themeOptions"
+                          id="lightTheme"
+                          value="light"
+                          defaultChecked={settings.theme === "light"}
+                          onChange={handleThemeChange}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="lightTheme"
+                        >
+                          Light
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="form-check">
+                      <input
+                        data-testid={"darkThemeSelector"}
+                        className="form-check-input"
+                        type="radio"
+                        name="themeOptions"
+                        id="darkTheme"
+                        value="dark"
+                        defaultChecked={settings.theme === "dark"}
+                        onChange={handleThemeChange}
+                      />
+                      <label className="form-check-label" htmlFor="darkTheme">
+                        Dark
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        data-testid={"systemThemeSelector"}
+                        className="form-check-input"
+                        type="radio"
+                        name="themeOptions"
+                        id="systemTheme"
+                        value="system"
+                        defaultChecked={settings.theme === "system"}
+                        onChange={handleThemeChange}
+                      />
+                      <label className="form-check-label" htmlFor="systemTheme">
+                        As in System
+                      </label>
+                    </div>
                   </div>
-                  <div className="form-check">
-                    <input
-                      data-testid={"darkThemeSelector"}
-                      className="form-check-input"
-                      type="radio"
-                      name="themeOptions"
-                      id="darkTheme"
-                      value="dark"
-                      defaultChecked={settings.theme === "dark"}
-                      onChange={handleThemeChange}
-                    />
-                    <label className="form-check-label" htmlFor="darkTheme">
-                      Dark
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      data-testid={"systemThemeSelector"}
-                      className="form-check-input"
-                      type="radio"
-                      name="themeOptions"
-                      id="systemTheme"
-                      value="system"
-                      defaultChecked={settings.theme === "system"}
-                      onChange={handleThemeChange}
-                    />
-                    <label className="form-check-label" htmlFor="systemTheme">
-                      As in System
-                    </label>
+                  <div>
+                    <h5>Advanced View</h5>
+                    <div className="form-check">
+                      <input
+                        data-testid={"advancedViewOnStartCheckbox"}
+                        className="form-check-input"
+                        type="checkbox"
+                        name="themeOptions"
+                        id="advancedViewOnStartCheckbox"
+                        value=""
+                        checked={advancedSettings}
+                        onChange={() => setAdvancedSettings(!advancedSettings)}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="advancedViewOnStartCheckbox"
+                      >
+                        On app start
+                      </label>
+                    </div>
                   </div>
                 </div>
                 <h5>Database Settings</h5>
@@ -318,6 +357,7 @@ function App() {
                   onClick={() =>
                     updateSettings({
                       theme,
+                      advancedSettings,
                       uri,
                       dbName,
                       collectionName,
@@ -422,8 +462,8 @@ function App() {
                             data-testid={"queryHistorySingleElement"}
                             key={index}
                             className={`list-group-item list-group-item-action text-truncate ${
-                              (theme === "dark" ||
-                                (theme === "system" && systemTheme === "dark"))
+                              theme === "dark" ||
+                              (theme === "system" && systemTheme === "dark")
                                 ? "dark-list-group-item"
                                 : ""
                             }`}

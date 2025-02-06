@@ -101,6 +101,15 @@ body {
   padding: 1rem;
 }
 
+.app-settings {
+  display: flex;
+  flex-direction: row;
+
+  div {
+    flex: 1;
+  }
+}
+
 .close:focus {
   outline: none;
 }
@@ -206,7 +215,7 @@ body {
 }
 
 .version {
-  background: linear-gradient(180deg, #208B85 0%, #355882 100%);
+  background: linear-gradient(180deg, #208b85 0%, #355882 100%);
 }
 
 .app-content {
@@ -268,7 +277,7 @@ body {
 
 .app-results pre,
 .app-history .list-group {
-  overflow-X: auto;
+  overflow-x: auto;
 }
 
 .app-history {
