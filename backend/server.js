@@ -87,14 +87,15 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS settings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     theme TEXT CHECK(theme IN ('light', 'dark', 'system')) NOT NULL,
+    advancedSettings INTEGER NOT NULL,
     uri TEXT NOT NULL,
     dbName TEXT NOT NULL,
     collectionName TEXT NOT NULL
   );
 
   -- Insert the single row into 'settings' if it doesn't already exist
-  INSERT OR IGNORE INTO settings (id, theme, uri, dbName, collectionName)
-  VALUES (1, 'system', 'mongodb://localhost:27017', 'test', 'test');
+  INSERT OR IGNORE INTO settings (id, theme, advancedSettings, uri, dbName, collectionName)
+  VALUES (1, 'system', 0, 'mongodb://localhost:27017', 'test', 'test');
 `);
 
 // GET all saved queries
@@ -154,17 +155,18 @@ app.get("/api/settings", (req, res) => {
 
 // POST /api/settings - Update or rewrite settings
 app.post("/api/settings", (req, res) => {
-  const { theme, uri, dbName, collectionName } = req.body;
+  const { theme, advancedSettings, uri, dbName, collectionName } = req.body;
 
   db.run(
-    `INSERT INTO settings (id, theme, uri, dbName, collectionName)
-     VALUES (1, ?, ?, ?, ?)
+    `INSERT INTO settings (id, theme, advancedSettings, uri, dbName, collectionName)
+     VALUES (1, ?, ?, ?, ?, ?)
      ON CONFLICT(id) DO UPDATE SET
        theme = excluded.theme,
+       advancedSettings = excluded.advancedSettings,
        uri = excluded.uri,
        dbName = excluded.dbName,
        collectionName = excluded.collectionName`,
-    [theme, uri, dbName, collectionName],
+    [theme, advancedSettings, uri, dbName, collectionName],
     function (err) {
       if (err) {
         console.error("Error updating settings:", err);
@@ -181,7 +183,9 @@ app.get("/api/check-version", async (req, res) => {
     const request = await fetch(process.env.VITE_VERSION_API, {
       headers: {
         "Content-Type": "application/json",
-        ...(process.env.GITHUB_TOKEN ? {Authorization: `Bearer ${process.env.GITHUB_TOKEN}`} : {}),
+        ...(process.env.GITHUB_TOKEN
+          ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+          : {}),
       },
     });
     const response = await request.json();
